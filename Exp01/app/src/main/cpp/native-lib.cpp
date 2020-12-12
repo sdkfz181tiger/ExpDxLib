@@ -1,18 +1,28 @@
 #include "DxLib.h"
 
-// プログラムは android_main から始まります
-int android_main( void )
-{
-    if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
-    {
-        return -1 ;			// エラーが起きたら直ちに終了
-    }
+int android_main(void) {
 
-    DrawBox( 0, 0, 100, 100, GetColor( 255,255,255 ), TRUE ) ;	// 四角形を描画する
+	const int D_WIDTH = 1080;
+	const int D_HEIGHT = 1920;
+	const int C_DEPTH = 16;
+	SetGraphMode(D_WIDTH, D_HEIGHT, C_DEPTH);
 
-    WaitKey() ;				// キー入力待ち
+	// Initialize
+	if (DxLib_Init() == -1) return -1;
 
-    DxLib_End() ;				// ＤＸライブラリ使用の終了処理
+	printfDx("Hello DxLib!\n");
 
-    return 0 ;					// ソフトの終了
+	int C_WHITE = GetColor(255, 255, 255);
+	int C_RED = GetColor(255, 0, 0);
+	int C_GREEN = GetColor(0, 255, 0);
+	int C_BLUE = GetColor(0, 0, 255);
+
+	DrawLine(0, 0, D_WIDTH, D_HEIGHT, C_GREEN);
+	DrawLine(D_WIDTH, 0, 0, D_HEIGHT, C_GREEN);
+
+	WaitKey();
+
+	DxLib_End();
+
+	return 0;
 }
