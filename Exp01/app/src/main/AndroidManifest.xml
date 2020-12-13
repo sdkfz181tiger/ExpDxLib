@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDXlib01"
+        android:screenOrientation="portrait"
         android:hasCode="false">
         <activity android:name="android.app.NativeActivity">
             <meta-data
