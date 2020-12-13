@@ -3,10 +3,10 @@
 // Singleton Object
 static UtilDebug *selfUtilDebug = nullptr;
 
-UtilDebug::UtilDebug() : dWidth(0), dHeight(0), dColor(0),
-                         gSize(64), gRows(0), gCols(0), gColor(0),
-                         fWidth(0), fHeight(0), fColor(0),
-                         sSize(0), sColor(0), pCnt(0) {
+UtilDebug::UtilDebug() : dispWidth(0), dispHeight(0), dispColor(0),
+                         gridSize(64), gridRows(0), gridCols(0), gridColor(0),
+                         fpsWidth(0), fpsHeight(0), fpsColor(0),
+                         fontSize(0), fontColor(0), delayCnt(0) {
 	LOGD("UtilDebug()\n");
 }
 
@@ -37,47 +37,47 @@ void UtilDebug::destroyInstance() {
 
 bool UtilDebug::init() {
 	LOGD("UtilDebug::init()\n");
-	GetScreenState(&dWidth, &dHeight, &dColor);
-	LOGD("Display:%d x %d", dWidth, dHeight);
-	gRows = dHeight / gSize;
-	gCols = dWidth / gSize;
-	gColor = GetColor(0, 99, 0);
-	fWidth = gSize * 3;
-	fHeight = gSize * 2;
-	fColor = GetColor(33, 33, 99);
-	sSize = gSize * 0.5f;
-	sColor = GetColor(255, 255, 255);
-	pCnt = GetNowCount();
+	GetScreenState(&dispWidth, &dispHeight, &dispColor);
+	LOGD("Display:%d x %d", dispWidth, dispHeight);
+	gridRows = dispHeight / gridSize;
+	gridCols = dispWidth / gridSize;
+	gridColor = GetColor(0, 99, 0);
+	fpsWidth = gridSize * 3;
+	fpsHeight = gridSize * 2;
+	fpsColor = GetColor(33, 33, 99);
+	fontSize = gridSize / 2;
+	fontColor = GetColor(255, 255, 255);
+	delayCnt = GetNowCount();
 	return true;
 }
 
 void UtilDebug::drawGrid() {
 	// Center
-	const int cX = dWidth * 0.5f;
-	const int cY = dHeight * 0.5f;
+	const int cX = dispWidth / 2;
+	const int cY = dispHeight / 2;
 	// Draw center
-	DrawLine(0, cY, dWidth, cY, gColor);
-	DrawLine(cX, 0, cX, dHeight, gColor);
+	DrawLine(0, cY, dispWidth, cY, gridColor);
+	DrawLine(cX, 0, cX, dispHeight, gridColor);
 	// Grid
-	for (int r = 1; r <= gRows * 0.5f; ++r) {
-		DrawLine(0, cY + gSize * r, dWidth, cY + gSize * r, gColor);
-		DrawLine(0, cY - gSize * r, dWidth, cY - gSize * r, gColor);
+	for (int r = 1; r <= gridRows / 2; ++r) {
+		DrawLine(0, cY + gridSize * r, dispWidth, cY + gridSize * r, gridColor);
+		DrawLine(0, cY - gridSize * r, dispWidth, cY - gridSize * r, gridColor);
 	}
-	for (int c = 1; c <= gCols; ++c) {
-		DrawLine(cX + gSize * c, 0, cX + gSize * c, dHeight, gColor);
-		DrawLine(cX - gSize * c, 0, cX - gSize * c, dHeight, gColor);
+	for (int c = 1; c <= gridCols; ++c) {
+		DrawLine(cX + gridSize * c, 0, cX + gridSize * c, dispHeight, gridColor);
+		DrawLine(cX - gridSize * c, 0, cX - gridSize * c, dispHeight, gridColor);
 	}
 }
 
 void UtilDebug::drawFPS() {
 
-	const int sX = dWidth - fWidth;
-	const int sY = dHeight - fHeight;
-	const float delay = 1000.0f / float(GetNowCount() - pCnt);
-	DrawBox(sX, sY, dWidth, dHeight, fColor, true);
-	SetFontSize(sSize);
-	DrawFormatString(sX, sY, sColor, "FPS:%.2f", delay);
-	DrawFormatString(sX, sY+gSize*0.5f, sColor, "W:%d", dWidth);
-	DrawFormatString(sX, sY+gSize*1.0f, sColor, "Y:%d", dHeight);
-	pCnt = GetNowCount();// Update
+	const int sX = dispWidth - fpsWidth;
+	const int sY = dispHeight - fpsHeight;
+	const float delay = 1000.0f / float(GetNowCount() - delayCnt);
+	DrawBox(sX, sY, dispWidth, dispHeight, fpsColor, true);
+	SetFontSize(fontSize);
+	DrawFormatString(sX, sY, fontColor, "FPS:%.2f", delay);
+	DrawFormatString(sX, sY + fontSize * 1, fontColor, "W:%dpx", dispWidth);
+	DrawFormatString(sX, sY + fontSize * 2, fontColor, "Y:%dpx", dispHeight);
+	delayCnt = GetNowCount();// Update
 }

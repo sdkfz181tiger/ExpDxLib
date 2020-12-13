@@ -7,10 +7,10 @@ class UtilDebug {
 
 private:
 
-	int dWidth, dHeight, dColor;
-	int gSize, gRows, gCols, gColor;
-	int fWidth, fHeight, fColor;
-	int sSize, sColor, pCnt;
+	int dispWidth, dispHeight, dispColor;
+	unsigned int gridSize, gridRows, gridCols, gridColor;
+	unsigned int fpsWidth, fpsHeight, fpsColor;
+	unsigned int fontSize, fontColor, delayCnt;
 
 public:
 	UtilDebug();
