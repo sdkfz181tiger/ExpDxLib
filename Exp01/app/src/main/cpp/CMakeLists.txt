@@ -26,6 +26,7 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              native-lib.cpp
              utility/Utility.h
+             utility/UtilDebug.cpp
              utility/UtilMath.cpp
              utility/Vec2.cpp
         )

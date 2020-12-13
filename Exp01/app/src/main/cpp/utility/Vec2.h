@@ -1,7 +1,23 @@
 #ifndef _VEC2_H_
 #define _VEC2_H_
 
-#include "Utility.h"
+//==========
+// Define
+#ifndef PI
+#define PI         3.141592653f
+#endif
+
+#ifndef RAD_TO_DEG
+#define RAD_TO_DEG 57.29577951f
+#endif
+
+#ifndef DEG_TO_RAD
+#define DEG_TO_RAD 0.017453293f
+#endif
+
+//==========
+// C++
+#include <math.h>
 
 class Vec2 {
 
@@ -11,9 +27,9 @@ public:
 
 public:
 
-	Vec2(float x = 0.0f, float y = 0.0f);
+	Vec2(float x = 0.0f, float y = 0.0f){};
 
-	~Vec2();
+	~Vec2(){};
 
 	Vec2 operator+(const Vec2 &vec) const; // 和
 

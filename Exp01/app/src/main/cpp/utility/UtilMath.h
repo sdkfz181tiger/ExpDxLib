@@ -3,7 +3,6 @@
 
 #include "Utility.h"
 
-// UtilMath
 class UtilMath {
 
 private:
