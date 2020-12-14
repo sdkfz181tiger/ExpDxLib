@@ -9,8 +9,7 @@ private:
 
 	int dispWidth, dispHeight, dispColor;
 	unsigned int gridSize, gridRows, gridCols, gridColor;
-	unsigned int fpsWidth, fpsHeight, fpsColor;
-	unsigned int fontSize, fontColor, delayCnt;
+	unsigned int fpsWidth, fpsHeight, fpsColor, delayCnt;
 
 public:
 	UtilDebug();

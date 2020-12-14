@@ -6,15 +6,12 @@ int android_main(void) {
 	const int D_WIDTH  = 1080;     // Display width
 	const int D_HEIGHT = 1920;     // Display height
 	const int C_DEPTH  = 16;       // Color depth 16 or 32
-	const int W_TIME   = 1000 / 2; // FPS
+	const int W_TIME   = 1000 / 60;// FPS
 	SetGraphMode(D_WIDTH, D_HEIGHT, C_DEPTH);
 	SetOutApplicationLogValidFlag(true);
 
 	// Initialize
 	if (DxLib_Init() == -1) return -1;
-
-	int fontHandle = LoadFontDataToHandle("assets/AtariClassic.ttf", 0);
-	LOGD("fontHandle:%d", fontHandle);
 
 	const int cX = D_WIDTH / 2;
 	const int cY = D_HEIGHT / 2;
@@ -24,21 +21,22 @@ int android_main(void) {
 	const int rGra = LoadGraph("images/y_reimu_x1.png");
 	int rGraW, rGraH;
 	GetGraphSize(rGra, &rGraW, &rGraH);
-	LOGD("W, H:%d, %d", rGraW, rGraH);
 
 	// MainLoop
 	while (ProcessMessage() == 0){
 		ClearDrawScreen();
 		SetDrawScreen(DX_SCREEN_BACK);
 
-		// Test
-		DrawStringToHandle(100, 100, "HELLO!!", cWhite, fontHandle);
+		// Debug
 		UtilDebug::getInstance()->drawGrid();
 		UtilDebug::getInstance()->drawFPS();
 
 		// Graph
 		DrawGraph(cX, cY, rGra, true);
-		DrawExtendGraph(cX, cY, cX+rGraW*10, cY+rGraH*10, rGra, true);
+		DrawExtendGraph(cX, cY, cX+rGraW*5, cY+rGraH*5, rGra, true);
+
+		// Label
+		UtilLabel::getInstance()->drawStr("HELLO DXLIB!!", cX, 100, 5, UtilLabelAlign::CENTER);
 
 		ScreenFlip();
 		WaitTimer(W_TIME);

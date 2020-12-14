@@ -5,8 +5,7 @@ static UtilDebug *selfUtilDebug = nullptr;
 
 UtilDebug::UtilDebug() : dispWidth(0), dispHeight(0), dispColor(0),
                          gridSize(64), gridRows(0), gridCols(0), gridColor(0),
-                         fpsWidth(0), fpsHeight(0), fpsColor(0),
-                         fontSize(0), fontColor(0), delayCnt(0) {
+                         fpsWidth(0), fpsHeight(0), fpsColor(0), delayCnt(0) {
 	LOGD("UtilDebug()\n");
 }
 
@@ -38,15 +37,12 @@ void UtilDebug::destroyInstance() {
 bool UtilDebug::init() {
 	LOGD("UtilDebug::init()\n");
 	GetScreenState(&dispWidth, &dispHeight, &dispColor);
-	LOGD("Display:%d x %d", dispWidth, dispHeight);
 	gridRows = dispHeight / gridSize;
 	gridCols = dispWidth / gridSize;
 	gridColor = GetColor(0, 99, 0);
-	fpsWidth = gridSize * 3;
-	fpsHeight = gridSize * 2;
+	fpsWidth = gridSize * 4;
+	fpsHeight = gridSize * 1;
 	fpsColor = GetColor(33, 33, 99);
-	fontSize = gridSize / 2;
-	fontColor = GetColor(255, 255, 255);
 	delayCnt = GetNowCount();
 	return true;
 }
@@ -74,10 +70,9 @@ void UtilDebug::drawFPS() {
 	const int sX = dispWidth - fpsWidth;
 	const int sY = dispHeight - fpsHeight;
 	const float delay = 1000.0f / float(GetNowCount() - delayCnt);
-	DrawBox(sX, sY, dispWidth, dispHeight, fpsColor, true);
-	SetFontSize(fontSize);
-	DrawFormatString(sX, sY, fontColor, "FPS:%.2f", delay);
-	DrawFormatString(sX, sY + fontSize * 1, fontColor, "W:%dpx", dispWidth);
-	DrawFormatString(sX, sY + fontSize * 2, fontColor, "Y:%dpx", dispHeight);
+	char fpsStr[20];
+	sprintf(fpsStr, "FPS:%.2f", delay);
+	UtilLabel::getInstance()->drawStr(fpsStr, sX + fpsWidth / 2, sY,
+	                                  3, UtilLabelAlign::CENTER);
 	delayCnt = GetNowCount();// Update
 }
