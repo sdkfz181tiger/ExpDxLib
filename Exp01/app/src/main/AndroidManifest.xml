@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDXlib01"
         android:screenOrientation="portrait"
-        android:hasCode="false">
-        <activity android:name="android.app.NativeActivity">
+        android:hasCode="true">
+        <activity android:name=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="native-lib" />

@@ -1,11 +1,9 @@
 package com.ozateck.mydxlib01;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.NativeActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NativeActivity {
 
 	// Used to load the 'native-lib' library on application startup.
 	static {
@@ -16,15 +14,50 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		// Example of a call to a native method
-		TextView tv = findViewById(R.id.sample_text);
-		tv.setText(stringFromJNI());
+		MainActivity.nativeOnCreate();// Native
 	}
 
-	/**
-	 * A native method that is implemented by the 'native-lib' native library,
-	 * which is packaged with this application.
-	 */
-	public native String stringFromJNI();
+	@Override
+	protected void onStart() {
+		super.onStart();
+		MainActivity.nativeOnStart();// Native
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MainActivity.nativeOnResume();// Native
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MainActivity.nativeOnPause();// Native
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		MainActivity.nativeOnStop();// Native
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MainActivity.nativeOnDestroy();// Native
+	}
+
+	//==========
+	// JNI
+	public static native void nativeOnCreate();
+
+	public static native void nativeOnStart();
+
+	public static native void nativeOnResume();
+
+	public static native void nativeOnPause();
+
+	public static native void nativeOnStop();
+
+	public static native void nativeOnDestroy();
 }
