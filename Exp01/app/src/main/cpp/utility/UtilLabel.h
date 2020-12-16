@@ -3,7 +3,7 @@
 
 #include "Utility.h"
 
-enum class UtilLabelAlign {
+enum class UtilAlign {
 	DEFAULT,
 	LEFT,
 	RIGHT,
@@ -28,8 +28,8 @@ public:
 
 	bool init();
 
-	void drawStr(const string &str, int x, int y, int scale = 1,
-	             UtilLabelAlign align = UtilLabelAlign::DEFAULT);
+	void drawStr(const string &str, int x, int y,
+	             int scale = 1, UtilAlign align = UtilAlign::DEFAULT);
 };
 
 #endif // _UTILLABEL_H_

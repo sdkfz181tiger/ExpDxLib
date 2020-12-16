@@ -4,11 +4,11 @@
 static UtilLabel *selfUtilLabel = nullptr;
 
 UtilLabel::UtilLabel() : fWidth(0), fHeight(0), fPadding(1.2f) {
-	LOGD("UtilLabel()\n");
+	LOGD("Util", "UtilLabel()\n");
 }
 
 UtilLabel::~UtilLabel() {
-	LOGD("~UtilLabel()\n");
+	LOGD("Util", "~UtilLabel()\n");
 }
 
 UtilLabel *UtilLabel::getInstance() {
@@ -33,7 +33,7 @@ void UtilLabel::destroyInstance() {
 }
 
 bool UtilLabel::init() {
-	LOGD("UtilLabel::init()\n");
+	LOGD("Util", "UtilLabel::init()\n");
 
 	// Number
 	const string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;!?";
@@ -57,16 +57,16 @@ bool UtilLabel::init() {
 	return true;
 }
 
-void UtilLabel::drawStr(const string &str, int x, int y, int scale,
-                        UtilLabelAlign align) {
+void UtilLabel::drawStr(const string &str, int x, int y,
+						int scale, UtilAlign align) {
 
 	int gX = x;
 	int gY = y;
 	int gPadding = fWidth * fPadding * scale;
 	int gWidth = gPadding * str.length();
-	if (align == UtilLabelAlign::LEFT) gX -= 0;
-	if (align == UtilLabelAlign::RIGHT) gX -= gWidth;
-	if (align == UtilLabelAlign::CENTER) gX -= gWidth / 2;
+	if (align == UtilAlign::LEFT) gX -= 0;
+	if (align == UtilAlign::RIGHT) gX -= gWidth;
+	if (align == UtilAlign::CENTER) gX -= gWidth / 2;
 	for (int i = 0; i < str.length(); ++i) {
 		const char c = str.at(i);
 		const int handle = handleMap[c];

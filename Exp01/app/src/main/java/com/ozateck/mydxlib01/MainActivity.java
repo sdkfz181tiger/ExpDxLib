@@ -31,20 +31,20 @@ public class MainActivity extends NativeActivity {
 
 	@Override
 	protected void onPause() {
-		super.onPause();
 		MainActivity.nativeOnPause();// Native
+		super.onPause();
 	}
 
 	@Override
 	protected void onStop() {
-		super.onStop();
 		MainActivity.nativeOnStop();// Native
+		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		MainActivity.nativeOnDestroy();// Native
+		super.onDestroy();
 	}
 
 	//==========

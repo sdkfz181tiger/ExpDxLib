@@ -9,7 +9,6 @@ private:
 
 	int dispWidth, dispHeight, dispColor;
 	unsigned int gridSize, gridRows, gridCols, gridColor;
-	unsigned int fpsWidth, fpsHeight, fpsColor, delayCnt;
 
 public:
 	UtilDebug();
@@ -24,7 +23,7 @@ public:
 
 	void drawGrid();
 
-	void drawFPS();
+	void drawFPS(float delay);
 };
 
 #endif // _UTILDEBUG_H_

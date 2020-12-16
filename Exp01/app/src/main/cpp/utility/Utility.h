@@ -4,10 +4,10 @@
 #include <ctime>
 #include <chrono>
 #include <functional>
-#include <locale>
-#include <map>
 #include <iomanip>
 #include <iostream>
+#include <locale>
+#include <map>
 #include <random>
 #include <string>
 
@@ -34,13 +34,13 @@ using namespace std;
 //==========
 // Macro
 #ifndef LOGD
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "TAG", __VA_ARGS__)
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, __VA_ARGS__)
 #endif
 
 #ifndef LOGW
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "TAG", __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, __VA_ARGS__)
 #endif
 
 #ifndef LOGE
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "TAG", __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __VA_ARGS__)
 #endif

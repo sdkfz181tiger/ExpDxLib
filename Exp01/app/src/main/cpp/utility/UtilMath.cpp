@@ -4,11 +4,11 @@
 static UtilMath *selfUtilMath = nullptr;
 
 UtilMath::UtilMath() {
-	LOGD("UtiliMath()\n");
+	LOGD("Util", "UtiliMath()\n");
 }
 
 UtilMath::~UtilMath() {
-	LOGD("~UtiliMath()\n");
+	LOGD("Util", "~UtiliMath()\n");
 }
 
 UtilMath *UtilMath::getInstance() {
@@ -33,7 +33,7 @@ void UtilMath::destroyInstance() {
 }
 
 bool UtilMath::init() {
-	LOGD("UtilMath::init()\n");
+	LOGD("Util", "UtilMath::init()\n");
 
 	// Sin table
 	for (int i = 0; i < 360; ++i) {

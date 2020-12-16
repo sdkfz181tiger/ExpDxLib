@@ -4,13 +4,12 @@
 static UtilDebug *selfUtilDebug = nullptr;
 
 UtilDebug::UtilDebug() : dispWidth(0), dispHeight(0), dispColor(0),
-                         gridSize(64), gridRows(0), gridCols(0), gridColor(0),
-                         fpsWidth(0), fpsHeight(0), fpsColor(0), delayCnt(0) {
-	LOGD("UtilDebug()\n");
+                         gridSize(64), gridRows(0), gridCols(0), gridColor(0) {
+	LOGD("Util", "UtilDebug()\n");
 }
 
 UtilDebug::~UtilDebug() {
-	LOGD("~UtilDebug()\n");
+	LOGD("Util", "~UtilDebug()\n");
 }
 
 UtilDebug *UtilDebug::getInstance() {
@@ -35,15 +34,11 @@ void UtilDebug::destroyInstance() {
 }
 
 bool UtilDebug::init() {
-	LOGD("UtilDebug::init()\n");
+	LOGD("Util", "UtilDebug::init()\n");
 	GetScreenState(&dispWidth, &dispHeight, &dispColor);
 	gridRows = dispHeight / gridSize;
 	gridCols = dispWidth / gridSize;
 	gridColor = GetColor(0, 99, 0);
-	fpsWidth = gridSize * 4;
-	fpsHeight = gridSize * 1;
-	fpsColor = GetColor(33, 33, 99);
-	delayCnt = GetNowCount();
 	return true;
 }
 
@@ -65,14 +60,10 @@ void UtilDebug::drawGrid() {
 	}
 }
 
-void UtilDebug::drawFPS() {
+void UtilDebug::drawFPS(float delay) {
 
-	const int sX = dispWidth - fpsWidth;
-	const int sY = dispHeight - fpsHeight;
-	const float delay = 1000.0f / float(GetNowCount() - delayCnt);
 	char fpsStr[20];
-	sprintf(fpsStr, "FPS:%.2f", delay);
-	UtilLabel::getInstance()->drawStr(fpsStr, sX + fpsWidth / 2, sY,
-	                                  3, UtilLabelAlign::CENTER);
-	delayCnt = GetNowCount();// Update
+	sprintf(fpsStr, "FPS:%02f", delay);
+	UtilLabel::getInstance()->drawStr(fpsStr, dispWidth, dispHeight - gridSize,
+	                                  3, UtilAlign::RIGHT);
 }

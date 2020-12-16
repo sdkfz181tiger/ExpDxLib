@@ -14,8 +14,12 @@ project("mydxlib01")
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI} )
-link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
+        ${CMAKE_CURRENT_SOURCE_DIR}/main
+        ${CMAKE_CURRENT_SOURCE_DIR}/utility)
+link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
+        ${CMAKE_CURRENT_SOURCE_DIR}/main
+        ${CMAKE_CURRENT_SOURCE_DIR}/utility)
 
 add_library( # Sets the name of the library.
              native-lib
@@ -25,6 +29,7 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              native-lib.cpp
+             main/GameManager.cpp
              utility/Utility.h
              utility/UtilDebug.cpp
              utility/UtilLabel.cpp
