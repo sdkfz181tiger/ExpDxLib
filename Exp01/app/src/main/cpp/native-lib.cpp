@@ -14,35 +14,32 @@ int android_main(void) {
 	// GameManager
 	GameManager *gameManager = new GameManager(D_WIDTH, D_HEIGHT, C_DEPTH);
 
-	const int cX = D_WIDTH / 2;
-	const int cY = D_HEIGHT / 2;
 	const int fps = 16;
 	const int wait = 1000 / fps;
 	int now = GetNowCount();
 
 	// Graph
-	const int rGra = LoadGraph("images/y_reimu_x1.png");
-	int rGraW, rGraH;
-	GetGraphSize(rGra, &rGraW, &rGraH);
-	DrawExtendGraph(cX, cY, cX + rGraW * 5, cY + rGraH * 5, rGra, true);
+//	const int rGra = LoadGraph("images/y_reimu_x1.png");
+//	int rGraW, rGraH;
+//	GetGraphSize(rGra, &rGraW, &rGraH);
+//	DrawExtendGraph(cX, cY, cX + rGraW * 5, cY + rGraH * 5,
+//	                rGra, true);
 
 	// MainLoop
-	while (ProcessMessage() == 0) {
+	while (ProcessMessage() == 0 || gameManager->getQuitFlg()) {
 		ClearDrawScreen();
 		SetDrawScreen(DX_SCREEN_BACK);
-
-		// Label
-		UtilLabel::getInstance()->drawStr("HELLO DXLIB!!", cX, cY,
-		                                  5, UtilAlign::CENTER);
 
 		// Delay
 		int passed = GetNowCount() - now;
 		float delay = float(passed) / float(wait);
-		UtilDebug::getInstance()->drawGrid();
-		UtilDebug::getInstance()->drawFPS(delay);
 		now = GetNowCount();
-		WaitTimer(wait);
 
+		// GameManager
+		gameManager->draw(delay);
+
+		// Wait, Flip
+		WaitTimer(wait);
 		ScreenFlip();
 	}
 
