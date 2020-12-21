@@ -2,7 +2,7 @@
 #define _GAMEMANAGER_H_
 
 #include "Utility.h"
-#include "BaseScene.h"
+#include "SceneTitle.h"
 
 class GameManager {
 
@@ -12,7 +12,7 @@ private:
 
 	vector<bool> touchFlgs;
 	vector<Vec2> touchPositions;
-	vector<BaseScene *> scenes;
+	vector<SceneBase *> scenes;
 
 public:
 	GameManager(int dWidth, int dHeight, int cDepth);
@@ -21,11 +21,9 @@ public:
 
 	void init();
 
-	int getDispWidth();
-
-	int getDispHeight();
-
 	bool getQuitFlg();
+
+	void setQuitFlg(bool flg);
 
 	void touchInput();
 

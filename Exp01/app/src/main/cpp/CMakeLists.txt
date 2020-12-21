@@ -29,8 +29,10 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              native-lib.cpp
-             main/BaseScene.cpp
              main/GameManager.cpp
+             main/SceneBase.cpp
+             main/SceneTitle.cpp
+             main/SpriteBase.cpp
              utility/Utility.h
              utility/UtilDebug.cpp
              utility/UtilLabel.cpp

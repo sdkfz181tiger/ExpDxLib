@@ -18,21 +18,14 @@ int android_main(void) {
 	const int wait = 1000 / fps;
 	int now = GetNowCount();
 
-	// Graph
-//	const int rGra = LoadGraph("images/y_reimu_x1.png");
-//	int rGraW, rGraH;
-//	GetGraphSize(rGra, &rGraW, &rGraH);
-//	DrawExtendGraph(cX, cY, cX + rGraW * 5, cY + rGraH * 5,
-//	                rGra, true);
-
 	// MainLoop
-	while (ProcessMessage() == 0 || gameManager->getQuitFlg()) {
+	while (ProcessMessage() == 0 && !gameManager->getQuitFlg()) {
 		ClearDrawScreen();
 		SetDrawScreen(DX_SCREEN_BACK);
 
 		// Delay
 		int passed = GetNowCount() - now;
-		float delay = float(passed) / float(wait);
+		float delay = floor((float(passed) / float(wait)) * 100.0f) * 0.01f;
 		now = GetNowCount();
 
 		// Touch, Update
@@ -43,6 +36,10 @@ int android_main(void) {
 		WaitTimer(wait);
 		ScreenFlip();
 	}
+
+	// Delete
+	delete(gameManager);
+	gameManager = nullptr;
 
 	DxLib_End();
 	return 0;

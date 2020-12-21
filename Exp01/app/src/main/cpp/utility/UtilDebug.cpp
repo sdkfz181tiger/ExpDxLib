@@ -63,7 +63,7 @@ void UtilDebug::drawGrid() {
 void UtilDebug::drawFPS(float delay) {
 
 	char fpsStr[20];
-	sprintf(fpsStr, "FPS:%02f", delay);
+	sprintf(fpsStr, "FPS:%.2f", delay);
 	UtilLabel::getInstance()->drawStr(fpsStr, dispWidth, dispHeight - gridSize,
 	                                  3, UtilAlign::RIGHT);
 }

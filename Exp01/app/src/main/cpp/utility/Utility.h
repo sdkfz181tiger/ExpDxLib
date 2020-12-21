@@ -44,3 +44,11 @@ using namespace std;
 #ifndef LOGE
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __VA_ARGS__)
 #endif
+
+#ifndef DX_SAFE_DELETE
+#define DX_SAFE_DELETE(p) do { if(p) { delete (p); (p) = 0; } } while(0)
+#endif
+
+#ifndef DX_SAFE_DELETE_ARRAY
+#define DX_SAFE_DELETE_ARRAY(p) do { if(p) { delete[] (p); (p) = 0; } } while(0)
+#endif

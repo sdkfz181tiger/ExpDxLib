@@ -9,6 +9,12 @@ GameManager::GameManager(int dWidth, int dHeight, int cDepth) :
 
 GameManager::~GameManager() {
 	LOGD("Main", "~GameManager()\n");
+	// Delete all scenes
+	vector<SceneBase *>::iterator it = scenes.end();
+	while (it-- != scenes.begin()) {
+		delete (*it);
+		scenes.erase(it);
+	}
 }
 
 void GameManager::init() {
@@ -17,26 +23,22 @@ void GameManager::init() {
 	SetGraphMode(dWidth, dHeight, cDepth);
 	SetOutApplicationLogValidFlag(true);
 	// Scenes
-	BaseScene *scene = new BaseScene(dWidth, dHeight);
+	SceneBase *scene = new SceneTitle(dWidth, dHeight);
 	scenes.push_back(scene);
-}
-
-int GameManager::getDispWidth() {
-	return dWidth;
-}
-
-int GameManager::getDispHeight() {
-	return dHeight;
 }
 
 bool GameManager::getQuitFlg() {
 	return this->quitFlg;
 }
 
+void GameManager::setQuitFlg(bool flg) {
+	this->quitFlg = flg;
+}
+
 void GameManager::touchInput() {
 
 	// Scene
-	BaseScene *scene = scenes.at(scenes.size() - 1);
+	SceneBase *scene = scenes.back();
 
 	// Touches(Began, Moved)
 	vector<bool> touches(5, false);
@@ -48,6 +50,7 @@ void GameManager::touchInput() {
 		if (!touchFlgs.at(id)) {
 			//LOGD("Main", "Began[%d]:%d, %d", i, x, y);
 			scene->setOnTouchBegan(id, x, y);// Began
+			setQuitFlg(true);// TODO: testing...
 		} else {
 			if (touchPositions.at(id).x != x || touchPositions.at(id).y != y) {
 				//LOGD("Main", "Moved[%d]:%d, %d", i, x, y);
@@ -75,8 +78,8 @@ void GameManager::touchInput() {
 void GameManager::update(const float delay) {
 
 	// Scene
-	BaseScene *scene = scenes.at(scenes.size() - 1);
-	scene->draw(delay);
+	SceneBase *scene = scenes.back();
+	scene->update(delay);
 
 	// Debug
 	UtilDebug::getInstance()->drawGrid();
