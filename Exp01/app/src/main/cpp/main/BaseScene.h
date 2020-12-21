@@ -15,6 +15,12 @@ public:
 
 	void init();
 
+	void setOnTouchBegan(int id, int x, int y);
+
+	void setOnTouchMoved(int id, int x, int y);
+
+	void setOnTouchEnded(int id, int x, int y);
+
 	void draw(float delay);
 };
 

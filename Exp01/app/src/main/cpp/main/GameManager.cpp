@@ -12,9 +12,13 @@ GameManager::~GameManager() {
 }
 
 void GameManager::init() {
+	LOGD("Main", "GameManager::init()\n");
 	// GraphMode
 	SetGraphMode(dWidth, dHeight, cDepth);
 	SetOutApplicationLogValidFlag(true);
+	// Scenes
+	BaseScene *scene = new BaseScene(dWidth, dHeight);
+	scenes.push_back(scene);
 }
 
 int GameManager::getDispWidth() {
@@ -31,17 +35,23 @@ bool GameManager::getQuitFlg() {
 
 void GameManager::touchInput() {
 
-	int x, y, id;
+	// Scene
+	BaseScene *scene = scenes.at(scenes.size() - 1);
+
+	// Touches(Began, Moved)
 	vector<bool> touches(5, false);
 	for (int i = 0; i < GetTouchInputNum(); i++) {
+		int x, y, id;
 		GetTouchInput(i, &x, &y, &id, nullptr);
 		if (touchFlgs.size() <= id) continue;
 		if (touchPositions.size() <= id) continue;
 		if (!touchFlgs.at(id)) {
-			LOGD("Touch", "Began[%d]: %d, %d", id, x, y);
+			//LOGD("Main", "Began[%d]:%d, %d", i, x, y);
+			scene->setOnTouchBegan(id, x, y);// Began
 		} else {
 			if (touchPositions.at(id).x != x || touchPositions.at(id).y != y) {
-				//LOGD("Touch", "Move[%d]: %d, %d", id, x, y);
+				//LOGD("Main", "Moved[%d]:%d, %d", i, x, y);
+				scene->setOnTouchMoved(id, x, y);// Moved
 			}
 		}
 		touches.at(id) = true;
@@ -50,24 +60,23 @@ void GameManager::touchInput() {
 		touchPositions.at(id).y = y;
 	}
 
+	// Touches(Ended)
 	for (int i = 0; i < touches.size(); i++) {
 		if (touches.at(i)) continue;
 		if (!touchFlgs.at(i)) continue;
 		touchFlgs.at(i) = false;
-		int x = int(touchPositions.at(i).x);
-		int y = int(touchPositions.at(i).y);
-		LOGD("Touch", "Ended[%d]: %d, %d", i, x, y);
+		const int x = int(touchPositions.at(i).x);
+		const int y = int(touchPositions.at(i).y);
+		//LOGD("Main", "Ended[%d]:%d, %d", i, x, y);
+		scene->setOnTouchEnded(i, x, y);// Ended
 	}
 }
 
 void GameManager::update(const float delay) {
 
-	const int cX = dWidth / 2;
-	const int cY = dHeight / 2;
-
-	// Label
-	UtilLabel::getInstance()->drawStr("HELLO DXLIB!!", cX, cY,
-	                                  5, UtilAlign::CENTER);
+	// Scene
+	BaseScene *scene = scenes.at(scenes.size() - 1);
+	scene->draw(delay);
 
 	// Debug
 	UtilDebug::getInstance()->drawGrid();
