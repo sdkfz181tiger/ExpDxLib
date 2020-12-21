@@ -50,11 +50,11 @@ void UtilDebug::drawGrid() {
 	DrawLine(0, cY, dispWidth, cY, gridColor);
 	DrawLine(cX, 0, cX, dispHeight, gridColor);
 	// Grid
-	for (int r = 1; r <= gridRows / 2; ++r) {
+	for (int r = 1; r <= gridRows / 2; r++) {
 		DrawLine(0, cY + gridSize * r, dispWidth, cY + gridSize * r, gridColor);
 		DrawLine(0, cY - gridSize * r, dispWidth, cY - gridSize * r, gridColor);
 	}
-	for (int c = 1; c <= gridCols; ++c) {
+	for (int c = 1; c <= gridCols; c++) {
 		DrawLine(cX + gridSize * c, 0, cX + gridSize * c, dispHeight, gridColor);
 		DrawLine(cX - gridSize * c, 0, cX - gridSize * c, dispHeight, gridColor);
 	}

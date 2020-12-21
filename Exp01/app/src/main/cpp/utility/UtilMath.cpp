@@ -36,13 +36,13 @@ bool UtilMath::init() {
 	LOGD("Util", "UtilMath::init()\n");
 
 	// Sin table
-	for (int i = 0; i < 360; ++i) {
+	for (int i = 0; i < 360; i++) {
 		float rad = sinf(i * DEG_TO_RAD);
 		sinTable[i] = rad;
 	}
 
 	// Cos table
-	for (int i = 0; i < 360; ++i) {
+	for (int i = 0; i < 360; i++) {
 		float rad = cosf(i * DEG_TO_RAD);
 		cosTable[i] = rad;
 	}

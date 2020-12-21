@@ -38,7 +38,7 @@ bool UtilLabel::init() {
 	// Number
 	const string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;!?";
 	int gW, gH = 0;
-	for (int i = 0; i < str.length(); ++i) {
+	for (int i = 0; i < str.length(); i++) {
 		string key = str.substr(i, 1);// Important!!
 		if (key == ":") key = "_colon";
 		if (key == ",") key = "_comma";
@@ -67,7 +67,7 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 	if (align == UtilAlign::LEFT) gX -= 0;
 	if (align == UtilAlign::RIGHT) gX -= gWidth;
 	if (align == UtilAlign::CENTER) gX -= gWidth / 2;
-	for (int i = 0; i < str.length(); ++i) {
+	for (int i = 0; i < str.length(); i++) {
 		const char c = str.at(i);
 		const int handle = handleMap[c];
 		if (0 <= handle)

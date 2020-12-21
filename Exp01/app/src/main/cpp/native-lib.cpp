@@ -14,7 +14,7 @@ int android_main(void) {
 	// GameManager
 	GameManager *gameManager = new GameManager(D_WIDTH, D_HEIGHT, C_DEPTH);
 
-	const int fps = 16;
+	const int fps = 32;
 	const int wait = 1000 / fps;
 	int now = GetNowCount();
 
@@ -35,8 +35,9 @@ int android_main(void) {
 		float delay = float(passed) / float(wait);
 		now = GetNowCount();
 
-		// GameManager
-		gameManager->draw(delay);
+		// Touch, Update
+		gameManager->touchInput();
+		gameManager->update(delay);
 
 		// Wait, Flip
 		WaitTimer(wait);
