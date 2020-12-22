@@ -6,7 +6,6 @@
 class UtilDebug {
 
 private:
-
 	int dispWidth, dispHeight, dispColor;
 	unsigned int gridSize, gridRows, gridCols, gridColor;
 

@@ -41,6 +41,8 @@ int android_main(void) {
 	delete(gameManager);
 	gameManager = nullptr;
 
+	InitSoundMem();
+	InitGraph();
 	DxLib_End();
 	return 0;
 }
@@ -86,4 +88,5 @@ Java_com_ozateck_mydxlib01_MainActivity_nativeOnDestroy(
 	UtilDebug::getInstance()->destroyInstance();
 	UtilLabel::getInstance()->destroyInstance();
 	UtilMath::getInstance()->destroyInstance();
+	UtilSound::getInstance()->destroyInstance();
 }

@@ -37,6 +37,7 @@ add_library( # Sets the name of the library.
              utility/UtilDebug.cpp
              utility/UtilLabel.cpp
              utility/UtilMath.cpp
+             utility/UtilSound.cpp
              utility/Vec2.cpp
         )
 

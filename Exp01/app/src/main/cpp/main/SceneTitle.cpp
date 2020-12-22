@@ -21,7 +21,6 @@ SceneTitle::~SceneTitle() {
 bool SceneTitle::init() {
 	LOGD("Main", "SceneTitle::init()\n");
 
-	// Test
 	for (int i = 0; i < 10; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
 		int rY = UtilMath::getInstance()->getRandom(0, dHeight);
@@ -41,6 +40,7 @@ void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		if (sprite->containsPoint(x, y)) {
 			LOGD("Main", "Contains!!");
+			UtilSound::getInstance()->playSE("se_coin_01.wav");
 		}
 	}
 }

@@ -6,7 +6,6 @@
 class UtilMath {
 
 private:
-
 	// Sin, Cos
 	float sinTable[360];
 	float cosTable[360];
