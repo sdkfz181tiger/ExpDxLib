@@ -1,6 +1,6 @@
 #include "SceneTitle.h"
 
-SceneTitle* SceneTitle::createScene(int dWidth, int dHeight) {
+SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 	// New
 	SceneTitle *scene = new SceneTitle(dWidth, dHeight);
 	if (scene && scene->init()) return scene;
@@ -8,36 +8,45 @@ SceneTitle* SceneTitle::createScene(int dWidth, int dHeight) {
 	return nullptr;
 }
 
-SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-				tSprite(nullptr) {
+SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight) {
 	LOGD("Main", "SceneTitle()\n");
 }
 
 SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
-	// Test
-	if (tSprite) delete (tSprite);
+	// Delete all sprites
+	DX_SAFE_DELETE_VECTOR(sprites);
 }
 
 bool SceneTitle::init() {
 	LOGD("Main", "SceneTitle::init()\n");
 
-	const float cX = dWidth * 0.5f;
-	const float cY = dHeight * 0.5f;
-
 	// Test
-	tSprite = SpriteBase::createSprite("images/y_reimu_x1.png", cX, cY);
-	tSprite->setScale(5);
+	for (int i = 0; i < 10; i++) {
+		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
+		int rY = UtilMath::getInstance()->getRandom(0, dHeight);
+		auto sprite = SpriteBase::createSprite("images/y_reimu_x1.png", rX, rY);
+		sprite->setScale(5);
+		sprites.push_back(sprite);
+	}
 
 	return true;
 }
 
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
+
+	auto it = sprites.end();
+	while (it-- != sprites.begin()) {
+		auto sprite = static_cast<SpriteBase *>(*it);
+		if (sprite->containsPoint(x, y)) {
+			LOGD("Main", "Contains!!");
+		}
+	}
 }
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {
-	LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
+	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
 }
 
 void SceneTitle::setOnTouchEnded(int id, int x, int y) {
@@ -54,5 +63,9 @@ void SceneTitle::update(const float delay) {
 	                                  5, UtilAlign::CENTER);
 
 	// Test
-	if(tSprite) tSprite->update(delay);
+	auto it = sprites.end();
+	while (it-- != sprites.begin()) {
+		auto sprite = static_cast<SpriteBase *>(*it);
+		sprite->update(delay);
+	}
 }

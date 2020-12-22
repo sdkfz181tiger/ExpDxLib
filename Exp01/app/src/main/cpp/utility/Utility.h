@@ -52,3 +52,7 @@ using namespace std;
 #ifndef DX_SAFE_DELETE_ARRAY
 #define DX_SAFE_DELETE_ARRAY(p) do { if(p) { delete[] (p); (p) = 0; } } while(0)
 #endif
+
+#ifndef DX_SAFE_DELETE_VECTOR
+#define DX_SAFE_DELETE_VECTOR(v) auto it = v.end(); while (it-- != v.begin()) { delete (*it);v.erase(it); }
+#endif

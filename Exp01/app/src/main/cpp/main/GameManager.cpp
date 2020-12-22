@@ -10,11 +10,7 @@ GameManager::GameManager(int dWidth, int dHeight, int cDepth) :
 GameManager::~GameManager() {
 	LOGD("Main", "~GameManager()\n");
 	// Delete all scenes
-	vector<SceneBase *>::iterator it = scenes.end();
-	while (it-- != scenes.begin()) {
-		delete (*it);
-		scenes.erase(it);
-	}
+	DX_SAFE_DELETE_VECTOR(scenes);
 }
 
 void GameManager::init() {
@@ -50,7 +46,7 @@ void GameManager::touchInput() {
 		if (!touchFlgs.at(id)) {
 			//LOGD("Main", "Began[%d]:%d, %d", i, x, y);
 			scene->setOnTouchBegan(id, x, y);// Began
-			setQuitFlg(true);// TODO: testing...
+			//setQuitFlg(true);// TODO: testing...
 		} else {
 			if (touchPositions.at(id).x != x || touchPositions.at(id).y != y) {
 				//LOGD("Main", "Moved[%d]:%d, %d", i, x, y);

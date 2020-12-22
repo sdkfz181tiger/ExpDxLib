@@ -6,10 +6,10 @@
 class SceneTitle : public SceneBase {
 
 private:
-	SpriteBase *tSprite;
+	vector<SpriteBase *> sprites;
 
 public:
-	static SceneTitle* createScene(int dWidth, int dHeight);
+	static SceneTitle *createScene(int dWidth, int dHeight);
 
 	SceneTitle(int dWidth, int dHeight);
 

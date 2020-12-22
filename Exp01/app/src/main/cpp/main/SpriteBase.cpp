@@ -46,6 +46,14 @@ void SpriteBase::setScale(int scale) {
 	this->draw();
 }
 
+bool SpriteBase::containsPoint(int x, int y) {
+	if (x < minX) return false;
+	if (maxX < x) return false;
+	if (y < minY) return false;
+	if (maxY < y) return false;
+	return true;
+}
+
 void SpriteBase::update(const float delay) {
 	pos.x += vel.x * delay;
 	pos.y += vel.y * delay;
