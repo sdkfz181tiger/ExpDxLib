@@ -55,14 +55,16 @@ bool UtilSound::init() {
 
 void UtilSound::playSE(const string &fileName) {
 	if (!sounds.count(fileName)) return;
-	auto se = sounds.find(fileName);
-	LOGD("Main", "playSE:%s, %d", se->first.c_str(), se->second);
-	PlaySoundMem(se->second, DX_PLAYTYPE_NORMAL, true);
+	auto sound = sounds.find(fileName);
+	LOGD("Main", "playSE:%s, %d", sound->first.c_str(), sound->second);
+	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
+	PlaySoundMem(sound->second, DX_PLAYTYPE_NORMAL, true);
 }
 
 void UtilSound::playBGM(const string &fileName) {
 	if (!sounds.count(fileName)) return;
-	auto se = sounds.find(fileName);
-	LOGD("Main", "playBGM:%s, %d", se->first.c_str(), se->second);
-	PlaySoundMem(se->second, DX_PLAYTYPE_LOOPBIT, true);
+	auto sound = sounds.find(fileName);
+	LOGD("Main", "playBGM:%s, %d", sound->first.c_str(), sound->second);
+	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
+	PlaySoundMem(sound->second, DX_PLAYTYPE_LOOPBIT, true);
 }
