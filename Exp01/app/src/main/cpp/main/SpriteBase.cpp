@@ -1,5 +1,13 @@
 #include "SpriteBase.h"
 
+SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
+	// New
+	SpriteBase *sprite = new SpriteBase(x, y);
+	if (sprite && sprite->init(fileName.c_str())) return sprite;
+	DX_SAFE_DELETE(sprite);
+	return nullptr;
+}
+
 SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
@@ -9,14 +17,6 @@ SpriteBase::SpriteBase(float x, float y) :
 
 SpriteBase::~SpriteBase() {
 	LOGD("Main", "~SpriteBase()\n");
-}
-
-SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
-	// New
-	SpriteBase *sprite = new SpriteBase(x, y);
-	if (sprite && sprite->init(fileName.c_str())) return sprite;
-	DX_SAFE_DELETE(sprite);
-	return nullptr;
 }
 
 bool SpriteBase::init(const char *fileName) {
@@ -43,21 +43,21 @@ void SpriteBase::setScale(int scale) {
 	this->scale = scale;
 	this->width *= scale;
 	this->height *= scale;
-	this->setRect();
+	this->draw();
 }
 
-void SpriteBase::setRect() {
+void SpriteBase::update(const float delay) {
+	pos.x += vel.x * delay;
+	pos.y += vel.y * delay;
+	this->draw();
+}
+
+void SpriteBase::draw() {
+
 	minX = pos.x - width * 0.5f;
 	maxX = pos.x + width * 0.5f;
 	minY = pos.y - height * 0.5f;
 	maxY = pos.y + height * 0.5f;
-}
-
-void SpriteBase::update(const float delay) {
-
-	pos.x += vel.x * delay;
-	pos.y += vel.y * delay;
-	this->setRect();
 
 	int color = GetColor(255, 255, 255);
 	DrawBox(minX, minY, maxX, maxY, color, false);

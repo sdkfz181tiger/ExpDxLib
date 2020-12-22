@@ -11,11 +11,11 @@ protected:
 	int minX, maxX, minY, maxY;
 
 public:
+	static SpriteBase *createSprite(const string &fileName, float x, float y);
+
 	SpriteBase(float x, float y);
 
 	virtual ~SpriteBase();
-
-	static SpriteBase *createSprite(const string &fileName, float x, float y);
 
 	bool init(const char *fileName);
 
@@ -25,9 +25,9 @@ public:
 
 	void setScale(int scale);
 
-	void setRect();
-
 	void update(const float delay);
+
+	void draw();
 };
 
 #endif // _SPRITEBASE_H_

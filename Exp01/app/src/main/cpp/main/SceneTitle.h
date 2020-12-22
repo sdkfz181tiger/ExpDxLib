@@ -9,11 +9,13 @@ private:
 	SpriteBase *tSprite;
 
 public:
+	static SceneTitle* createScene(int dWidth, int dHeight);
+
 	SceneTitle(int dWidth, int dHeight);
 
 	~SceneTitle() override;
 
-	void init() override;
+	bool init() override;
 
 	void setOnTouchBegan(int id, int x, int y) override;
 

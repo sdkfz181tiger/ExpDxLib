@@ -1,9 +1,16 @@
 #include "SceneTitle.h"
 
+SceneTitle* SceneTitle::createScene(int dWidth, int dHeight) {
+	// New
+	SceneTitle *scene = new SceneTitle(dWidth, dHeight);
+	if (scene && scene->init()) return scene;
+	DX_SAFE_DELETE(scene);
+	return nullptr;
+}
+
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 				tSprite(nullptr) {
 	LOGD("Main", "SceneTitle()\n");
-	this->init();// Initialize
 }
 
 SceneTitle::~SceneTitle() {
@@ -12,7 +19,7 @@ SceneTitle::~SceneTitle() {
 	if (tSprite) delete (tSprite);
 }
 
-void SceneTitle::init() {
+bool SceneTitle::init() {
 	LOGD("Main", "SceneTitle::init()\n");
 
 	const float cX = dWidth * 0.5f;
@@ -21,6 +28,8 @@ void SceneTitle::init() {
 	// Test
 	tSprite = SpriteBase::createSprite("images/y_reimu_x1.png", cX, cY);
 	tSprite->setScale(5);
+
+	return true;
 }
 
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {

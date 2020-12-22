@@ -14,7 +14,7 @@ public:
 
 	virtual ~SceneBase();
 
-	virtual void init() = 0;
+	virtual bool init() = 0;
 
 	virtual void setOnTouchBegan(int id, int x, int y) = 0;
 
