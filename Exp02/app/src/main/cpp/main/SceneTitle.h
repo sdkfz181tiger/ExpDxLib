@@ -6,6 +6,7 @@
 class SceneTitle : public SceneBase {
 
 private:
+	BtnBase *btn;
 	vector<SpriteBase *> sprites;
 
 public:

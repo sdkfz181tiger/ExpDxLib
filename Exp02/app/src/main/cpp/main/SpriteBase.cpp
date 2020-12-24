@@ -43,7 +43,6 @@ void SpriteBase::setScale(int scale) {
 	this->scale = scale;
 	this->width *= scale;
 	this->height *= scale;
-	this->draw();
 }
 
 bool SpriteBase::containsPoint(int x, int y) {
@@ -55,18 +54,15 @@ bool SpriteBase::containsPoint(int x, int y) {
 }
 
 void SpriteBase::update(const float delay) {
+	// Velocity
 	pos.x += vel.x * delay;
 	pos.y += vel.y * delay;
-	this->draw();
-}
-
-void SpriteBase::draw() {
-
+	// Rect
 	minX = pos.x - width * 0.5f;
 	maxX = pos.x + width * 0.5f;
 	minY = pos.y - height * 0.5f;
 	maxY = pos.y + height * 0.5f;
-
+	// Draw
 	int color = GetColor(255, 255, 255);
 	DrawBox(minX, minY, maxX, maxY, color, false);
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);

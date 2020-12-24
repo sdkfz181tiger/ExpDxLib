@@ -28,8 +28,6 @@ public:
 	bool containsPoint(int x, int y);
 
 	void update(const float delay);
-
-	void draw();
 };
 
 #endif // _SPRITEBASE_H_

@@ -21,6 +21,12 @@ SceneTitle::~SceneTitle() {
 bool SceneTitle::init() {
 	LOGD("Main", "SceneTitle::init()\n");
 
+	const float cX = dWidth * 0.5f;
+	const float cY = dHeight * 0.5f;
+
+	btn = BtnBase::createSprite("images/ss_btn.png", cX, cY, 3, 1);
+	btn->setScale(3);
+
 	for (int i = 0; i < 3; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
 		int rY = UtilMath::getInstance()->getRandom(0, dHeight);
@@ -33,7 +39,8 @@ bool SceneTitle::init() {
 }
 
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
-	LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
+	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
+	btn->setOnTouchBegan(id, x, y);// Btn
 
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
@@ -47,10 +54,12 @@ void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
+	btn->setOnTouchMoved(id, x, y);// Btn
 }
 
 void SceneTitle::setOnTouchEnded(int id, int x, int y) {
-	LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
+	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
+	btn->setOnTouchEnded(id, x, y);// Btn
 }
 
 void SceneTitle::update(const float delay) {
@@ -68,4 +77,6 @@ void SceneTitle::update(const float delay) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		sprite->update(delay);
 	}
+
+	btn->update(delay);
 }

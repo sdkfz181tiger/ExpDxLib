@@ -2,6 +2,7 @@
 #define _SCENEBASE_H_
 
 #include "Utility.h"
+#include "BtnBase.h"
 #include "SpriteBase.h"
 
 class SceneBase {
