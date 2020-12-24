@@ -6,21 +6,22 @@
 class BtnBase {
 
 protected:
-	Vec2 pos;
-	int graphs[3];
-	int width, height, scale;
+	const string title; Vec2 pos;
+	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
-	int touchID;
+	bool touchFlg; int touchID;
+	int colorOn, colorOff;
 
 public:
-	static BtnBase *createSprite(const string &fileName, float x, float y,
-	                             int xNum, int yNum);
+	static BtnBase *createBtn(const string &fileName,
+	                          const string &title,
+	                          float x, float y);
 
-	BtnBase(float x, float y);
+	BtnBase(string title, float x, float y);
 
 	virtual ~BtnBase();
 
-	bool init(const char *fileName, int xNum, int yNum);
+	bool init(const char *fileName);
 
 	void setPosition(float x, float y);
 

@@ -24,7 +24,7 @@ bool SceneTitle::init() {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	btn = BtnBase::createSprite("images/ss_btn.png", cX, cY, 3, 1);
+	btn = BtnBase::createBtn("images/box_100x60.png", "GREAT", cX, cY);
 	btn->setScale(3);
 
 	for (int i = 0; i < 3; i++) {

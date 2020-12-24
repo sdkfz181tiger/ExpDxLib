@@ -1,19 +1,22 @@
 #include "BtnBase.h"
 
-BtnBase *BtnBase::createSprite(const string &fileName, float x, float y,
-                               int xNum, int yNum) {
+#include <utility>
+
+BtnBase *BtnBase::createBtn(const string &fileName,
+                            const string &title,
+                            float x, float y) {
 	// New
-	BtnBase *sprite = new BtnBase(x, y);
-	if (sprite && sprite->init(fileName.c_str(), xNum, yNum)) return sprite;
+	BtnBase *sprite = new BtnBase(title, x, y);
+	if (sprite && sprite->init(fileName.c_str())) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-BtnBase::BtnBase(float x, float y) :
-		pos(Vec2(x, y)),
-		width(0), height(0), scale(1),
+BtnBase::BtnBase(string title, float x, float y) :
+		title(title), pos(Vec2(x, y)),
+		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		touchID(-1) {
+		touchFlg(false), touchID(-1) {
 	LOGD("Main", "BtnBase()\n");
 }
 
@@ -21,22 +24,12 @@ BtnBase::~BtnBase() {
 	LOGD("Main", "~BtnBase()\n");
 }
 
-bool BtnBase::init(const char *fileName, int xNum, int yNum) {
+bool BtnBase::init(const char *fileName) {
 	// Load graph
-	int graph = LoadGraph(fileName);
+	graph = LoadGraph(fileName);
 	if (graph == -1) return false;
-	int sWidth, sHeight;
-	GetGraphSize(graph, &sWidth, &sHeight);
-	// Width, Height
-	width = sWidth / xNum;
-	height = sHeight / yNum;
-	int result = LoadDivGraph(fileName, xNum * yNum,
-	                          xNum, yNum, width, height, graphs);
-	if (result == 0) {
-		DeleteGraph(graph);// Delete
-		return true;
-	}
-	return false;
+	GetGraphSize(graph, &width, &height);
+	return true;
 }
 
 void BtnBase::setPosition(float x, float y) {
@@ -59,23 +52,29 @@ bool BtnBase::containsPoint(int x, int y) {
 }
 
 void BtnBase::setOnTouchBegan(int id, int x, int y) {
+	if (touchFlg) return;
 	if (touchID != -1) return;
 	if (!this->containsPoint(x, y)) return;
 	LOGD("Main", "Capture[%d]:%d, %d", id, x, y);
+	touchFlg = true;
 	touchID = id;
 }
 
 void BtnBase::setOnTouchMoved(int id, int x, int y) {
+	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (this->containsPoint(x, y)) return;
 	LOGD("Main", "Cancel[%d]:%d, %d", id, x, y);
+	touchFlg = false;
 	touchID = -1;
 }
 
 void BtnBase::setOnTouchEnded(int id, int x, int y) {
+	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (!this->containsPoint(x, y)) return;
 	LOGD("Main", "Confirm[%d]:%d, %d", id, x, y);
+	touchFlg = false;
 	touchID = -1;
 }
 
@@ -86,11 +85,12 @@ void BtnBase::update(const float delay) {
 	minY = pos.y - height * 0.5f;
 	maxY = pos.y + height * 0.5f;
 	// Draw
-	int color = GetColor(255, 255, 255);
-	DrawBox(minX, minY, maxX, maxY, color, false);
-	if (touchID != -1) {
-		DrawExtendGraph(minX, minY, maxX, maxY, graphs[1], true);
-	} else {
-		DrawExtendGraph(minX, minY, maxX, maxY, graphs[0], true);
+	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+	if(touchFlg){
+		int color = GetColor(255, 255, 255);
+		DrawBox(minX, minY, maxX, maxY, color, false);
 	}
+	// Text
+	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
+	                                  scale, UtilAlign::CENTER);
 }

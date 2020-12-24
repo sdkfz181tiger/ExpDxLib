@@ -22,11 +22,9 @@ SpriteBase::~SpriteBase() {
 bool SpriteBase::init(const char *fileName) {
 	// Load graph
 	graph = LoadGraph(fileName);
-	if (graph != -1) {
-		GetGraphSize(graph, &width, &height);
-		return true;
-	}
-	return false;
+	if (graph == -1) return false;
+	GetGraphSize(graph, &width, &height);
+	return true;
 }
 
 void SpriteBase::setPosition(float x, float y) {
