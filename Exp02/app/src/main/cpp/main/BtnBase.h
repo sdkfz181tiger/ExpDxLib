@@ -6,11 +6,13 @@
 class BtnBase {
 
 protected:
-	const string title; Vec2 pos;
+	const string title;
+	Vec2 pos;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
-	bool touchFlg; int touchID;
-	int colorOn, colorOff;
+	bool touchFlg;
+	int touchID;
+	unsigned int touchColor;
 
 public:
 	static BtnBase *createBtn(const string &fileName,
