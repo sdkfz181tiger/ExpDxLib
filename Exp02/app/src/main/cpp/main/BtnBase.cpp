@@ -13,10 +13,10 @@ BtnBase *BtnBase::createBtn(const string &fileName,
 }
 
 BtnBase::BtnBase(string title, float x, float y) :
-		title(title), pos(Vec2(x, y)),
+		title(move(title)), pos(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		touchFlg(false), touchID(-1), touchColor(0) {
+		touchFlg(false), touchID(-1), eventListener(nullptr) {
 	LOGD("Main", "BtnBase()\n");
 }
 
@@ -30,6 +30,10 @@ bool BtnBase::init(const char *fileName) {
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	return true;
+}
+
+void BtnBase::addEventListener(BtnEventListener *eventListener) {
+	this->eventListener = eventListener;
 }
 
 void BtnBase::setPosition(float x, float y) {
@@ -55,30 +59,27 @@ void BtnBase::setOnTouchBegan(int id, int x, int y) {
 	if (touchFlg) return;
 	if (touchID != -1) return;
 	if (!this->containsPoint(x, y)) return;
-	LOGD("Main", "Captured[%d]:%d, %d", id, x, y);
+	if (eventListener) eventListener->onBtnPressed();
 	touchFlg = true;
 	touchID = id;
-	touchColor = GetColor(33, 33, 255);
 }
 
 void BtnBase::setOnTouchMoved(int id, int x, int y) {
 	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (this->containsPoint(x, y)) return;
-	LOGD("Main", "Canceled[%d]:%d, %d", id, x, y);
+	if (eventListener) eventListener->onBtnCanceled();
 	touchFlg = false;
 	touchID = -1;
-	touchColor = GetColor(33, 33, 255);
 }
 
 void BtnBase::setOnTouchEnded(int id, int x, int y) {
 	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (!this->containsPoint(x, y)) return;
-	LOGD("Main", "Confirmed[%d]:%d, %d", id, x, y);
+	if (eventListener) eventListener->onBtnReleased();
 	touchFlg = false;
 	touchID = -1;
-	touchColor = GetColor(33, 255, 33);
 }
 
 void BtnBase::update(const float delay) {
@@ -89,7 +90,6 @@ void BtnBase::update(const float delay) {
 	maxY = pos.y + height * 0.5f;
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
-	DrawBox(minX, minY, maxX, maxY, touchColor, false);
 	// Text
 	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
 	                                  scale, UtilAlign::CENTER);

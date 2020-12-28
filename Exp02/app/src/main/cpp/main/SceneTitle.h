@@ -2,8 +2,9 @@
 #define _SCENETITLE_H_
 
 #include "SceneBase.h"
+#include "BtnBase.h"
 
-class SceneTitle : public SceneBase {
+class SceneTitle : public SceneBase, BtnEventListener {
 
 private:
 	BtnBase *btn;
@@ -25,6 +26,12 @@ public:
 	void setOnTouchEnded(int id, int x, int y) override;
 
 	void update(const float delay) override;
+
+	void onBtnPressed() override;
+
+	void onBtnCanceled() override;
+
+	void onBtnReleased() override;
 };
 
 #endif // _SCENETITLE_H_

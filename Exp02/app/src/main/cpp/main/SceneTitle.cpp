@@ -26,6 +26,7 @@ bool SceneTitle::init() {
 
 	btn = BtnBase::createBtn("images/box_100x60.png", "GREAT", cX, cY);
 	btn->setScale(3);
+	btn->addEventListener(this);
 
 	for (int i = 0; i < 3; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
@@ -47,7 +48,6 @@ void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		if (sprite->containsPoint(x, y)) {
 			LOGD("Main", "Contains!!");
-			UtilSound::getInstance()->playSE("se_coin_01.wav");
 		}
 	}
 }
@@ -77,6 +77,19 @@ void SceneTitle::update(const float delay) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		sprite->update(delay);
 	}
-
+	// Test
 	btn->update(delay);
+}
+
+void SceneTitle::onBtnPressed() {
+	LOGD("Main", "onBtnPressed()");
+}
+
+void SceneTitle::onBtnCanceled() {
+	LOGD("Main", "onBtnCanceled()");
+}
+
+void SceneTitle::onBtnReleased() {
+	LOGD("Main", "onBtnReleased()");
+	UtilSound::getInstance()->playSE("se_coin_01.wav");
 }

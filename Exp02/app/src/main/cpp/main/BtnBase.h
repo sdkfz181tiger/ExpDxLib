@@ -3,6 +3,16 @@
 
 #include "Utility.h"
 
+// EventListener
+class BtnEventListener {
+public:
+	virtual void onBtnPressed() = 0;
+
+	virtual void onBtnCanceled() = 0;
+
+	virtual void onBtnReleased() = 0;
+};
+
 class BtnBase {
 
 protected:
@@ -12,7 +22,9 @@ protected:
 	int minX, maxX, minY, maxY;
 	bool touchFlg;
 	int touchID;
-	unsigned int touchColor;
+
+	// EventListener
+	BtnEventListener *eventListener;
 
 public:
 	static BtnBase *createBtn(const string &fileName,
@@ -24,6 +36,8 @@ public:
 	virtual ~BtnBase();
 
 	bool init(const char *fileName);
+
+	void addEventListener(BtnEventListener *eventListener);
 
 	void setPosition(float x, float y);
 
