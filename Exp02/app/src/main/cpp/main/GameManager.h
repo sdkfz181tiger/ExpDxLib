@@ -8,7 +8,6 @@ class GameManager {
 
 private:
 	const int dWidth, dHeight, cDepth;
-	bool quitFlg;
 
 	vector<bool> touchFlgs;
 	vector<Vec2> touchPositions;
@@ -20,10 +19,6 @@ public:
 	~GameManager();
 
 	void init();
-
-	bool getQuitFlg();
-
-	void setQuitFlg(bool flg);
 
 	void touchInput();
 

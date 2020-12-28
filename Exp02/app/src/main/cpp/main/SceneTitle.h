@@ -4,7 +4,7 @@
 #include "SceneBase.h"
 #include "BtnBase.h"
 
-class SceneTitle : public SceneBase, BtnEventListener {
+class SceneTitle : public SceneBase, BtnListener {
 
 private:
 	BtnBase *btn;
@@ -27,11 +27,11 @@ public:
 
 	void update(const float delay) override;
 
-	void onBtnPressed() override;
+	void onBtnPressed(BtnTag &tag) override;
 
-	void onBtnCanceled() override;
+	void onBtnCanceled(BtnTag &tag) override;
 
-	void onBtnReleased() override;
+	void onBtnReleased(BtnTag &tag) override;
 };
 
 #endif // _SCENETITLE_H_

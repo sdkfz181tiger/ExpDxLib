@@ -1,7 +1,7 @@
 #include "GameManager.h"
 
 GameManager::GameManager(int dWidth, int dHeight, int cDepth) :
-		dWidth(dWidth), dHeight(dHeight), cDepth(cDepth), quitFlg(false),
+		dWidth(dWidth), dHeight(dHeight), cDepth(cDepth),
 		touchFlgs(5, false), touchPositions(5, Vec2()) {
 	LOGD("Main", "GameManager()\n");
 	this->init();// Initialize
@@ -11,6 +11,12 @@ GameManager::~GameManager() {
 	LOGD("Main", "~GameManager()\n");
 	// Delete all scenes
 	DX_SAFE_DELETE_VECTOR(scenes);
+	// Destroy all utilities
+	UtilDebug::getInstance()->destroyInstance();
+	UtilDx::getInstance()->destroyInstance();
+	UtilLabel::getInstance()->destroyInstance();
+	UtilMath::getInstance()->destroyInstance();
+	UtilSound::getInstance()->destroyInstance();
 }
 
 void GameManager::init() {
@@ -21,14 +27,6 @@ void GameManager::init() {
 	// Scenes
 	SceneTitle *scene = SceneTitle::createScene(dWidth, dHeight);
 	scenes.push_back(scene);
-}
-
-bool GameManager::getQuitFlg() {
-	return this->quitFlg;
-}
-
-void GameManager::setQuitFlg(bool flg) {
-	this->quitFlg = flg;
 }
 
 void GameManager::touchInput() {
@@ -46,7 +44,6 @@ void GameManager::touchInput() {
 		if (!touchFlgs.at(id)) {
 			//LOGD("Main", "Began[%d]:%d, %d", i, x, y);
 			scene->setOnTouchBegan(id, x, y);// Began
-			//setQuitFlg(true);// TODO: testing...
 		} else {
 			if (touchPositions.at(id).x != x || touchPositions.at(id).y != y) {
 				//LOGD("Main", "Moved[%d]:%d, %d", i, x, y);

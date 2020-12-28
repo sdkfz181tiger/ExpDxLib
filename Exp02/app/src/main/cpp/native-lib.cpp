@@ -19,7 +19,7 @@ int android_main(void) {
 	int now = GetNowCount();
 
 	// MainLoop
-	while (ProcessMessage() == 0 && !gameManager->getQuitFlg()) {
+	while (ProcessMessage() == 0 && !UtilDx::getInstance()->getQuitFlg()) {
 		ClearDrawScreen();
 		SetDrawScreen(DX_SCREEN_BACK);
 
@@ -38,8 +38,7 @@ int android_main(void) {
 	}
 
 	// Delete
-	delete(gameManager);
-	gameManager = nullptr;
+	DX_SAFE_DELETE(gameManager);
 
 	InitSoundMem();
 	InitGraph();
@@ -81,12 +80,7 @@ Java_com_ozateck_chickader_MainActivity_nativeOnStop(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_ozateck_mydxlib01_MainActivity_nativeOnDestroy(
+Java_com_ozateck_chickader_MainActivity_nativeOnDestroy(
 		JNIEnv *env, jclass clz) {
 	LOGD("JNI", "onDestroy!!");
-	// Destroy all utilities
-	UtilDebug::getInstance()->destroyInstance();
-	UtilLabel::getInstance()->destroyInstance();
-	UtilMath::getInstance()->destroyInstance();
-	UtilSound::getInstance()->destroyInstance();
 }

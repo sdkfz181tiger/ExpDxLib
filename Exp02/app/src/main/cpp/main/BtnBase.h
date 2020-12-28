@@ -3,14 +3,20 @@
 
 #include "Utility.h"
 
-// EventListener
-class BtnEventListener {
+// BtnTag
+enum class BtnTag {
+	DEFAULT, QUIT,
+	TITLE, GAME, RESULT
+};
+
+// BtnListener
+class BtnListener {
 public:
-	virtual void onBtnPressed() = 0;
+	virtual void onBtnPressed(BtnTag& tag) = 0;
 
-	virtual void onBtnCanceled() = 0;
+	virtual void onBtnCanceled(BtnTag& tag) = 0;
 
-	virtual void onBtnReleased() = 0;
+	virtual void onBtnReleased(BtnTag& tag) = 0;
 };
 
 class BtnBase {
@@ -24,7 +30,8 @@ protected:
 	int touchID;
 
 	// EventListener
-	BtnEventListener *eventListener;
+	BtnListener *btnListener;
+	BtnTag btnTag;
 
 public:
 	static BtnBase *createBtn(const string &fileName,
@@ -36,8 +43,6 @@ public:
 	virtual ~BtnBase();
 
 	bool init(const char *fileName);
-
-	void addEventListener(BtnEventListener *eventListener);
 
 	void setPosition(float x, float y);
 
@@ -52,6 +57,8 @@ public:
 	void setOnTouchEnded(int id, int x, int y);
 
 	void update(const float delay);
+
+	void addEventListener(BtnListener *btnListener, BtnTag tag);
 };
 
 #endif // _BTNBASE_H_

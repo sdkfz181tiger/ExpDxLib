@@ -16,7 +16,8 @@ BtnBase::BtnBase(string title, float x, float y) :
 		title(move(title)), pos(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		touchFlg(false), touchID(-1), eventListener(nullptr) {
+		touchFlg(false), touchID(-1),
+		btnListener(nullptr), btnTag(BtnTag::DEFAULT) {
 	LOGD("Main", "BtnBase()\n");
 }
 
@@ -30,10 +31,6 @@ bool BtnBase::init(const char *fileName) {
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	return true;
-}
-
-void BtnBase::addEventListener(BtnEventListener *eventListener) {
-	this->eventListener = eventListener;
 }
 
 void BtnBase::setPosition(float x, float y) {
@@ -59,7 +56,7 @@ void BtnBase::setOnTouchBegan(int id, int x, int y) {
 	if (touchFlg) return;
 	if (touchID != -1) return;
 	if (!this->containsPoint(x, y)) return;
-	if (eventListener) eventListener->onBtnPressed();
+	if (btnListener) btnListener->onBtnPressed(btnTag);
 	touchFlg = true;
 	touchID = id;
 }
@@ -68,7 +65,7 @@ void BtnBase::setOnTouchMoved(int id, int x, int y) {
 	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (this->containsPoint(x, y)) return;
-	if (eventListener) eventListener->onBtnCanceled();
+	if (btnListener) btnListener->onBtnCanceled(btnTag);
 	touchFlg = false;
 	touchID = -1;
 }
@@ -77,7 +74,7 @@ void BtnBase::setOnTouchEnded(int id, int x, int y) {
 	if (!touchFlg) return;
 	if (touchID != id) return;
 	if (!this->containsPoint(x, y)) return;
-	if (eventListener) eventListener->onBtnReleased();
+	if (btnListener) btnListener->onBtnReleased(btnTag);
 	touchFlg = false;
 	touchID = -1;
 }
@@ -93,4 +90,9 @@ void BtnBase::update(const float delay) {
 	// Text
 	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
 	                                  scale, UtilAlign::CENTER);
+}
+
+void BtnBase::addEventListener(BtnListener *btnListener, BtnTag btnTag) {
+	this->btnListener = btnListener;
+	this->btnTag = btnTag;
 }

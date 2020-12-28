@@ -36,6 +36,7 @@ add_library( # Sets the name of the library.
              main/SpriteBase.cpp
              utility/Utility.h
              utility/UtilDebug.cpp
+             utility/UtilDx.cpp
              utility/UtilLabel.cpp
              utility/UtilMath.cpp
              utility/UtilSound.cpp

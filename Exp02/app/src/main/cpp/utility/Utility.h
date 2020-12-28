@@ -21,6 +21,7 @@
 //==========
 // Utility
 #include "UtilDebug.h"
+#include "UtilDx.h"
 #include "UtilLabel.h"
 #include "UtilMath.h"
 #include "UtilSound.h"

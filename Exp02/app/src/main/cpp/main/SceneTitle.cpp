@@ -14,7 +14,8 @@ SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight) {
 
 SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
-	// Delete all sprites
+	// Delete
+	DX_SAFE_DELETE(btn);
 	DX_SAFE_DELETE_VECTOR(sprites);
 }
 
@@ -26,7 +27,7 @@ bool SceneTitle::init() {
 
 	btn = BtnBase::createBtn("images/box_100x60.png", "GREAT", cX, cY);
 	btn->setScale(3);
-	btn->addEventListener(this);
+	btn->addEventListener(this, BtnTag::QUIT);
 
 	for (int i = 0; i < 3; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
@@ -67,8 +68,10 @@ void SceneTitle::update(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
+	btn->update(delay);// Btn
+
 	// Label
-	UtilLabel::getInstance()->drawStr("TITLE!!", cX, cY,
+	UtilLabel::getInstance()->drawStr("TITLE!!", cX, 120,
 	                                  5, UtilAlign::CENTER);
 
 	// Test
@@ -77,19 +80,18 @@ void SceneTitle::update(const float delay) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		sprite->update(delay);
 	}
-	// Test
-	btn->update(delay);
 }
 
-void SceneTitle::onBtnPressed() {
+void SceneTitle::onBtnPressed(BtnTag& tag) {
 	LOGD("Main", "onBtnPressed()");
 }
 
-void SceneTitle::onBtnCanceled() {
+void SceneTitle::onBtnCanceled(BtnTag& tag) {
 	LOGD("Main", "onBtnCanceled()");
 }
 
-void SceneTitle::onBtnReleased() {
-	LOGD("Main", "onBtnReleased()");
+void SceneTitle::onBtnReleased(BtnTag& tag) {
+	LOGD("Main", "onBtnReleased():%d", tag);
 	UtilSound::getInstance()->playSE("se_coin_01.wav");
+	if(tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();// Quit
 }
