@@ -7,6 +7,7 @@ class UtilDx {
 
 private:
 	bool quitFlg;
+	const int defScale;
 
 public:
 	UtilDx();
@@ -22,6 +23,8 @@ public:
 	void setQuitFlg();
 
 	bool getQuitFlg();
+
+	int getDefScale();
 };
 
 #endif // _UTILDX_H_

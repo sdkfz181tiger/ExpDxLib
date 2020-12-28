@@ -30,6 +30,7 @@ bool BtnBase::init(const char *fileName) {
 	graph = LoadGraph(fileName);
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
+	this->setScale(UtilDx::getInstance()->getDefScale());
 	return true;
 }
 

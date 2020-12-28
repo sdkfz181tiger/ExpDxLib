@@ -7,7 +7,7 @@
 class SceneTitle : public SceneBase, BtnListener {
 
 private:
-	BtnBase *btn;
+	BtnBase *btnQuit, *btnGame;
 	vector<SpriteBase *> sprites;
 
 public:

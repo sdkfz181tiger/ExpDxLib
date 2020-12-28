@@ -8,14 +8,16 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 	return nullptr;
 }
 
-SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight) {
+SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
+                                                  btnQuit(nullptr), btnGame(nullptr) {
 	LOGD("Main", "SceneTitle()\n");
 }
 
 SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
 	// Delete
-	DX_SAFE_DELETE(btn);
+	DX_SAFE_DELETE(btnQuit);
+	DX_SAFE_DELETE(btnGame);
 	DX_SAFE_DELETE_VECTOR(sprites);
 }
 
@@ -25,15 +27,16 @@ bool SceneTitle::init() {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	btn = BtnBase::createBtn("images/box_100x60.png", "GREAT", cX, cY);
-	btn->setScale(3);
-	btn->addEventListener(this, BtnTag::QUIT);
+	btnQuit = BtnBase::createBtn("images/box_100x60.png", "QUIT", cX-180, cY);
+	btnQuit->addEventListener(this, BtnTag::QUIT);
+
+	btnGame = BtnBase::createBtn("images/box_100x60.png", "GAME", cX+180, cY);
+	btnGame->addEventListener(this, BtnTag::GAME);
 
 	for (int i = 0; i < 3; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
 		int rY = UtilMath::getInstance()->getRandom(0, dHeight);
 		auto sprite = SpriteBase::createSprite("images/y_reimu_x1.png", rX, rY);
-		sprite->setScale(5);
 		sprites.push_back(sprite);
 	}
 
@@ -42,7 +45,8 @@ bool SceneTitle::init() {
 
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
-	btn->setOnTouchBegan(id, x, y);// Btn
+	btnQuit->setOnTouchBegan(id, x, y);// Btn
+	btnGame->setOnTouchBegan(id, x, y);// Btn
 
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
@@ -55,12 +59,14 @@ void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
-	btn->setOnTouchMoved(id, x, y);// Btn
+	btnQuit->setOnTouchMoved(id, x, y);// Btn
+	btnGame->setOnTouchMoved(id, x, y);// Btn
 }
 
 void SceneTitle::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
-	btn->setOnTouchEnded(id, x, y);// Btn
+	btnQuit->setOnTouchEnded(id, x, y);// Btn
+	btnGame->setOnTouchEnded(id, x, y);// Btn
 }
 
 void SceneTitle::update(const float delay) {
@@ -68,7 +74,8 @@ void SceneTitle::update(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	btn->update(delay);// Btn
+	btnQuit->update(delay);// Btn
+	btnGame->update(delay);// Btn
 
 	// Label
 	UtilLabel::getInstance()->drawStr("TITLE!!", cX, 120,
@@ -82,16 +89,20 @@ void SceneTitle::update(const float delay) {
 	}
 }
 
-void SceneTitle::onBtnPressed(BtnTag& tag) {
+void SceneTitle::onBtnPressed(BtnTag &tag) {
 	LOGD("Main", "onBtnPressed()");
 }
 
-void SceneTitle::onBtnCanceled(BtnTag& tag) {
+void SceneTitle::onBtnCanceled(BtnTag &tag) {
 	LOGD("Main", "onBtnCanceled()");
 }
 
-void SceneTitle::onBtnReleased(BtnTag& tag) {
+void SceneTitle::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
-	UtilSound::getInstance()->playSE("se_coin_01.wav");
-	if(tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();// Quit
+	if (tag == BtnTag::QUIT) {
+		UtilDx::getInstance()->setQuitFlg();
+	}
+	if (tag == BtnTag::GAME) {
+		UtilSound::getInstance()->playSE("se_coin_01.wav");
+	}
 }
