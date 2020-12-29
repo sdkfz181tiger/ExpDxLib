@@ -12,17 +12,11 @@ UtilDx::~UtilDx() {
 }
 
 UtilDx *UtilDx::getInstance() {
-
-	if (!selfUtilDx) {
-		selfUtilDx = new UtilDx();
-		if (selfUtilDx && selfUtilDx->init()) {
-			return selfUtilDx;
-		} else {
-			delete (selfUtilDx);
-			selfUtilDx = nullptr;
-		}
-	}
-	return selfUtilDx;
+	if (selfUtilDx) return selfUtilDx;
+	selfUtilDx = new UtilDx();
+	if (selfUtilDx && selfUtilDx->init()) return selfUtilDx;
+	DX_SAFE_DELETE(selfUtilDx);
+	return nullptr;
 }
 
 void UtilDx::destroyInstance() {

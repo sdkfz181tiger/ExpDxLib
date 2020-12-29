@@ -12,17 +12,11 @@ UtilLabel::~UtilLabel() {
 }
 
 UtilLabel *UtilLabel::getInstance() {
-
-	if (!selfUtilLabel) {
-		selfUtilLabel = new UtilLabel();
-		if (selfUtilLabel && selfUtilLabel->init()) {
-			return selfUtilLabel;
-		} else {
-			delete (selfUtilLabel);
-			selfUtilLabel = nullptr;
-		}
-	}
-	return selfUtilLabel;
+	if (selfUtilLabel) return selfUtilLabel;
+	selfUtilLabel = new UtilLabel();
+	if (selfUtilLabel && selfUtilLabel->init()) return selfUtilLabel;
+	DX_SAFE_DELETE(selfUtilLabel);
+	return nullptr;
 }
 
 void UtilLabel::destroyInstance() {

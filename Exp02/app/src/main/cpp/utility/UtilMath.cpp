@@ -12,17 +12,11 @@ UtilMath::~UtilMath() {
 }
 
 UtilMath *UtilMath::getInstance() {
-
-	if (!selfUtilMath) {
-		selfUtilMath = new UtilMath();
-		if (selfUtilMath && selfUtilMath->init()) {
-			return selfUtilMath;
-		} else {
-			delete (selfUtilMath);
-			selfUtilMath = nullptr;
-		}
-	}
-	return selfUtilMath;
+	if (selfUtilMath) return selfUtilMath;
+	selfUtilMath = new UtilMath();
+	if (selfUtilMath && selfUtilMath->init()) return selfUtilMath;
+	DX_SAFE_DELETE(selfUtilMath);
+	return nullptr;
 }
 
 void UtilMath::destroyInstance() {

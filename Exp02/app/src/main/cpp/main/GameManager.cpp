@@ -100,4 +100,11 @@ void GameManager::onSceneChange(SceneTag tag) {
 		scene->addSceneListener(this);
 		scenes.push_back(scene);
 	}
+
+	// Delete previous scene
+	if(1 < scenes.size()) {
+		auto it = scenes.begin();
+		delete (*it);
+		scenes.erase(it);
+	}
 }

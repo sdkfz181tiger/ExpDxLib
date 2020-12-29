@@ -13,17 +13,11 @@ UtilDebug::~UtilDebug() {
 }
 
 UtilDebug *UtilDebug::getInstance() {
-
-	if (!selfUtilDebug) {
-		selfUtilDebug = new UtilDebug();
-		if (selfUtilDebug && selfUtilDebug->init()) {
-			return selfUtilDebug;
-		} else {
-			delete (selfUtilDebug);
-			selfUtilDebug = nullptr;
-		}
-	}
-	return selfUtilDebug;
+	if (selfUtilDebug) return selfUtilDebug;
+	selfUtilDebug = new UtilDebug();
+	if (selfUtilDebug && selfUtilDebug->init()) return selfUtilDebug;
+	DX_SAFE_DELETE(selfUtilDebug);
+	return nullptr;
 }
 
 void UtilDebug::destroyInstance() {

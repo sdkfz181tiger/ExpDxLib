@@ -12,17 +12,11 @@ UtilSound::~UtilSound() {
 }
 
 UtilSound *UtilSound::getInstance() {
-
-	if (!selfUtilSound) {
-		selfUtilSound = new UtilSound();
-		if (selfUtilSound && selfUtilSound->init()) {
-			return selfUtilSound;
-		} else {
-			delete (selfUtilSound);
-			selfUtilSound = nullptr;
-		}
-	}
-	return selfUtilSound;
+	if (selfUtilSound) return selfUtilSound;
+	selfUtilSound = new UtilSound();
+	if (selfUtilSound && selfUtilSound->init()) return selfUtilSound;
+	DX_SAFE_DELETE(selfUtilSound);
+	return nullptr;
 }
 
 void UtilSound::destroyInstance() {
