@@ -93,7 +93,7 @@ void BtnBase::update(const float delay) {
 	                                  scale, UtilAlign::CENTER);
 }
 
-void BtnBase::addEventListener(BtnListener *btnListener, BtnTag btnTag) {
+void BtnBase::addBtnListener(BtnListener *btnListener, BtnTag btnTag) {
 	this->btnListener = btnListener;
 	this->btnTag = btnTag;
 }

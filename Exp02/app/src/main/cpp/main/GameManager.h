@@ -2,9 +2,11 @@
 #define _GAMEMANAGER_H_
 
 #include "Utility.h"
+#include "SceneGame.h"
+#include "SceneResult.h"
 #include "SceneTitle.h"
 
-class GameManager {
+class GameManager : public SceneListener {
 
 private:
 	const int dWidth, dHeight, cDepth;
@@ -23,6 +25,8 @@ public:
 	void touchInput();
 
 	void update(const float delay);
+
+	void onSceneChange(SceneTag tag) override;
 };
 
 #endif // _GAMEMANAGER_H_

@@ -73,8 +73,8 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 		if (0 <= handle)
 			DrawExtendGraph(gX, gY,
 			                gX + fWidth * scale,
-			                gY + fHeight * scale, handle,
-			                true);
+			                gY + fHeight * scale,
+			                handle,true);
 		gX += gPadding;
 	}
 }

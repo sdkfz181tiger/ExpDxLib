@@ -26,6 +26,7 @@ void GameManager::init() {
 	SetOutApplicationLogValidFlag(true);
 	// Scenes
 	SceneTitle *scene = SceneTitle::createScene(dWidth, dHeight);
+	scene->addSceneListener(this);
 	scenes.push_back(scene);
 }
 
@@ -79,3 +80,24 @@ void GameManager::update(const float delay) {
 	UtilDebug::getInstance()->drawFPS(delay);
 }
 
+void GameManager::onSceneChange(SceneTag tag) {
+	LOGD("Main", "GameManager::onSceneChange() %d\n", tag);
+
+	if(SceneTag::TITLE == tag){
+		SceneTitle *scene = SceneTitle::createScene(dWidth, dHeight);
+		scene->addSceneListener(this);
+		scenes.push_back(scene);
+	}
+
+	if(SceneTag::GAME == tag){
+		SceneGame *scene = SceneGame::createScene(dWidth, dHeight);
+		scene->addSceneListener(this);
+		scenes.push_back(scene);
+	}
+
+	if(SceneTag::RESULT == tag){
+		SceneResult *scene = SceneResult::createScene(dWidth, dHeight);
+		scene->addSceneListener(this);
+		scenes.push_back(scene);
+	}
+}

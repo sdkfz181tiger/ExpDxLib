@@ -1,21 +1,21 @@
-#ifndef _SCENETITLE_H_
-#define _SCENETITLE_H_
+#ifndef _SCENERESULT_H_
+#define _SCENERESULT_H_
 
 #include "SceneBase.h"
 #include "BtnBase.h"
 
-class SceneTitle : public SceneBase, BtnListener {
+class SceneResult : public SceneBase, BtnListener {
 
 private:
 	SceneListener *sceneListener;
 	BtnBase *btnQuit, *btnTest;
 
 public:
-	static SceneTitle *createScene(int dWidth, int dHeight);
+	static SceneResult *createScene(int dWidth, int dHeight);
 
-	SceneTitle(int dWidth, int dHeight);
+	SceneResult(int dWidth, int dHeight);
 
-	~SceneTitle() override;
+	~SceneResult() override;
 
 	bool init() override;
 
@@ -36,4 +36,4 @@ public:
 	void onBtnReleased(BtnTag &tag) override;
 };
 
-#endif // _SCENETITLE_H_
+#endif // _SCENERESULT_H_

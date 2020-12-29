@@ -12,11 +12,11 @@ enum class BtnTag {
 // BtnListener
 class BtnListener {
 public:
-	virtual void onBtnPressed(BtnTag& tag) = 0;
+	virtual void onBtnPressed(BtnTag &tag) = 0;
 
-	virtual void onBtnCanceled(BtnTag& tag) = 0;
+	virtual void onBtnCanceled(BtnTag &tag) = 0;
 
-	virtual void onBtnReleased(BtnTag& tag) = 0;
+	virtual void onBtnReleased(BtnTag &tag) = 0;
 };
 
 class BtnBase {
@@ -58,7 +58,7 @@ public:
 
 	void update(const float delay);
 
-	void addEventListener(BtnListener *btnListener, BtnTag tag);
+	void addBtnListener(BtnListener *btnListener, BtnTag tag);
 };
 
 #endif // _BTNBASE_H_

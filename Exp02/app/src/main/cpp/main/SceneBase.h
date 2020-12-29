@@ -5,6 +5,18 @@
 #include "BtnBase.h"
 #include "SpriteBase.h"
 
+// SceneTag
+enum class SceneTag {
+	DEFAULT,
+	TITLE, GAME, RESULT
+};
+
+// SceneListener
+class SceneListener {
+public:
+	virtual void onSceneChange(SceneTag tag) = 0;
+};
+
 class SceneBase {
 
 protected:
@@ -24,6 +36,8 @@ public:
 	virtual void setOnTouchEnded(int id, int x, int y) = 0;
 
 	virtual void update(const float delay) = 0;
+
+	virtual void addSceneListener(SceneListener *sceneListener) = 0;
 };
 
 #endif // _SCENEBASE_H_
