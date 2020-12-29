@@ -30,9 +30,11 @@ bool SceneGame::init() {
 
 	btnQuit = BtnBase::createBtn("images/box_32x32.png", "QUIT", cX - 180, cY);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
+	btns.push_back(btnQuit);
 
 	btnTest = BtnBase::createBtn("images/box_90x30.png", "RESULT", cX + 180, cY);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
+	btns.push_back(btnTest);
 
 	for (int i = 0; i < 3; i++) {
 		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
@@ -46,8 +48,7 @@ bool SceneGame::init() {
 
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
-	btnQuit->setOnTouchBegan(id, x, y);// Btn
-	btnTest->setOnTouchBegan(id, x, y);// Btn
+	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
@@ -60,14 +61,12 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
-	btnQuit->setOnTouchMoved(id, x, y);// Btn
-	btnTest->setOnTouchMoved(id, x, y);// Btn
+	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
 }
 
 void SceneGame::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
-	btnQuit->setOnTouchEnded(id, x, y);// Btn
-	btnTest->setOnTouchEnded(id, x, y);// Btn
+	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
 }
 
 void SceneGame::update(const float delay) {

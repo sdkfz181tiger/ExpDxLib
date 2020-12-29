@@ -21,6 +21,7 @@ class SceneBase {
 
 protected:
 	const int dWidth, dHeight;
+	vector<BtnBase*> btns;
 
 public:
 	SceneBase(int dWidth, int dHeight);
