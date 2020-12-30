@@ -12,7 +12,7 @@ SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		color(GetColor(255, 255, 255)){
+		color(GetColor(255, 255, 255)) {
 	LOGD("Main", "SpriteBase()\n");
 }
 

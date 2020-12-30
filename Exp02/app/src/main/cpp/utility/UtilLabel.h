@@ -15,7 +15,7 @@ class UtilLabel {
 private:
 	map<char, int> handleMap;
 	int fWidth, fHeight;
-	float fPadding;
+	const float fPadding;
 
 public:
 	UtilLabel();

@@ -26,12 +26,15 @@ bool SceneTitle::init() {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_32x32.png", "QUIT", cX - 180, cY);
+	btnQuit = BtnBase::createBtn("images/box_16x16.png", "Q",
+								 dWidth - gSize * 1, gSize);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_90x30.png", "GAME", cX + 180, cY);
+	btnTest = BtnBase::createBtn("images/box_16x16.png", "G",
+								 dWidth - gSize * 3, gSize);
 	btnTest->addBtnListener(this, BtnTag::GAME);
 	btns.push_back(btnTest);
 
@@ -58,12 +61,10 @@ void SceneTitle::update(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	btnQuit->update(delay);// Btn
-	btnTest->update(delay);// Btn
-
-	// Label
-	UtilLabel::getInstance()->drawStr("TITLE!!", cX, 120,
+	// Label, Buttons
+	UtilLabel::getInstance()->drawStr("=TITLE=", cX, 120,
 									  5, UtilAlign::CENTER);
+	for (auto btn : btns) btn->update(delay);
 }
 
 void SceneTitle::addSceneListener(SceneListener *sceneListener) {

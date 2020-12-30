@@ -6,9 +6,9 @@
 class UtilDebug {
 
 private:
-	int dispWidth, dispHeight, dispColor;
-	int gridSize, gridRows, gridCols;
-	unsigned int gridColor;
+	int dWidth, dHeight, dColor;
+	int gSize, gRows, gCols;
+	unsigned int gColor;
 	char fpsStr[20];
 
 public:
@@ -21,6 +21,12 @@ public:
 	void destroyInstance();
 
 	bool init();
+
+	int getGridSize() { return gSize; }
+
+	int getGridRows() { return gRows; }
+
+	int getGridCols() { return gCols; }
 
 	void drawGrid();
 

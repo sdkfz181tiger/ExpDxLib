@@ -30,7 +30,7 @@ bool UtilLabel::init() {
 	LOGD("Util", "UtilLabel::init()\n");
 
 	// Number
-	const string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;!?";
+	const string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;/-!?'()[]*%+=";
 	int gW, gH = 0;
 	for (int i = 0; i < str.length(); i++) {
 		string key = str.substr(i, 1);// Important!!
@@ -54,21 +54,20 @@ bool UtilLabel::init() {
 void UtilLabel::drawStr(const string &str, int x, int y,
 						int scale, UtilAlign align) {
 
-	int gX = x;
-	int gY = y;
-	int gPadding = fWidth * fPadding * scale;
-	int gWidth = gPadding * str.length();
-	if (align == UtilAlign::LEFT) gX -= 0;
-	if (align == UtilAlign::RIGHT) gX -= gWidth;
-	if (align == UtilAlign::CENTER) gX -= gWidth / 2;
+	int gOffX = fWidth * scale * fPadding;
+	int gOffY = fWidth * scale / 2;
+	int gWidth = gOffX * str.length();
+	if (align == UtilAlign::LEFT) x -= 0;
+	if (align == UtilAlign::RIGHT) x -= gWidth;
+	if (align == UtilAlign::CENTER) x -= gWidth / 2;
 	for (int i = 0; i < str.length(); i++) {
 		const char c = str.at(i);
-		if (0 < handleMap.count(c)){
-			DrawExtendGraph(gX, gY,
-							gX + fWidth * scale,
-							gY + fHeight * scale,
-							handleMap.find(c)->second,true);
+		if (0 < handleMap.count(c)) {
+			DrawExtendGraph(x, y - gOffY,
+							x + fWidth * scale,
+							y + fHeight * scale - gOffY,
+							handleMap.find(c)->second, true);
 		}
-		gX += gPadding;
+		x += gOffX;
 	}
 }
