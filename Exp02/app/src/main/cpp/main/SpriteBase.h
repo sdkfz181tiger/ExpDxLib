@@ -12,13 +12,13 @@ protected:
 	unsigned int color;
 
 public:
-	static SpriteBase *createSprite(const string &fileName, float x, float y);
-
 	SpriteBase(float x, float y);
 
 	virtual ~SpriteBase();
 
-	virtual bool init(const string &fileName);
+	bool initGraph(const string &fileName);
+
+	bool initDivGraph(const string &fileName);
 
 	void setPosition(float pX, float pY);
 

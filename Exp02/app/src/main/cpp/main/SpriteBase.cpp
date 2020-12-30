@@ -1,13 +1,5 @@
 #include "SpriteBase.h"
 
-SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
-	// New
-	SpriteBase *sprite = new SpriteBase(x, y);
-	if (sprite && sprite->init(fileName)) return sprite;
-	DX_SAFE_DELETE(sprite);
-	return nullptr;
-}
-
 SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
@@ -20,9 +12,21 @@ SpriteBase::~SpriteBase() {
 	LOGD("Main", "~SpriteBase()\n");
 }
 
-bool SpriteBase::init(const string &fileName) {
+bool SpriteBase::initGraph(const string &fileName) {
 	// Load graph
 	graph = UtilGraph::getInstance()->createGraph(fileName);
+	if (graph == -1) return false;
+	GetGraphSize(graph, &width, &height);
+	this->setScale(UtilDx::getInstance()->getDefScale());
+	return true;
+}
+
+bool SpriteBase::initDivGraph(const string &fileName) {
+	// Load graph
+	const vector<int> *graphs = UtilGraph::getInstance()->createDivGraph(fileName, "hoge", 25, 5, 5, 16,
+																   16);
+	//graph = UtilGraph::getInstance()->createGraph(fileName);
+	graph = graphs->at(0);
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());

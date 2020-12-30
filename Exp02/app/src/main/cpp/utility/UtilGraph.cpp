@@ -38,3 +38,18 @@ int UtilGraph::createGraph(const string &fileName) {
 	graphMap.insert(make_pair(fileName, graph));
 	return graph;
 }
+
+const vector<int> *UtilGraph::createDivGraph(const string &fileName, const string &animName,
+											 int total, int rows, int cols, int w, int h) {
+	if (0 < divMap.count(animName)) return &divMap.find(animName)->second;
+	int graph[total];
+	int result = LoadDivGraph(fileName.c_str(), total, cols, rows, w, h, graph);
+	if (result == -1) return nullptr;
+	vector<int> graphs;
+	graphs.reserve(total);
+	for (int i = 0; i < total; i++) {
+		graphs.push_back(graph[i]);
+	}
+	divMap.insert(make_pair(animName, graphs));
+	return &divMap.find(animName)->second;
+}

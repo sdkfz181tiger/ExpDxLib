@@ -36,6 +36,7 @@ add_library( # Sets the name of the library.
              main/SceneResult.cpp
              main/SceneTitle.cpp
              main/SpriteBase.cpp
+             main/SpriteDancer.cpp
              main/SpriteEnemy.cpp
              utility/Utility.h
              utility/UtilDebug.cpp

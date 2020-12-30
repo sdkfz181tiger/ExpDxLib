@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "BtnBase.h"
 #include "SpriteBase.h"
+#include "SpriteDancer.h"
 #include "SpriteEnemy.h"
 
 // SceneTag

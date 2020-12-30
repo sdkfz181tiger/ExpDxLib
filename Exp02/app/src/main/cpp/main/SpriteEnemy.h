@@ -13,8 +13,6 @@ public:
 	SpriteEnemy(float x, float y);
 
 	virtual ~SpriteEnemy();
-
-	bool init(const string &fileName) override;
 };
 
 #endif // _SPRITEENEMY_H_
