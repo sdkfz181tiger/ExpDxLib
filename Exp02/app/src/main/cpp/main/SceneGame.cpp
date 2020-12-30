@@ -36,10 +36,22 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	for (int i = 0; i < 3; i++) {
-		int rX = UtilMath::getInstance()->getRandom(0, dWidth);
-		int rY = UtilMath::getInstance()->getRandom(0, dHeight);
-		auto sprite = SpriteBase::createSprite("images/y_reimu_x1.png", rX, rY);
+	for (int i = 0; i < 300; i++) {
+		int pX = UtilMath::getInstance()->getRandom(200, dWidth - 200);
+		int pY = UtilMath::getInstance()->getRandom(200, dHeight - 200);
+		int vX = UtilMath::getInstance()->getRandom(2, 5);
+		int vY = UtilMath::getInstance()->getRandom(2, 5);
+		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vX *= -1 : vX *= 1;
+		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vY *= -1 : vY *= 1;
+		int rdm = UtilMath::getInstance()->getRandom(0, 5);
+		string fileName = "images/y_reimu_x1.png";
+		if (rdm == 0) fileName = "images/y_marisa_x1.png";
+		if (rdm == 1) fileName = "images/y_youmu_x1.png";
+		if (rdm == 2) fileName = "images/y_chiruno_x1.png";
+		if (rdm == 3) fileName = "images/y_sanae_x1.png";
+		LOGD("Util", "Ready:%s\n", fileName.c_str());
+		auto sprite = SpriteEnemy::createSprite(fileName, pX, pY);
+		sprite->setVelocity(vX, vY);
 		sprites.push_back(sprite);
 	}
 
@@ -85,6 +97,10 @@ void SceneGame::update(const float delay) {
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
 		auto sprite = static_cast<SpriteBase *>(*it);
+		if (sprite->getPosX() < 0) sprite->setPosX(dWidth);
+		if (dWidth < sprite->getPosX()) sprite->setPosX(0);
+		if (sprite->getPosY() < 0) sprite->setPosY(dHeight-100);
+		if (dHeight-100 < sprite->getPosY()) sprite->setPosY(0);
 		sprite->update(delay);
 	}
 }

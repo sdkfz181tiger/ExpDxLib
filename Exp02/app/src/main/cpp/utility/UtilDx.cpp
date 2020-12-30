@@ -3,7 +3,7 @@
 // Singleton Object
 static UtilDx *selfUtilDx = nullptr;
 
-UtilDx::UtilDx() : quitFlg(false), defScale(4) {
+UtilDx::UtilDx() : quitFlg(false), defScale(2) {
 	LOGD("Util", "UtilDx()\n");
 }
 

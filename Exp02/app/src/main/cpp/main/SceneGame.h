@@ -2,7 +2,6 @@
 #define _SCENEGAME_H_
 
 #include "SceneBase.h"
-#include "BtnBase.h"
 
 class SceneGame : public SceneBase, BtnListener {
 

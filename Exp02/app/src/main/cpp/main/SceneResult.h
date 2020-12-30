@@ -2,7 +2,6 @@
 #define _SCENERESULT_H_
 
 #include "SceneBase.h"
-#include "BtnBase.h"
 
 class SceneResult : public SceneBase, BtnListener {
 

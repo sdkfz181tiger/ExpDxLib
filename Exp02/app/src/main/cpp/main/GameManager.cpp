@@ -14,6 +14,7 @@ GameManager::~GameManager() {
 	// Destroy all utilities
 	UtilDebug::getInstance()->destroyInstance();
 	UtilDx::getInstance()->destroyInstance();
+	UtilGraph::getInstance()->destroyInstance();
 	UtilLabel::getInstance()->destroyInstance();
 	UtilMath::getInstance()->destroyInstance();
 	UtilSound::getInstance()->destroyInstance();
@@ -25,7 +26,7 @@ void GameManager::init() {
 	SetGraphMode(dWidth, dHeight, cDepth);
 	SetOutApplicationLogValidFlag(true);
 	// Scenes
-	SceneTitle *scene = SceneTitle::createScene(dWidth, dHeight);
+	SceneGame *scene = SceneGame::createScene(dWidth, dHeight);
 	scene->addSceneListener(this);
 	scenes.push_back(scene);
 }
@@ -71,12 +72,13 @@ void GameManager::touchInput() {
 
 void GameManager::update(const float delay) {
 
+	// Debug
+	UtilDebug::getInstance()->drawGrid();
+
 	// Scene
 	SceneBase *scene = scenes.back();
 	scene->update(delay);
 
-	// Debug
-	UtilDebug::getInstance()->drawGrid();
 	UtilDebug::getInstance()->drawFPS(delay);
 }
 

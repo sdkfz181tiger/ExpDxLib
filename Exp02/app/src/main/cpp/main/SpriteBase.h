@@ -17,13 +17,31 @@ public:
 
 	virtual ~SpriteBase();
 
-	bool init(const char *fileName);
+	virtual bool init(const string &fileName);
 
-	void setPosition(float x, float y);
+	void setPosition(float pX, float pY);
 
-	void setVelocity(float x, float y);
+	void setPosX(float pX);
+
+	void setPosY(float pY);
+
+	float getPosX() const { return pos.x; }
+
+	float getPosY() const { return pos.y; }
+
+	void setVelocity(float vX, float vY);
+
+	void setVelX(float vX);
+
+	void setVelY(float vY);
+
+	float getVelX() const { return vel.x; }
+
+	float getVelY() const { return vel.y; }
 
 	void setScale(int scale);
+
+	float getScale() const { return scale; }
 
 	bool containsPoint(int x, int y);
 

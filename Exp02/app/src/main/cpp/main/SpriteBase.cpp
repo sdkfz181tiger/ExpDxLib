@@ -3,7 +3,7 @@
 SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
 	// New
 	SpriteBase *sprite = new SpriteBase(x, y);
-	if (sprite && sprite->init(fileName.c_str())) return sprite;
+	if (sprite && sprite->init(fileName)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
@@ -19,23 +19,39 @@ SpriteBase::~SpriteBase() {
 	LOGD("Main", "~SpriteBase()\n");
 }
 
-bool SpriteBase::init(const char *fileName) {
+bool SpriteBase::init(const string &fileName) {
 	// Load graph
-	graph = LoadGraph(fileName);
+	graph = UtilGraph::getInstance()->createGraph(fileName);
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());
 	return true;
 }
 
-void SpriteBase::setPosition(float x, float y) {
-	pos.x = x;
-	pos.y = y;
+void SpriteBase::setPosition(float pX, float pY) {
+	pos.x = pX;
+	pos.y = pY;
 }
 
-void SpriteBase::setVelocity(float x, float y) {
-	vel.x = x;
-	vel.y = y;
+void SpriteBase::setPosX(float pX) {
+	pos.x = pX;
+}
+
+void SpriteBase::setPosY(float pY) {
+	pos.y = pY;
+}
+
+void SpriteBase::setVelocity(float vX, float vY) {
+	vel.x = vX;
+	vel.y = vY;
+}
+
+void SpriteBase::setVelX(float vX) {
+	vel.x = vX;
+}
+
+void SpriteBase::setVelY(float vY) {
+	vel.y = vY;
 }
 
 void SpriteBase::setScale(int scale) {
@@ -57,12 +73,12 @@ void SpriteBase::update(const float delay) {
 	pos.x += vel.x * delay;
 	pos.y += vel.y * delay;
 	// Rect
-	minX = pos.x - width * 0.5f;
-	maxX = pos.x + width * 0.5f;
-	minY = pos.y - height * 0.5f;
-	maxY = pos.y + height * 0.5f;
+	minX = pos.x - width / 2;
+	maxX = pos.x + width / 2;
+	minY = pos.y - height / 2;
+	maxY = pos.y + height / 2;
 	// Draw
 	int color = GetColor(255, 255, 255);
 	DrawBox(minX, minY, maxX, maxY, color, false);
-	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+	//DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 }

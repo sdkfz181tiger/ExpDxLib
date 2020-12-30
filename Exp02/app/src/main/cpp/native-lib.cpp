@@ -14,8 +14,9 @@ int android_main(void) {
 	// GameManager
 	GameManager *gameManager = new GameManager(D_WIDTH, D_HEIGHT, C_DEPTH);
 
-	const int fps = 32;
+	const int fps = 50;
 	const int wait = 1000 / fps;
+
 	int now = GetNowCount();
 
 	// MainLoop
@@ -33,7 +34,7 @@ int android_main(void) {
 		gameManager->update(delay);
 
 		// Wait, Flip
-		WaitTimer(wait);
+		if(passed < wait) WaitTimer(wait-passed);
 		ScreenFlip();
 	}
 
