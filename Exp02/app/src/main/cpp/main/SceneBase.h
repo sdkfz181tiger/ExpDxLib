@@ -5,7 +5,7 @@
 #include "BtnBase.h"
 #include "SpriteBase.h"
 #include "SpriteDancer.h"
-#include "SpriteEnemy.h"
+#include "SpriteFrames.h"
 
 // SceneTag
 enum class SceneTag {

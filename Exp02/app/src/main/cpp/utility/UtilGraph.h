@@ -20,10 +20,16 @@ public:
 
 	bool init();
 
+	int getGraph(const string &fileName);
+
+	const vector<int> &getDivGraph(const string &frameName);
+
+private:
 	int createGraph(const string &fileName);
 
-	const vector<int> *createDivGraph(const string &fileName, const string &animName,
-									  int total, int rows, int cols, int w, int h);
+	void createDivGraph(const string &fileName, const string &frameName,
+						int total, int rows, int cols, int w, int h,
+						int from, int to);
 };
 
 #endif // _UTILGRAPH_H_

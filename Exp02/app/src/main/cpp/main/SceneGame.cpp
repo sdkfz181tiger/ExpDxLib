@@ -39,18 +39,18 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 100; i++) {
 		int pX = UtilMath::getInstance()->getRandom(200, dWidth - 200);
 		int pY = UtilMath::getInstance()->getRandom(200, dHeight - 200);
-		int vX = UtilMath::getInstance()->getRandom(30, 50);
-		int vY = UtilMath::getInstance()->getRandom(30, 50);
+		int vX = UtilMath::getInstance()->getRandom(5, 20);
+		int vY = UtilMath::getInstance()->getRandom(5, 20);
 		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vX *= -1 : vX *= 1;
 		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vY *= -1 : vY *= 1;
-//		int rdm = UtilMath::getInstance()->getRandom(0, 4);
-		string fileName = "images/c_chicken_16x16.png";
-//		if (rdm == 0) fileName = "images/c_bozu_16x16.png";
-//		if (rdm == 1) fileName = "images/c_koboz_16x16.png";
-//		if (rdm == 2) fileName = "images/c_tanuki_16x16.png";
+		int rdm = UtilMath::getInstance()->getRandom(0, 4);
+		string fileName = "images/c_chi.png";
+		if (rdm == 0) fileName = "images/c_bozu.png";
+		if (rdm == 1) fileName = "images/c_kobo.png";
+		if (rdm == 2) fileName = "images/c_tanu.png";
 		auto sprite = SpriteDancer::createSprite(fileName, pX, pY);
 		sprite->setVelocity(vX, vY);
 		sprites.push_back(sprite);

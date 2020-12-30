@@ -12,21 +12,9 @@ SpriteBase::~SpriteBase() {
 	LOGD("Main", "~SpriteBase()\n");
 }
 
-bool SpriteBase::initGraph(const string &fileName) {
+bool SpriteBase::init(const string &fileName) {
 	// Load graph
-	graph = UtilGraph::getInstance()->createGraph(fileName);
-	if (graph == -1) return false;
-	GetGraphSize(graph, &width, &height);
-	this->setScale(UtilDx::getInstance()->getDefScale());
-	return true;
-}
-
-bool SpriteBase::initDivGraph(const string &fileName) {
-	// Load graph
-	const vector<int> *graphs = UtilGraph::getInstance()->createDivGraph(fileName, "hoge", 25, 5, 5, 16,
-																   16);
-	//graph = UtilGraph::getInstance()->createGraph(fileName);
-	graph = graphs->at(0);
+	graph = UtilGraph::getInstance()->getGraph(fileName);
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());
@@ -83,7 +71,5 @@ void SpriteBase::update(const float delay) {
 	minY = pos.y - height / 2;
 	maxY = pos.y + height / 2;
 	// Draw
-	//DrawBox(minX, minY, maxX, maxY, color, false);
-	//DrawCircle(pos.x, pos.y, width / 2, color, true);
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 }

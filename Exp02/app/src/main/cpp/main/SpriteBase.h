@@ -16,9 +16,7 @@ public:
 
 	virtual ~SpriteBase();
 
-	bool initGraph(const string &fileName);
-
-	bool initDivGraph(const string &fileName);
+	virtual bool init(const string &fileName);
 
 	void setPosition(float pX, float pY);
 
@@ -46,7 +44,7 @@ public:
 
 	bool containsPoint(int x, int y);
 
-	void update(const float delay);
+	virtual void update(const float delay);
 };
 
 #endif // _SPRITEBASE_H_
