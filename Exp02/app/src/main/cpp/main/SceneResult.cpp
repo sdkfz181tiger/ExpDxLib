@@ -9,8 +9,8 @@ SceneResult *SceneResult::createScene(int dWidth, int dHeight) {
 }
 
 SceneResult::SceneResult(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-                                                    sceneListener(nullptr),
-                                                    btnQuit(nullptr), btnTest(nullptr) {
+													sceneListener(nullptr),
+													btnQuit(nullptr), btnTest(nullptr) {
 	LOGD("Main", "SceneResult()\n");
 }
 
@@ -40,17 +40,17 @@ bool SceneResult::init() {
 
 void SceneResult::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
-	for(auto btn : btns) btn->setOnTouchBegan(id, x, y);
+	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 }
 
 void SceneResult::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
-	for(auto btn : btns) btn->setOnTouchMoved(id, x, y);
+	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
 }
 
 void SceneResult::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
-	for(auto btn : btns) btn->setOnTouchEnded(id, x, y);
+	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
 }
 
 void SceneResult::update(const float delay) {
@@ -63,7 +63,7 @@ void SceneResult::update(const float delay) {
 
 	// Label
 	UtilLabel::getInstance()->drawStr("RESULT!!", cX, 120,
-	                                  5, UtilAlign::CENTER);
+									  5, UtilAlign::CENTER);
 }
 
 void SceneResult::addSceneListener(SceneListener *sceneListener) {

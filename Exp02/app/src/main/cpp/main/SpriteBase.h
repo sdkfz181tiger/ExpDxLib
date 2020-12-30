@@ -9,6 +9,7 @@ protected:
 	Vec2 pos, vel;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
+	unsigned int color;
 
 public:
 	static SpriteBase *createSprite(const string &fileName, float x, float y);

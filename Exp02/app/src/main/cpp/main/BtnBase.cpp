@@ -3,8 +3,8 @@
 #include <utility>
 
 BtnBase *BtnBase::createBtn(const string &fileName,
-                            const string &title,
-                            float x, float y) {
+							const string &title,
+							float x, float y) {
 	// New
 	BtnBase *sprite = new BtnBase(title, x, y);
 	if (sprite && sprite->init(fileName.c_str())) return sprite;
@@ -90,7 +90,7 @@ void BtnBase::update(const float delay) {
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 	// Text
 	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
-	                                  scale, UtilAlign::CENTER);
+									  scale, UtilAlign::CENTER);
 }
 
 void BtnBase::addBtnListener(BtnListener *btnListener, BtnTag btnTag) {

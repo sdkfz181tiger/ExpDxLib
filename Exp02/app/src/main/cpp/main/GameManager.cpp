@@ -74,37 +74,36 @@ void GameManager::update(const float delay) {
 
 	// Debug
 	UtilDebug::getInstance()->drawGrid();
+	UtilDebug::getInstance()->drawFPS(delay);
 
 	// Scene
 	SceneBase *scene = scenes.back();
 	scene->update(delay);
-
-	UtilDebug::getInstance()->drawFPS(delay);
 }
 
 void GameManager::onSceneChange(SceneTag tag) {
 	LOGD("Main", "GameManager::onSceneChange() %d\n", tag);
 
-	if(SceneTag::TITLE == tag){
+	if (SceneTag::TITLE == tag) {
 		SceneTitle *scene = SceneTitle::createScene(dWidth, dHeight);
 		scene->addSceneListener(this);
 		scenes.push_back(scene);
 	}
 
-	if(SceneTag::GAME == tag){
+	if (SceneTag::GAME == tag) {
 		SceneGame *scene = SceneGame::createScene(dWidth, dHeight);
 		scene->addSceneListener(this);
 		scenes.push_back(scene);
 	}
 
-	if(SceneTag::RESULT == tag){
+	if (SceneTag::RESULT == tag) {
 		SceneResult *scene = SceneResult::createScene(dWidth, dHeight);
 		scene->addSceneListener(this);
 		scenes.push_back(scene);
 	}
 
 	// Delete previous scene
-	if(1 < scenes.size()) {
+	if (1 < scenes.size()) {
 		auto it = scenes.begin();
 		delete (*it);
 		scenes.erase(it);

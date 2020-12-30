@@ -4,7 +4,8 @@
 static UtilDebug *selfUtilDebug = nullptr;
 
 UtilDebug::UtilDebug() : dispWidth(0), dispHeight(0), dispColor(0),
-                         gridSize(64), gridRows(0), gridCols(0), gridColor(0) {
+						 gridSize(0), gridRows(0), gridCols(10),
+						 gridColor(GetColor(0, 99, 0)) {
 	LOGD("Util", "UtilDebug()\n");
 }
 
@@ -30,9 +31,8 @@ void UtilDebug::destroyInstance() {
 bool UtilDebug::init() {
 	LOGD("Util", "UtilDebug::init()\n");
 	GetScreenState(&dispWidth, &dispHeight, &dispColor);
+	gridSize = dispWidth / gridCols;
 	gridRows = dispHeight / gridSize;
-	gridCols = dispWidth / gridSize;
-	gridColor = GetColor(0, 99, 0);
 	return true;
 }
 
@@ -55,9 +55,8 @@ void UtilDebug::drawGrid() {
 }
 
 void UtilDebug::drawFPS(float delay) {
-
-	char fpsStr[20];
-	sprintf(fpsStr, "FPS:%.2f", delay);
-	UtilLabel::getInstance()->drawStr(fpsStr, dispWidth, dispHeight - gridSize,
-	                                  3, UtilAlign::RIGHT);
+	// FPS
+	sprintf(fpsStr, "FPS:%.1f", 1.0f / delay);
+	UtilLabel::getInstance()->drawStr(fpsStr, gridSize / 4, gridSize / 4,
+									  2, UtilAlign::LEFT);
 }

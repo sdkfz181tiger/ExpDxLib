@@ -32,9 +32,9 @@ bool UtilGraph::init() {
 }
 
 int UtilGraph::createGraph(const string &fileName) {
-	if (0 < graphs.count(fileName)) return graphs.find(fileName)->second;
+	if (0 < graphMap.count(fileName)) return graphMap.find(fileName)->second;
 	int graph = LoadGraph(fileName.c_str());
 	if (graph == -1) return -1;
-	graphs.insert(make_pair(fileName, graph));
+	graphMap.insert(make_pair(fileName, graph));
 	return graph;
 }

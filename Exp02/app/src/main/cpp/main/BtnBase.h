@@ -35,8 +35,8 @@ protected:
 
 public:
 	static BtnBase *createBtn(const string &fileName,
-	                          const string &title,
-	                          float x, float y);
+							  const string &title,
+							  float x, float y);
 
 	BtnBase(string title, float x, float y);
 

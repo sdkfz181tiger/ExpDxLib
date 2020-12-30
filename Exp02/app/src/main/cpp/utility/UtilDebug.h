@@ -7,7 +7,9 @@ class UtilDebug {
 
 private:
 	int dispWidth, dispHeight, dispColor;
-	unsigned int gridSize, gridRows, gridCols, gridColor;
+	int gridSize, gridRows, gridCols;
+	unsigned int gridColor;
+	char fpsStr[20];
 
 public:
 	UtilDebug();

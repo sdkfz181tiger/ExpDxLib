@@ -6,7 +6,7 @@
 class UtilGraph {
 
 private:
-	map<string, int> graphs;
+	map<string, int> graphMap;
 
 public:
 	UtilGraph();

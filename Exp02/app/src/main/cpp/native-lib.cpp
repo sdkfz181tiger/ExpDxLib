@@ -7,12 +7,12 @@ int android_main(void) {
 	if (DxLib_Init() == -1) return -1;
 
 	// Display: Pixel2: 1080x1920
-	const int D_WIDTH = 1080;
-	const int D_HEIGHT = 1920;
-	const int C_DEPTH = 16;
+	const int dWidth = UtilDx::getInstance()->getDispWidth();
+	const int dHeight = UtilDx::getInstance()->getDispHeight();
+	const int dDepth = UtilDx::getInstance()->getDispDepth();
 
 	// GameManager
-	GameManager *gameManager = new GameManager(D_WIDTH, D_HEIGHT, C_DEPTH);
+	GameManager *gameManager = new GameManager(dWidth, dHeight, dDepth);
 
 	const int fps = 50;
 	const int wait = 1000 / fps;
@@ -26,7 +26,7 @@ int android_main(void) {
 
 		// Delay
 		int passed = GetNowCount() - now;
-		float delay = floor((float(passed) / float(wait)) * 100.0f) * 0.01f;
+		float delay = float(passed) * 0.001f;
 		now = GetNowCount();
 
 		// Touch, Update
@@ -34,7 +34,7 @@ int android_main(void) {
 		gameManager->update(delay);
 
 		// Wait, Flip
-		if(passed < wait) WaitTimer(wait-passed);
+		if (passed < wait) WaitTimer(wait - passed);
 		ScreenFlip();
 	}
 

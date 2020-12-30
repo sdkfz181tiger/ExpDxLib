@@ -11,7 +11,8 @@ SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
 SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
-		minX(0), maxX(0), minY(0), maxY(0) {
+		minX(0), maxX(0), minY(0), maxY(0),
+		color(GetColor(255, 255, 255)){
 	LOGD("Main", "SpriteBase()\n");
 }
 
@@ -78,7 +79,7 @@ void SpriteBase::update(const float delay) {
 	minY = pos.y - height / 2;
 	maxY = pos.y + height / 2;
 	// Draw
-	int color = GetColor(255, 255, 255);
-	DrawBox(minX, minY, maxX, maxY, color, false);
-	//DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+	//DrawBox(minX, minY, maxX, maxY, color, false);
+	//DrawCircle(pos.x, pos.y, width / 2, color, true);
+	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 }

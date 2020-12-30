@@ -63,12 +63,12 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 	if (align == UtilAlign::CENTER) gX -= gWidth / 2;
 	for (int i = 0; i < str.length(); i++) {
 		const char c = str.at(i);
-		const int handle = handleMap[c];
-		if (0 <= handle)
+		if (0 < handleMap.count(c)){
 			DrawExtendGraph(gX, gY,
-			                gX + fWidth * scale,
-			                gY + fHeight * scale,
-			                handle,true);
+							gX + fWidth * scale,
+							gY + fHeight * scale,
+							handleMap.find(c)->second,true);
+		}
 		gX += gPadding;
 	}
 }

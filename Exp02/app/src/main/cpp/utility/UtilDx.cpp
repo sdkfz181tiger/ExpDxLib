@@ -3,7 +3,8 @@
 // Singleton Object
 static UtilDx *selfUtilDx = nullptr;
 
-UtilDx::UtilDx() : quitFlg(false), defScale(2) {
+UtilDx::UtilDx() : quitFlg(false), dWidth(540), dHeight(960),
+				   dDepth(16), defScale(3) {
 	LOGD("Util", "UtilDx()\n");
 }
 
@@ -33,12 +34,4 @@ bool UtilDx::init() {
 
 void UtilDx::setQuitFlg() {
 	this->quitFlg = true;
-}
-
-bool UtilDx::getQuitFlg() {
-	return quitFlg;
-}
-
-int UtilDx::getDefScale() {
-	return defScale;
 }
