@@ -10,6 +10,7 @@
 #include <map>
 #include <random>
 #include <string>
+#include <sstream>
 
 //==========
 // Library

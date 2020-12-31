@@ -4,8 +4,12 @@
 #include "Utility.h"
 #include "BtnBase.h"
 #include "SpriteBase.h"
+#include "SpriteBozu.h"
+#include "SpriteChicken.h"
 #include "SpriteDancer.h"
 #include "SpriteFrames.h"
+#include "SpriteKobozu.h"
+#include "SpriteTanuki.h"
 
 // SceneTag
 enum class SceneTag {

@@ -14,38 +14,42 @@ project("mydxlib01")
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
         ${CMAKE_CURRENT_SOURCE_DIR}/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utility)
-link_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../DxLib/${ANDROID_ABI}
         ${CMAKE_CURRENT_SOURCE_DIR}/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utility)
 
 add_library( # Sets the name of the library.
-             native-lib
+        native-lib
 
-             # Sets the library as a shared library.
-             SHARED
+        # Sets the library as a shared library.
+        SHARED
 
-             # Provides a relative path to your source file(s).
-             native-lib.cpp
-             main/BtnBase.cpp
-             main/GameManager.cpp
-             main/SceneBase.cpp
-             main/SceneGame.cpp
-             main/SceneResult.cpp
-             main/SceneTitle.cpp
-             main/SpriteBase.cpp
-             main/SpriteDancer.cpp
-             main/SpriteFrames.cpp
-             utility/Utility.h
-             utility/UtilDebug.cpp
-             utility/UtilDx.cpp
-             utility/UtilGraph.cpp
-             utility/UtilLabel.cpp
-             utility/UtilMath.cpp
-             utility/UtilSound.cpp
-             utility/Vec2.cpp
+        # Provides a relative path to your source file(s).
+        native-lib.cpp
+        main/BtnBase.cpp
+        main/GameManager.cpp
+        main/SceneBase.cpp
+        main/SceneGame.cpp
+        main/SceneResult.cpp
+        main/SceneTitle.cpp
+        main/SpriteBase.cpp
+        main/SpriteBozu.cpp
+        main/SpriteChicken.cpp
+        main/SpriteDancer.cpp
+        main/SpriteFrames.cpp
+        main/SpriteKobozu.cpp
+        main/SpriteTanuki.cpp
+        utility/Utility.h
+        utility/UtilDebug.cpp
+        utility/UtilDx.cpp
+        utility/UtilGraph.cpp
+        utility/UtilLabel.cpp
+        utility/UtilMath.cpp
+        utility/UtilSound.cpp
+        utility/Vec2.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -55,37 +59,37 @@ add_library( # Sets the name of the library.
 # completing its build.
 
 find_library( # Sets the name of the path variable.
-              log-lib
+        log-lib
 
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-                       native-lib
+        native-lib
 
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib}
-                       android
-                       GLESv1_CM
-                       EGL
-                       GLESv2
-                       OpenSLES
-                       m
-                       DxLib
-                       DxUseCLib
-                       jpeg
-                       png
-                       zlib
-                       tiff
-                       theora_static
-                       vorbis_static
-                       vorbisfile_static
-                       ogg_static
-                       bullet
-                       opus)
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib}
+        android
+        GLESv1_CM
+        EGL
+        GLESv2
+        OpenSLES
+        m
+        DxLib
+        DxUseCLib
+        jpeg
+        png
+        zlib
+        tiff
+        theora_static
+        vorbis_static
+        vorbisfile_static
+        ogg_static
+        bullet
+        opus)

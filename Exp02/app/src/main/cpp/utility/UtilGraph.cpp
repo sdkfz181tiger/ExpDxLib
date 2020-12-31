@@ -30,27 +30,27 @@ bool UtilGraph::init() {
 	LOGD("Util", "UtilGraph::init()\n");
 
 	// Create animation
-	this->createDivGraph("images/c_bone_16.png", "bone", 5, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/c_chi_16.png", "chi_front", 25, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/c_chi_16.png", "chi_back", 25, 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/c_chi_16.png", "chi_right", 25, 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/c_chi_16.png", "chi_left", 25, 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/c_chi_16.png", "chi_dead", 25, 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/c_bozu_16.png", "bozu_front", 25, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/c_bozu_16.png", "bozu_back", 25, 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/c_bozu_16.png", "bozu_right", 25, 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/c_bozu_16.png", "bozu_left", 25, 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/c_bozu_16.png", "bozu_dead", 25, 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/c_kobo_16.png", "kobo_front", 25, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/c_kobo_16.png", "kobo_back", 25, 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/c_kobo_16.png", "kobo_right", 25, 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/c_kobo_16.png", "kobo_left", 25, 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/c_kobo_16.png", "kobo_dead", 25, 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/c_tanu_16.png", "tanu_front", 25, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/c_tanu_16.png", "tanu_back", 25, 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/c_tanu_16.png", "tanu_right", 25, 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/c_tanu_16.png", "tanu_left", 25, 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/c_tanu_16.png", "tanu_dead", 25, 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_bone.png", "bone_f", 5, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chi.png", "chi_f", 25, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chi.png", "chi_b", 25, 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_chi.png", "chi_r", 25, 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_chi.png", "chi_l", 25, 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_chi.png", "chi_d", 25, 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_bozu.png", "bozu_f", 25, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_bozu.png", "bozu_b", 25, 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_bozu.png", "bozu_r", 25, 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_bozu.png", "bozu_l", 25, 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_bozu.png", "bozu_d", 25, 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_kobo.png", "kobo_f", 25, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_kobo.png", "kobo_b", 25, 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_kobo.png", "kobo_r", 25, 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_kobo.png", "kobo_l", 25, 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_kobo.png", "kobo_d", 25, 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_tanu.png", "tanu_f", 25, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_tanu.png", "tanu_b", 25, 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_tanu.png", "tanu_r", 25, 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_tanu.png", "tanu_l", 25, 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_tanu.png", "tanu_d", 25, 5, 5, 16, 16, 20, 24);
 
 	return true;
 }
@@ -62,7 +62,7 @@ int UtilGraph::getGraph(const string &fileName) {
 
 const vector<int> &UtilGraph::getDivGraph(const string &frameName) {
 	if (0 < divMap.count(frameName)) return divMap.find(frameName)->second;
-	return divMap.find("bone")->second;
+	return divMap.find("bone_f")->second;
 }
 
 int UtilGraph::createGraph(const string &fileName) {

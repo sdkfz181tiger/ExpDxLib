@@ -20,12 +20,12 @@ bool SpriteDancer::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
-	this->pushFrames("kobo_front");
-	this->pushFrames("kobo_back");
-	this->pushFrames("kobo_right");
-	this->pushFrames("kobo_left");
-	this->pushFrames("kobo_dead");
-	this->changeFrames("kobo_front");
+	this->pushFrames("chi_f");
+	this->pushFrames("chi_b");
+	this->pushFrames("chi_r");
+	this->pushFrames("chi_l");
+	this->pushFrames("chi_d");
+	this->changeFrames("chi_f");
 
 	return true;
 }

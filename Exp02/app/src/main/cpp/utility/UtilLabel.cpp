@@ -71,3 +71,11 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 		x += gOffX;
 	}
 }
+
+vector<string> UtilLabel::split(const string &str, char sep) {
+	vector<string> result;
+	stringstream stream(str);
+	string buffer;
+	while (getline(stream, buffer, sep)) result.push_back(buffer);
+	return result;
+}

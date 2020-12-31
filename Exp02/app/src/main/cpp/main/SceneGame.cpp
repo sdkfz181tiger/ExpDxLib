@@ -39,19 +39,21 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	for (int i = 0; i < 100; i++) {
+	auto bozu = SpriteBozu::createSprite("images/c_bozu.png", cX, cY);
+	sprites.push_back(bozu);
+	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX - gSize * 2, cY);
+	sprites.push_back(kobo);
+	auto tanu = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 2, cY);
+	sprites.push_back(tanu);
+
+	for (int i = 0; i < 30; i++) {
 		int pX = UtilMath::getInstance()->getRandom(200, dWidth - 200);
 		int pY = UtilMath::getInstance()->getRandom(200, dHeight - 200);
-		int vX = UtilMath::getInstance()->getRandom(5, 20);
-		int vY = UtilMath::getInstance()->getRandom(5, 20);
+		int vX = UtilMath::getInstance()->getRandom(30, 80);
+		int vY = UtilMath::getInstance()->getRandom(30, 80);
 		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vX *= -1 : vX *= 1;
 		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vY *= -1 : vY *= 1;
-		int rdm = UtilMath::getInstance()->getRandom(0, 4);
-		string fileName = "images/c_chi.png";
-		if (rdm == 0) fileName = "images/c_bozu.png";
-		if (rdm == 1) fileName = "images/c_kobo.png";
-		if (rdm == 2) fileName = "images/c_tanu.png";
-		auto sprite = SpriteDancer::createSprite(fileName, pX, pY);
+		auto sprite = SpriteChicken::createSprite("images/c_chi.png", pX, pY);
 		sprite->setVelocity(vX, vY);
 		sprites.push_back(sprite);
 	}
@@ -86,6 +88,7 @@ void SceneGame::update(const float delay) {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Test
 	auto it = sprites.end();
@@ -93,14 +96,16 @@ void SceneGame::update(const float delay) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		if (sprite->getPosX() < 0) sprite->setPosX(dWidth);
 		if (dWidth < sprite->getPosX()) sprite->setPosX(0);
-		if (sprite->getPosY() < 0) sprite->setPosY(dHeight);
-		if (dHeight < sprite->getPosY()) sprite->setPosY(0);
+		if (sprite->getPosY() < 0) sprite->setPosY(dHeight - 80);
+		if (dHeight - 80 < sprite->getPosY()) sprite->setPosY(0);
 		sprite->update(delay);
 	}
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("=GAME=", cX, 120,
-									  5, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr("=HAPPY NEW YEAR=", cX, cY - gSize * 5,
+									  2, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr("2021", cX, cY - gSize * 3,
+									  6, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }
 

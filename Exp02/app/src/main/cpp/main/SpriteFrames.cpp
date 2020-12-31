@@ -32,6 +32,7 @@ void SpriteFrames::pushFrames(const string &frameName) {
 }
 
 void SpriteFrames::changeFrames(const string &frameName) {
+	if (frameMap.count(frameName) <= 0) return;
 	frames = frameMap.find(frameName)->second;
 }
 

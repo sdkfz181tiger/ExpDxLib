@@ -30,6 +30,8 @@ public:
 
 	void drawStr(const string &str, int x, int y,
 	             int scale = 1, UtilAlign align = UtilAlign::DEFAULT);
+
+	vector<string> split(const string &str, char sep);
 };
 
 #endif // _UTILLABEL_H_
