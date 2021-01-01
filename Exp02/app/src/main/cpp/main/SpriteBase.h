@@ -12,6 +12,8 @@ protected:
 	unsigned int color;
 
 public:
+	static SpriteBase *createSprite(const string &fileName, float x, float y);
+
 	SpriteBase(float x, float y);
 
 	virtual ~SpriteBase();

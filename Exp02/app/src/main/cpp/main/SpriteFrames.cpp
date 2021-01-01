@@ -9,7 +9,7 @@ SpriteFrames *SpriteFrames::createSprite(const string &fileName, float x, float 
 }
 
 SpriteFrames::SpriteFrames(float x, float y) : SpriteBase(x, y),
-											   frameIndex(0), frameCnt(0), frameInterval(10) {
+											   frameIndex(0), frameCnt(0), frameInterval(5) {
 	LOGD("Main", "SpriteFrames()\n");
 }
 

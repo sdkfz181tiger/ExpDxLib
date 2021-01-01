@@ -3,7 +3,8 @@
 // Singleton Object
 static UtilLabel *selfUtilLabel = nullptr;
 
-UtilLabel::UtilLabel() : fWidth(0), fHeight(0), fPadding(1.2f) {
+UtilLabel::UtilLabel() : fWidth(0), fHeight(0), fPadding(1.2f),
+						 black(GetColor(0, 0, 0)) {
 	LOGD("Util", "UtilLabel()\n");
 }
 
@@ -55,27 +56,22 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 						int scale, UtilAlign align) {
 
 	int gOffX = fWidth * scale * fPadding;
-	int gOffY = fWidth * scale / 2;
+	int gOffY = fHeight * scale / 2;
 	int gWidth = gOffX * str.length();
 	if (align == UtilAlign::LEFT) x -= 0;
 	if (align == UtilAlign::RIGHT) x -= gWidth;
 	if (align == UtilAlign::CENTER) x -= gWidth / 2;
+	y -= gOffY;
+
+	DrawBox(x, y - gOffY, x + gOffX * str.length(), y + gOffY * 2, black, true);
 	for (int i = 0; i < str.length(); i++) {
 		const char c = str.at(i);
 		if (0 < handleMap.count(c)) {
 			DrawExtendGraph(x, y - gOffY,
 							x + fWidth * scale,
-							y + fHeight * scale - gOffY,
+							y + fHeight * scale,
 							handleMap.find(c)->second, true);
 		}
 		x += gOffX;
 	}
-}
-
-vector<string> UtilLabel::split(const string &str, char sep) {
-	vector<string> result;
-	stringstream stream(str);
-	string buffer;
-	while (getline(stream, buffer, sep)) result.push_back(buffer);
-	return result;
 }

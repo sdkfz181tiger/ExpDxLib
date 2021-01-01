@@ -25,7 +25,19 @@ bool SpriteKobozu::init(const string &fileName) {
 	this->pushFrames("kobo_r");
 	this->pushFrames("kobo_l");
 	this->pushFrames("kobo_d");
-	this->changeFrames("kobo_f");
+
+	int rdm = UtilMath::getInstance()->getRandom(0, 5);
+	if(rdm == 0){
+		this->changeFrames("kobo_f");
+	}else if(rdm == 1){
+		this->changeFrames("kobo_b");
+	}else if(rdm == 2){
+		this->changeFrames("kobo_r");
+	}else if(rdm == 3){
+		this->changeFrames("kobo_l");
+	}else{
+		this->changeFrames("kobo_d");
+	}
 
 	return true;
 }

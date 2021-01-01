@@ -39,23 +39,43 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
+	// Background
+	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 2);
+
+	// Characters
 	auto bozu = SpriteBozu::createSprite("images/c_bozu.png", cX, cY);
+	bozu->changeFrames("bozu_f");
 	sprites.push_back(bozu);
 	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX - gSize * 2, cY);
+	kobo->changeFrames("kobo_f");
 	sprites.push_back(kobo);
-	auto tanu = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 2, cY);
+	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX + gSize * 2, cY);
+	chicken->changeFrames("chi_f");
+	sprites.push_back(chicken);
+
+	auto c2 = SpriteChicken::createSprite("images/c_chi.png",
+										  cX + gSize * 4, cY + gSize * 2);
+	c2->changeFrames("chi_r");
+	sprites.push_back(c2);
+
+	auto c3 = SpriteChicken::createSprite("images/c_chi.png",
+										  cX - gSize * 3, cY + gSize * 3);
+	c3->changeFrames("chi_l");
+	sprites.push_back(c3);
+
+	auto c4 = SpriteChicken::createSprite("images/c_chi.png",
+										  cX - gSize * 5, cY + gSize * 1);
+	c4->changeFrames("chi_d");
+	sprites.push_back(c4);
+
+
+	auto tanu = SpriteTanuki::createSprite("images/c_tanu.png",
+										   dWidth - gSize * 2, cY + gSize * 2);
+	tanu->changeFrames("tanu_l");
 	sprites.push_back(tanu);
 
-	for (int i = 0; i < 30; i++) {
-		int pX = UtilMath::getInstance()->getRandom(200, dWidth - 200);
-		int pY = UtilMath::getInstance()->getRandom(200, dHeight - 200);
-		int vX = UtilMath::getInstance()->getRandom(30, 80);
-		int vY = UtilMath::getInstance()->getRandom(30, 80);
-		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vX *= -1 : vX *= 1;
-		(UtilMath::getInstance()->getRandom(0, 4) < 2) ? vY *= -1 : vY *= 1;
-		auto sprite = SpriteChicken::createSprite("images/c_chi.png", pX, pY);
-		sprite->setVelocity(vX, vY);
-		sprites.push_back(sprite);
+	for (int i = 0; i < 100; i++) {
+		this->birth();
 	}
 
 	return true;
@@ -90,22 +110,23 @@ void SceneGame::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Test
+	background->update(delay);
+
+	// Sprites
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
 		auto sprite = static_cast<SpriteBase *>(*it);
 		if (sprite->getPosX() < 0) sprite->setPosX(dWidth);
 		if (dWidth < sprite->getPosX()) sprite->setPosX(0);
-		if (sprite->getPosY() < 0) sprite->setPosY(dHeight - 80);
-		if (dHeight - 80 < sprite->getPosY()) sprite->setPosY(0);
+		if (sprite->getPosY() < 0) sprite->setPosY(dHeight);
+		if (dHeight < sprite->getPosY()) sprite->setPosY(0);
 		sprite->update(delay);
 	}
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("=HAPPY NEW YEAR=", cX, cY - gSize * 5,
+	UtilLabel::getInstance()->drawStr("=HAPPY NEW YEAR=", cX, cY - gSize * 6.0f,
 									  2, UtilAlign::CENTER);
-	UtilLabel::getInstance()->drawStr("2021", cX, cY - gSize * 3,
-									  6, UtilAlign::CENTER);
+
 	for (auto btn : btns) btn->update(delay);
 }
 
@@ -129,5 +150,36 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::RESULT) {
 		UtilSound::getInstance()->playSE("se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::RESULT);
+	}
+}
+
+void SceneGame::birth() {
+
+	const float cX = dWidth * 0.5f;
+	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
+
+	// New chicken
+	int deg = UtilMath::getInstance()->getRandom(0, 360);
+	int spd = 120;
+	float vX = UtilMath::getInstance()->getCos(deg) * spd;
+	float vY = UtilMath::getInstance()->getSin(deg) * spd;
+	int rdm = UtilMath::getInstance()->getRandom(0, 3);
+	if (rdm == 0) {
+		auto spr = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
+		spr->setVelocity(vX, vY);
+		sprites.push_back(spr);
+	} else if (rdm == 1) {
+		auto spr = SpriteBozu::createSprite("images/c_chi.png", cX, cY);
+		spr->setVelocity(vX, vY);
+		sprites.push_back(spr);
+	} else if (rdm == 2) {
+		auto spr = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
+		spr->setVelocity(vX, vY);
+		sprites.push_back(spr);
+	} else {
+		auto spr = SpriteTanuki::createSprite("images/c_chi.png", cX, cY);
+		spr->setVelocity(vX, vY);
+		sprites.push_back(spr);
 	}
 }

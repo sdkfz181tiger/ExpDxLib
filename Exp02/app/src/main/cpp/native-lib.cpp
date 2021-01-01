@@ -10,32 +10,32 @@ int android_main(void) {
 	const int dWidth = UtilDx::getInstance()->getDispWidth();
 	const int dHeight = UtilDx::getInstance()->getDispHeight();
 	const int dDepth = UtilDx::getInstance()->getDispDepth();
+	const int fps = UtilDx::getInstance()->getFPS();
+	const int wait = 1000 / fps;
+	float delay = 0.0f;
 
 	// GameManager
 	GameManager *gameManager = new GameManager(dWidth, dHeight, dDepth);
-
-	const int fps = 50;
-	const int wait = 1000 / fps;
-
-	int now = GetNowCount();
 
 	// MainLoop
 	while (ProcessMessage() == 0 && !UtilDx::getInstance()->getQuitFlg()) {
 		ClearDrawScreen();
 		SetDrawScreen(DX_SCREEN_BACK);
 
-		// Delay
+		int now = GetNowCount();
+
+		gameManager->touchInput();// Touch
+		gameManager->update(delay);// Update
+
 		int passed = GetNowCount() - now;
-		float delay = float(passed) * 0.001f;
-		now = GetNowCount();
-
-		// Touch, Update
-		gameManager->touchInput();
-		gameManager->update(delay);
-
-		// Wait, Flip
-		if (passed < wait) WaitTimer(wait - passed);
-		ScreenFlip();
+		if (wait < passed) {
+			delay = float(passed) * 0.001f;
+			WaitTimer(wait);
+		} else {
+			delay = float(wait - passed) * 0.001f;
+			WaitTimer(wait - passed);
+		}
+		ScreenFlip();// Flip
 	}
 
 	// Delete

@@ -16,6 +16,7 @@ private:
 	map<char, int> handleMap;
 	int fWidth, fHeight;
 	const float fPadding;
+	const int black;
 
 public:
 	UtilLabel();
@@ -29,9 +30,7 @@ public:
 	bool init();
 
 	void drawStr(const string &str, int x, int y,
-	             int scale = 1, UtilAlign align = UtilAlign::DEFAULT);
-
-	vector<string> split(const string &str, char sep);
+				 int scale = 1, UtilAlign align = UtilAlign::DEFAULT);
 };
 
 #endif // _UTILLABEL_H_

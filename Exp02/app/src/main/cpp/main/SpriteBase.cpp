@@ -1,5 +1,13 @@
 #include "SpriteBase.h"
 
+SpriteBase *SpriteBase::createSprite(const string &fileName, float x, float y) {
+	// New
+	SpriteBase *sprite = new SpriteBase(x, y);
+	if (sprite && sprite->init(fileName)) return sprite;
+	DX_SAFE_DELETE(sprite);
+	return nullptr;
+}
+
 SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
@@ -62,9 +70,6 @@ bool SpriteBase::containsPoint(int x, int y) {
 }
 
 void SpriteBase::update(const float delay) {
-	// Velocity
-	pos.x += vel.x * delay;
-	pos.y += vel.y * delay;
 	// Rect
 	minX = pos.x - width / 2;
 	maxX = pos.x + width / 2;

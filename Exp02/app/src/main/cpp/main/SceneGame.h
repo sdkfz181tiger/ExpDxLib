@@ -8,6 +8,7 @@ class SceneGame : public SceneBase, BtnListener {
 private:
 	SceneListener *sceneListener;
 	BtnBase *btnQuit, *btnTest;
+	SpriteBase *background;
 	vector<SpriteBase *> sprites;
 
 public:
@@ -34,6 +35,8 @@ public:
 	void onBtnCanceled(BtnTag &tag) override;
 
 	void onBtnReleased(BtnTag &tag) override;
+
+	void birth();
 };
 
 #endif // _SCENEGAME_H_

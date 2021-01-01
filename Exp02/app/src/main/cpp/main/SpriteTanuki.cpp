@@ -25,7 +25,19 @@ bool SpriteTanuki::init(const string &fileName) {
 	this->pushFrames("tanu_r");
 	this->pushFrames("tanu_l");
 	this->pushFrames("tanu_d");
-	this->changeFrames("tanu_f");
+
+	int rdm = UtilMath::getInstance()->getRandom(0, 5);
+	if(rdm == 0){
+		this->changeFrames("tanu_f");
+	}else if(rdm == 1){
+		this->changeFrames("tanu_b");
+	}else if(rdm == 2){
+		this->changeFrames("tanu_r");
+	}else if(rdm == 3){
+		this->changeFrames("tanu_l");
+	}else{
+		this->changeFrames("tanu_d");
+	}
 
 	return true;
 }

@@ -6,31 +6,33 @@
 class UtilDx {
 
 private:
-    bool quitFlg;
-    const int dWidth, dHeight, dDepth, defScale;
+	bool quitFlg;
+	const int dWidth, dHeight, dDepth, defScale, fps;
 
 public:
-    UtilDx();
+	UtilDx();
 
-    ~UtilDx();
+	~UtilDx();
 
-    static UtilDx *getInstance();
+	static UtilDx *getInstance();
 
-    void destroyInstance();
+	void destroyInstance();
 
-    bool init();
+	bool init();
 
-    void setQuitFlg();
+	void setQuitFlg();
 
-    bool getQuitFlg() { return quitFlg; }
+	bool getQuitFlg() { return quitFlg; }
 
-    int getDispWidth() { return dWidth; }
+	int getDispWidth() { return dWidth; }
 
-    int getDispHeight() { return dHeight; }
+	int getDispHeight() { return dHeight; }
 
-    int getDispDepth() { return dDepth; }
+	int getDispDepth() { return dDepth; }
 
-    int getDefScale() { return defScale; }
+	int getDefScale() { return defScale; }
+
+	int getFPS() { return fps; }
 };
 
 #endif // _UTILDX_H_

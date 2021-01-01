@@ -4,7 +4,7 @@
 static UtilDx *selfUtilDx = nullptr;
 
 UtilDx::UtilDx() : quitFlg(false), dWidth(540), dHeight(960),
-				   dDepth(16), defScale(3) {
+				   dDepth(16), defScale(4), fps(50) {
 	LOGD("Util", "UtilDx()\n");
 }
 
