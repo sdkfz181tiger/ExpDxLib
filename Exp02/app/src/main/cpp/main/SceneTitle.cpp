@@ -39,7 +39,7 @@ bool SceneTitle::init() {
 	btns.push_back(btnTest);
 
 	// Background
-	background = SpriteBase::createSprite("images/box_120x180.png", cX, cY);
+	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
 
 	// Characters
 	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);

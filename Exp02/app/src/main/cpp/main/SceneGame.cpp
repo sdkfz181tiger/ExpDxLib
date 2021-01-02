@@ -40,7 +40,7 @@ bool SceneGame::init() {
 	btns.push_back(btnTest);
 
 	// Background
-	background = SpriteBase::createSprite("images/box_120x180.png", cX, cY);
+	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
 
 	// Test
 	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
