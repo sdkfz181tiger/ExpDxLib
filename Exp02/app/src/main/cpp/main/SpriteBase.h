@@ -10,7 +10,7 @@ protected:
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
 	bool moveFlg;
-	int speed, degree;
+	int moveSpd, moveDeg;
 	unsigned int color;
 
 public:
@@ -52,9 +52,9 @@ public:
 
 	void setDegree(int deg);
 
-	int getSpeed() { return speed; }
+	int getSpeed() { return moveSpd; }
 
-	int getDegree() { return degree; }
+	int getDegree() { return moveDeg; }
 
 	bool containsPoint(int x, int y);
 

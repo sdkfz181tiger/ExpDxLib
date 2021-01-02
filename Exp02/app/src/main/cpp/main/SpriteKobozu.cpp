@@ -28,15 +28,15 @@ bool SpriteKobozu::init(const string &fileName) {
 
 	int rdm = UtilMath::getInstance()->getRandom(0, 5);
 	if(rdm == 0){
-		this->changeFrames("kobo_f");
+		this->changeFrames("kobo_f", -1);
 	}else if(rdm == 1){
-		this->changeFrames("kobo_b");
+		this->changeFrames("kobo_b", -1);
 	}else if(rdm == 2){
-		this->changeFrames("kobo_r");
+		this->changeFrames("kobo_r", -1);
 	}else if(rdm == 3){
-		this->changeFrames("kobo_l");
+		this->changeFrames("kobo_l", -1);
 	}else{
-		this->changeFrames("kobo_d");
+		this->changeFrames("kobo_d", -1);
 	}
 
 	return true;

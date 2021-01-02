@@ -5,10 +5,10 @@
 
 class SpriteFrames : public SpriteBase {
 
-protected:
+private:
 	map<string, vector<int>> frameMap;
-	int frameIndex, frameCnt, frameInterval;
 	vector<int> frames;
+	int frameCnt, frameInterval, frameIndex, frameLoop;
 
 public:
 	static SpriteFrames *createSprite(const string &fileName, float x, float y);
@@ -21,7 +21,11 @@ public:
 
 	void pushFrames(const string &frameName);
 
-	void changeFrames(const string &frameName);
+	void changeFrames(const string &frameName, int loop);
+
+	void startFrames(int loop);
+
+	void stopFrames();
 
 	virtual void update(const float delay) override;
 

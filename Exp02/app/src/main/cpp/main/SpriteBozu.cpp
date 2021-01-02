@@ -28,15 +28,15 @@ bool SpriteBozu::init(const string &fileName) {
 
 	int rdm = UtilMath::getInstance()->getRandom(0, 5);
 	if(rdm == 0){
-		this->changeFrames("bozu_f");
+		this->changeFrames("bozu_f", -1);
 	}else if(rdm == 1){
-		this->changeFrames("bozu_b");
+		this->changeFrames("bozu_b", -1);
 	}else if(rdm == 2){
-		this->changeFrames("bozu_r");
+		this->changeFrames("bozu_r", -1);
 	}else if(rdm == 3){
-		this->changeFrames("bozu_l");
+		this->changeFrames("bozu_l", -1);
 	}else{
-		this->changeFrames("bozu_d");
+		this->changeFrames("bozu_d", -1);
 	}
 
 	return true;

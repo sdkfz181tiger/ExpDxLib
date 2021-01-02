@@ -9,7 +9,8 @@ SpriteFrames *SpriteFrames::createSprite(const string &fileName, float x, float 
 }
 
 SpriteFrames::SpriteFrames(float x, float y) : SpriteBase(x, y),
-											   frameIndex(0), frameCnt(0), frameInterval(5) {
+											   frameCnt(0), frameInterval(5),
+											   frameIndex(0), frameLoop(-1) {
 	LOGD("Main", "SpriteFrames()\n");
 }
 
@@ -22,7 +23,7 @@ bool SpriteFrames::init(const string &fileName) {
 
 	// Frames
 	this->pushFrames("bone");
-	this->changeFrames("bone");
+	this->changeFrames("bone", -1);
 
 	return true;
 }
@@ -31,9 +32,20 @@ void SpriteFrames::pushFrames(const string &frameName) {
 	frameMap.insert(make_pair(frameName, UtilGraph::getInstance()->getDivGraph(frameName)));
 }
 
-void SpriteFrames::changeFrames(const string &frameName) {
+void SpriteFrames::changeFrames(const string &frameName, int loop) {
 	if (frameMap.count(frameName) <= 0) return;
 	frames = frameMap.find(frameName)->second;
+	frameCnt = 0;
+	frameIndex = 0;
+	frameLoop = loop;
+}
+
+void SpriteFrames::startFrames(int loop) {
+	frameLoop = loop;
+}
+
+void SpriteFrames::stopFrames() {
+	frameLoop = 0;
 }
 
 void SpriteFrames::update(const float delay) {
@@ -54,8 +66,10 @@ void SpriteFrames::draw() {
 	maxY = pos.y + height / 2;
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, frames.at(frameIndex), true);
+	if (frameLoop == 0) return;
 	if (++frameCnt < frameInterval) return;
 	frameCnt = 0;
 	if (++frameIndex < frames.size()) return;
 	frameIndex = 0;
+	if (0 < frameLoop) frameLoop--;
 }

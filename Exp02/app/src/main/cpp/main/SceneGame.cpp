@@ -42,7 +42,7 @@ bool SceneGame::init() {
 	// Background
 	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
 
-	// Test
+	// TODO: test!!
 	chicken = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
 
 	return true;
@@ -60,7 +60,7 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 		}
 	}
 
-	// Test
+	// TODO: test!!
 	int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	chicken->moveTo(spd, x, y);
 }
@@ -94,7 +94,7 @@ void SceneGame::update(const float delay) {
 		sprite->update(delay);
 	}
 
-	// Test
+	// TODO: test!!
 	chicken->update(delay);
 
 	// Label, Buttons

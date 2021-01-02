@@ -43,16 +43,16 @@ bool SceneTitle::init() {
 
 	// Characters
 	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
-	kobo->changeFrames("kobo_f");
+	kobo->changeFrames("kobo_f", -1);
 	sprites.push_back(kobo);
 	auto bozu = SpriteBozu::createSprite("images/c_bozu.png", cX - gSize * 3, cY);
-	bozu->changeFrames("bozu_f");
+	bozu->changeFrames("bozu_f", -1);
 	sprites.push_back(bozu);
 	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
-	chicken->changeFrames("chi_f");
+	chicken->changeFrames("chi_f", -1);
 	sprites.push_back(chicken);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
-	tanuki->changeFrames("tanu_f");
+	tanuki->changeFrames("tanu_f", -1);
 	sprites.push_back(tanuki);
 
 	return true;

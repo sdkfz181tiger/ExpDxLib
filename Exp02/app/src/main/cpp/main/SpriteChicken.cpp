@@ -29,15 +29,15 @@ bool SpriteChicken::init(const string &fileName) {
 
 	int rdm = UtilMath::getInstance()->getRandom(0, 5);
 	if (rdm == 0) {
-		this->changeFrames("chi_f");
+		this->changeFrames("chi_f", -1);
 	} else if (rdm == 1) {
-		this->changeFrames("chi_b");
+		this->changeFrames("chi_b", -1);
 	} else if (rdm == 2) {
-		this->changeFrames("chi_r");
+		this->changeFrames("chi_r", -1);
 	} else if (rdm == 3) {
-		this->changeFrames("chi_l");
+		this->changeFrames("chi_l", -1);
 	} else {
-		this->changeFrames("chi_d");
+		this->changeFrames("chi_d", -1);
 	}
 
 	return true;
@@ -48,14 +48,17 @@ void SpriteChicken::update(float delay) {
 	if (moveFlg) {
 		pos.x += vel.x * delay;
 		pos.y += vel.y * delay;
-		distance -= speed * delay;
-		if (distance <= 0.0f) stop();
+		distance -= moveSpd * delay;
+		if (distance <= 0.0f) {
+			stopFrames();
+			stop();
+		}
 	}
-	// Test
-	int white = GetColor(255, 255, 255);
-	DrawLine(pos.x, pos.y, dst.x, dst.y, white, 2);
 	// Draw
 	this->draw();
+	// TODO: test!!
+	int white = GetColor(255, 255, 255);
+	DrawLine(pos.x, pos.y, dst.x, dst.y, white, 1);
 }
 
 void SpriteChicken::moveTo(int spd, int x, int y) {
@@ -65,15 +68,15 @@ void SpriteChicken::moveTo(int spd, int x, int y) {
 	dst.y = y;
 	distance = UtilMath::getInstance()->calcDistance2D(pos, Vec2(x, y));
 	// Frames
-	if (degree < 45) {
-		this->changeFrames("chi_r");
-	} else if (degree < 135) {
-		this->changeFrames("chi_f");
-	} else if (degree < 225) {
-		this->changeFrames("chi_l");
-	} else if (degree < 315) {
-		this->changeFrames("chi_b");
+	if (moveDeg < 45) {
+		this->changeFrames("chi_r", -1);
+	} else if (moveDeg < 135) {
+		this->changeFrames("chi_f", -1);
+	} else if (moveDeg < 225) {
+		this->changeFrames("chi_l", -1);
+	} else if (moveDeg < 315) {
+		this->changeFrames("chi_b", -1);
 	} else {
-		this->changeFrames("chi_r");
+		this->changeFrames("chi_r", -1);
 	}
 }

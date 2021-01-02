@@ -12,7 +12,7 @@ SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		moveFlg(false), speed(0), degree(0),
+		moveFlg(false), moveSpd(0), moveDeg(0),
 		color(GetColor(255, 255, 255)) {
 	LOGD("Main", "SpriteBase()\n");
 }
@@ -53,24 +53,24 @@ void SpriteBase::move(int spd, int deg) {
 	moveFlg = true;
 	this->setSpeed(spd);
 	this->setDegree(deg);
-	vel.x = speed * UtilMath::getInstance()->getCos(degree);
-	vel.y = speed * UtilMath::getInstance()->getSin(degree);
+	vel.x = moveSpd * UtilMath::getInstance()->getCos(moveDeg);
+	vel.y = moveSpd * UtilMath::getInstance()->getSin(moveDeg);
 }
 
 void SpriteBase::stop() {
 	moveFlg = false;
-	speed = 0;
-	speed = 0;
+	moveSpd = 0;
+	moveDeg = 0;
 	vel.x = 0.0f;
 	vel.y = 0.0f;
 }
 
 void SpriteBase::setSpeed(int spd) {
-	speed = spd;
+	moveSpd = spd;
 }
 
 void SpriteBase::setDegree(int deg) {
-	degree = deg;
+	moveDeg = deg;
 }
 
 bool SpriteBase::containsPoint(int x, int y) {

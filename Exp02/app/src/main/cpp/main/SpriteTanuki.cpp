@@ -28,15 +28,15 @@ bool SpriteTanuki::init(const string &fileName) {
 
 	int rdm = UtilMath::getInstance()->getRandom(0, 5);
 	if(rdm == 0){
-		this->changeFrames("tanu_f");
+		this->changeFrames("tanu_f", -1);
 	}else if(rdm == 1){
-		this->changeFrames("tanu_b");
+		this->changeFrames("tanu_b", -1);
 	}else if(rdm == 2){
-		this->changeFrames("tanu_r");
+		this->changeFrames("tanu_r", -1);
 	}else if(rdm == 3){
-		this->changeFrames("tanu_l");
+		this->changeFrames("tanu_l", -1);
 	}else{
-		this->changeFrames("tanu_d");
+		this->changeFrames("tanu_d", -1);
 	}
 
 	return true;
