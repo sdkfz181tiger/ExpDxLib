@@ -28,15 +28,18 @@ bool SceneResult::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_16x16.png", "Q",
-								 dWidth - gSize * 1, gSize);
+	btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+								 dWidth - gSize * 1, gSize * 1);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_16x16.png", "T",
-								 dWidth - gSize * 3, gSize);
+	btnTest = BtnBase::createBtn("images/box_12x12.png", "T",
+								 gSize * 1, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::TITLE);
 	btns.push_back(btnTest);
+
+	// Background
+	background = SpriteBase::createSprite("images/box_120x180.png", cX, cY);
 
 	return true;
 }
@@ -61,9 +64,11 @@ void SceneResult::update(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
+	background->update(delay);// Background
+
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("=RESULT=", cX, 120,
-									  5, UtilAlign::CENTER);
+									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }
 

@@ -28,15 +28,32 @@ bool SceneTitle::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_16x16.png", "Q",
-								 dWidth - gSize * 1, gSize);
+	btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+								 dWidth - gSize * 1, gSize * 1);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_16x16.png", "G",
-								 dWidth - gSize * 3, gSize);
+	btnTest = BtnBase::createBtn("images/box_12x12.png", "G",
+								 gSize * 1, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::GAME);
 	btns.push_back(btnTest);
+
+	// Background
+	background = SpriteBase::createSprite("images/box_120x180.png", cX, cY);
+
+	// Characters
+	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
+	kobo->changeFrames("kobo_f");
+	sprites.push_back(kobo);
+	auto bozu = SpriteBozu::createSprite("images/c_bozu.png", cX - gSize * 3, cY);
+	bozu->changeFrames("bozu_f");
+	sprites.push_back(bozu);
+	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+	chicken->changeFrames("chi_f");
+	sprites.push_back(chicken);
+	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
+	tanuki->changeFrames("tanu_f");
+	sprites.push_back(tanuki);
 
 	return true;
 }
@@ -61,9 +78,13 @@ void SceneTitle::update(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
+	background->update(delay);// Background
+
+	for (auto sprite : sprites) sprite->update(delay);// Sprites
+
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("=TITLE=", cX, 120,
-									  5, UtilAlign::CENTER);
+									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }
 

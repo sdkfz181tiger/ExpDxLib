@@ -8,6 +8,7 @@ class SceneResult : public SceneBase, BtnListener {
 private:
 	SceneListener *sceneListener;
 	BtnBase *btnQuit, *btnTest;
+	SpriteBase *background;
 
 public:
 	static SceneResult *createScene(int dWidth, int dHeight);

@@ -26,6 +26,7 @@ int android_main(void) {
 
 		gameManager->touchInput();// Touch
 		gameManager->update(delay);// Update
+		//WaitTimer(20);
 
 		int passed = GetNowCount() - now;
 		if (wait < passed) {

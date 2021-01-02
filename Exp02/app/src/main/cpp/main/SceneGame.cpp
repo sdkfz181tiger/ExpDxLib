@@ -29,18 +29,18 @@ bool SceneGame::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_16x16.png", "Q",
-								 dWidth - gSize * 1, gSize);
+	btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+								 dWidth - gSize * 1, gSize * 1);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_16x16.png", "R",
-								 dWidth - gSize * 3, gSize);
+	btnTest = BtnBase::createBtn("images/box_12x12.png", "R",
+								 gSize * 1, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
 	// Background
-	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 2);
+	background = SpriteBase::createSprite("images/box_120x180.png", cX, cY);
 
 	// Characters
 	auto bozu = SpriteBozu::createSprite("images/c_bozu.png", cX, cY);
@@ -110,7 +110,7 @@ void SceneGame::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	background->update(delay);
+	background->update(delay);// Background
 
 	// Sprites
 	auto it = sprites.end();
@@ -124,7 +124,7 @@ void SceneGame::update(const float delay) {
 	}
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("=HAPPY NEW YEAR=", cX, cY - gSize * 6.0f,
+	UtilLabel::getInstance()->drawStr("=JUST DO IT!=", cX, cY - gSize * 6.0f,
 									  2, UtilAlign::CENTER);
 
 	for (auto btn : btns) btn->update(delay);
