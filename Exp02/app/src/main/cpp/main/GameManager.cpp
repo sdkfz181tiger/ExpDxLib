@@ -72,8 +72,8 @@ void GameManager::touchInput() {
 
 void GameManager::update(const float delay) {
 
-	UtilDebug::getInstance()->drawGrid();// DrawGrid
 	scenes.back()->update(delay);// DrawScene
+	UtilDebug::getInstance()->drawGrid();// DrawGrid
 	UtilDebug::getInstance()->drawFPS(delay);// DrawFPS
 }
 

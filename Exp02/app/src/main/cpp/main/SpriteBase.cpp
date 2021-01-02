@@ -12,7 +12,7 @@ SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		moveFlg(false), moveSpd(0), moveDeg(0),
+		moveFlg(false), speed(0), degree(0),
 		color(GetColor(255, 255, 255)) {
 	LOGD("Main", "SpriteBase()\n");
 }
@@ -43,26 +43,34 @@ void SpriteBase::setPosY(float pY) {
 	pos.y = pY;
 }
 
-void SpriteBase::moveStart(int spd, int deg) {
-	moveFlg = true;
-	moveSpd = spd;
-	moveDeg = deg;
-	vel.x = spd * UtilMath::getInstance()->getCos(deg);
-	vel.y = spd * UtilMath::getInstance()->getSin(deg);
+void SpriteBase::setScale(int scale) {
+	this->width *= scale;
+	this->height *= scale;
+	this->scale = scale;
 }
 
-void SpriteBase::moveStop() {
+void SpriteBase::move(int spd, int deg) {
+	moveFlg = true;
+	this->setSpeed(spd);
+	this->setDegree(deg);
+	vel.x = speed * UtilMath::getInstance()->getCos(degree);
+	vel.y = speed * UtilMath::getInstance()->getSin(degree);
+}
+
+void SpriteBase::stop() {
 	moveFlg = false;
-	moveSpd = 0;
-	moveDeg = 0;
+	speed = 0;
+	speed = 0;
 	vel.x = 0.0f;
 	vel.y = 0.0f;
 }
 
-void SpriteBase::setScale(int scale) {
-	this->scale = scale;
-	this->width *= scale;
-	this->height *= scale;
+void SpriteBase::setSpeed(int spd) {
+	speed = spd;
+}
+
+void SpriteBase::setDegree(int deg) {
+	degree = deg;
 }
 
 bool SpriteBase::containsPoint(int x, int y) {
@@ -75,10 +83,15 @@ bool SpriteBase::containsPoint(int x, int y) {
 
 void SpriteBase::update(const float delay) {
 	// Move
-	if (moveFlg){
+	if (moveFlg) {
 		pos.x += vel.x * delay;
 		pos.y += vel.y * delay;
 	}
+	// Draw
+	this->draw();
+}
+
+void SpriteBase::draw() {
 	// Rect
 	minX = pos.x - width / 2;
 	maxX = pos.x + width / 2;

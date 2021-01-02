@@ -23,7 +23,9 @@ public:
 
 	void changeFrames(const string &frameName);
 
-	virtual void update(float delay) override;
+	virtual void update(const float delay) override;
+
+	virtual void draw() override;
 };
 
 #endif // _SPRITEFRAMES_H_

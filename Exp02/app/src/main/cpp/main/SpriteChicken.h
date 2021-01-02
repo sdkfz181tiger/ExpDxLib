@@ -5,6 +5,10 @@
 
 class SpriteChicken : public SpriteFrames {
 
+protected:
+	Vec2 dst;
+	float distance;
+
 public:
 	static SpriteChicken *createSprite(const string &fileName, float x, float y);
 
@@ -13,6 +17,10 @@ public:
 	virtual ~SpriteChicken();
 
 	virtual bool init(const string &fileName) override;
+
+	void update(const float delay) override;
+
+	void moveTo(int spd, int x, int y);
 };
 
 #endif // _SPRITECHICKEN_H_

@@ -36,12 +36,17 @@ void SpriteFrames::changeFrames(const string &frameName) {
 	frames = frameMap.find(frameName)->second;
 }
 
-void SpriteFrames::update(float delay) {
+void SpriteFrames::update(const float delay) {
 	// Move
-	if (moveFlg){
+	if (moveFlg) {
 		pos.x += vel.x * delay;
 		pos.y += vel.y * delay;
 	}
+	// Draw
+	this->draw();
+}
+
+void SpriteFrames::draw() {
 	// Rect
 	minX = pos.x - width / 2;
 	maxX = pos.x + width / 2;

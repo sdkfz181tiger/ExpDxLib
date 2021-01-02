@@ -10,7 +10,7 @@ protected:
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
 	bool moveFlg;
-	int moveSpd, moveDeg;
+	int speed, degree;
 	unsigned int color;
 
 public:
@@ -32,21 +32,35 @@ public:
 
 	float getPosY() const { return pos.y; }
 
-	void moveStart(int spd, int deg);
+	const Vec2 &getPos() { return pos; }
 
-	void moveStop();
+	const Vec2 &getVel() { return vel; }
 
-	float getVelX() const { return vel.x; }
+	int getWidth() { return width; }
 
-	float getVelY() const { return vel.y; }
+	int getHeight() { return height; }
 
 	void setScale(int scale);
 
 	float getScale() const { return scale; }
 
+	void move(int spd, int deg);
+
+	void stop();
+
+	void setSpeed(int spd);
+
+	void setDegree(int deg);
+
+	int getSpeed() { return speed; }
+
+	int getDegree() { return degree; }
+
 	bool containsPoint(int x, int y);
 
 	virtual void update(const float delay);
+
+	virtual void draw();
 };
 
 #endif // _SPRITEBASE_H_

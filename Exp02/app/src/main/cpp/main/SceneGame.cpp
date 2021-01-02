@@ -43,8 +43,7 @@ bool SceneGame::init() {
 	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
 
 	// Test
-	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
-	sprites.push_back(chicken);
+	chicken = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
 
 	return true;
 }
@@ -60,6 +59,10 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 			LOGD("Main", "Contains!!");
 		}
 	}
+
+	// Test
+	int spd = UtilDebug::getInstance()->getGridSize() * 20;
+	chicken->moveTo(spd, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -90,6 +93,9 @@ void SceneGame::update(const float delay) {
 		if (dHeight < sprite->getPosY()) sprite->setPosY(0);
 		sprite->update(delay);
 	}
+
+	// Test
+	chicken->update(delay);
 
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("=JUST DO IT!=", cX, cY - gSize * 6.0f,
