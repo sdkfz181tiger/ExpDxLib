@@ -30,23 +30,23 @@ bool SpriteBase::init(const string &fileName) {
 	return true;
 }
 
-void SpriteBase::setPosition(float pX, float pY) {
-	pos.x = pX;
-	pos.y = pY;
+void SpriteBase::setPosition(float x, float y) {
+	pos.x = x;
+	pos.y = y;
 }
 
-void SpriteBase::setPosX(float pX) {
-	pos.x = pX;
+void SpriteBase::setPosX(float x) {
+	pos.x = x;
 }
 
-void SpriteBase::setPosY(float pY) {
-	pos.y = pY;
+void SpriteBase::setPosY(float y) {
+	pos.y = y;
 }
 
-void SpriteBase::setScale(int scale) {
-	this->width *= scale;
-	this->height *= scale;
-	this->scale = scale;
+void SpriteBase::setScale(int scl) {
+	width *= scl;
+	height *= scl;
+	scale = scl;
 }
 
 void SpriteBase::move(int spd, int deg) {

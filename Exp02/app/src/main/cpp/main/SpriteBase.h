@@ -22,11 +22,11 @@ public:
 
 	virtual bool init(const string &fileName);
 
-	void setPosition(float pX, float pY);
+	void setPosition(float x, float y);
 
-	void setPosX(float pX);
+	void setPosX(float x);
 
-	void setPosY(float pY);
+	void setPosY(float y);
 
 	float getPosX() const { return pos.x; }
 
@@ -40,7 +40,7 @@ public:
 
 	int getHeight() { return height; }
 
-	void setScale(int scale);
+	void setScale(int scl);
 
 	float getScale() const { return scale; }
 
