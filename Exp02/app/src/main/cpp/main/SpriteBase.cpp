@@ -12,6 +12,7 @@ SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
+		moveFlg(false), moveSpd(0), moveDeg(0),
 		color(GetColor(255, 255, 255)) {
 	LOGD("Main", "SpriteBase()\n");
 }
@@ -42,17 +43,20 @@ void SpriteBase::setPosY(float pY) {
 	pos.y = pY;
 }
 
-void SpriteBase::setVelocity(float vX, float vY) {
-	vel.x = vX;
-	vel.y = vY;
+void SpriteBase::moveStart(int spd, int deg) {
+	moveFlg = true;
+	moveSpd = spd;
+	moveDeg = deg;
+	vel.x = spd * UtilMath::getInstance()->getCos(deg);
+	vel.y = spd * UtilMath::getInstance()->getSin(deg);
 }
 
-void SpriteBase::setVelX(float vX) {
-	vel.x = vX;
-}
-
-void SpriteBase::setVelY(float vY) {
-	vel.y = vY;
+void SpriteBase::moveStop() {
+	moveFlg = false;
+	moveSpd = 0;
+	moveDeg = 0;
+	vel.x = 0.0f;
+	vel.y = 0.0f;
 }
 
 void SpriteBase::setScale(int scale) {
@@ -70,6 +74,11 @@ bool SpriteBase::containsPoint(int x, int y) {
 }
 
 void SpriteBase::update(const float delay) {
+	// Move
+	if (moveFlg){
+		pos.x += vel.x * delay;
+		pos.y += vel.y * delay;
+	}
 	// Rect
 	minX = pos.x - width / 2;
 	maxX = pos.x + width / 2;

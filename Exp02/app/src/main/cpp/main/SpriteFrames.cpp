@@ -37,9 +37,11 @@ void SpriteFrames::changeFrames(const string &frameName) {
 }
 
 void SpriteFrames::update(float delay) {
-	// Velocity
-	pos.x += vel.x * delay;
-	pos.y += vel.y * delay;
+	// Move
+	if (moveFlg){
+		pos.x += vel.x * delay;
+		pos.y += vel.y * delay;
+	}
 	// Rect
 	minX = pos.x - width / 2;
 	maxX = pos.x + width / 2;

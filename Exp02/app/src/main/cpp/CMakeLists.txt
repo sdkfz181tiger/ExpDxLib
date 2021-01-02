@@ -38,7 +38,6 @@ add_library( # Sets the name of the library.
         main/SpriteBase.cpp
         main/SpriteBozu.cpp
         main/SpriteChicken.cpp
-        main/SpriteDancer.cpp
         main/SpriteFrames.cpp
         main/SpriteKobozu.cpp
         main/SpriteTanuki.cpp

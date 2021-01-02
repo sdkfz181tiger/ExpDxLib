@@ -6,7 +6,6 @@
 #include "SpriteBase.h"
 #include "SpriteBozu.h"
 #include "SpriteChicken.h"
-#include "SpriteDancer.h"
 #include "SpriteFrames.h"
 #include "SpriteKobozu.h"
 #include "SpriteTanuki.h"

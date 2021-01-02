@@ -35,8 +35,6 @@ public:
 	void onBtnCanceled(BtnTag &tag) override;
 
 	void onBtnReleased(BtnTag &tag) override;
-
-	void birth();
 };
 
 #endif // _SCENEGAME_H_

@@ -9,6 +9,8 @@ protected:
 	Vec2 pos, vel;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
+	bool moveFlg;
+	int moveSpd, moveDeg;
 	unsigned int color;
 
 public:
@@ -30,11 +32,9 @@ public:
 
 	float getPosY() const { return pos.y; }
 
-	void setVelocity(float vX, float vY);
+	void moveStart(int spd, int deg);
 
-	void setVelX(float vX);
-
-	void setVelY(float vY);
+	void moveStop();
 
 	float getVelX() const { return vel.x; }
 
