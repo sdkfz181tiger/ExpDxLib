@@ -12,8 +12,7 @@ SpriteBase::SpriteBase(float x, float y) :
 		pos(Vec2(x, y)), vel(Vec2(0, 0)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		moveFlg(false), moveSpd(0), moveDeg(0),
-		color(GetColor(255, 255, 255)) {
+		moveFlg(false), moveSpd(0), moveDeg(0) {
 	LOGD("Main", "SpriteBase()\n");
 }
 
@@ -28,11 +27,6 @@ bool SpriteBase::init(const string &fileName) {
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());
 	return true;
-}
-
-void SpriteBase::setPosition(float x, float y) {
-	pos.x = x;
-	pos.y = y;
 }
 
 void SpriteBase::setPosX(float x) {
@@ -51,8 +45,8 @@ void SpriteBase::setScale(int scl) {
 
 void SpriteBase::move(int spd, int deg) {
 	moveFlg = true;
-	this->setSpeed(spd);
-	this->setDegree(deg);
+	moveSpd = spd;
+	moveDeg = deg;
 	vel.x = moveSpd * UtilMath::getInstance()->getCos(moveDeg);
 	vel.y = moveSpd * UtilMath::getInstance()->getSin(moveDeg);
 }
@@ -63,14 +57,6 @@ void SpriteBase::stop() {
 	moveDeg = 0;
 	vel.x = 0.0f;
 	vel.y = 0.0f;
-}
-
-void SpriteBase::setSpeed(int spd) {
-	moveSpd = spd;
-}
-
-void SpriteBase::setDegree(int deg) {
-	moveDeg = deg;
 }
 
 bool SpriteBase::containsPoint(int x, int y) {

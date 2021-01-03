@@ -1,22 +1,25 @@
-#include "SpriteChicken.h"
+#include "SpriteChara.h"
 
-SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, float y) {
+SpriteChara *SpriteChara::createSprite(const string &fileName, float x, float y) {
 	// New
-	SpriteChicken *sprite = new SpriteChicken(x, y);
+	SpriteChara *sprite = new SpriteChara(x, y);
 	if (sprite && sprite->init(fileName)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y) {
-	LOGD("Main", "SpriteChicken()\n");
+SpriteChara::SpriteChara(float x, float y) : SpriteFrames(x, y),
+											 state(StateChara::DEFAULT),
+											 idleCnt(0), idleInterval(300),
+											 walkDst(Vec2(x, y)), walkLen(0.0f) {
+	LOGD("Main", "SpriteChara()\n");
 }
 
-SpriteChicken::~SpriteChicken() {
-	LOGD("Main", "~SpriteChicken()\n");
+SpriteChara::~SpriteChara() {
+	LOGD("Main", "~SpriteChara()\n");
 }
 
-bool SpriteChicken::init(const string &fileName) {
+bool SpriteChara::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
@@ -30,7 +33,8 @@ bool SpriteChicken::init(const string &fileName) {
 
 	return true;
 }
-void SpriteChicken::update(float delay) {
+
+void SpriteChara::update(float delay) {
 	// Idle
 	if (state == StateChara::IDLE) {
 		if (0 < idleCnt) {
@@ -52,12 +56,12 @@ void SpriteChicken::update(float delay) {
 	this->draw();
 }
 
-void SpriteChicken::changeState(StateChara sta) {
+void SpriteChara::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::IDLE) {
 		LOGD("Main", "Let's idle!!");
-		idleCnt = UtilMath::getInstance()->getRandom(idleInterval/2, idleInterval);
+		idleCnt = idleInterval;
 		// Frames
 		vector<string> frames = {"chi_f", "chi_r", "chi_l", "chi_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
@@ -81,4 +85,24 @@ void SpriteChicken::changeState(StateChara sta) {
 		}
 		return;
 	}
+}
+
+void SpriteChara::startIdle() {
+	// Stop
+	this->stop();
+	walkDst.x = pos.x;
+	walkDst.y = pos.y;
+	walkLen = 0.0f;
+	// State
+	this->changeState(StateChara::IDLE);
+}
+
+void SpriteChara::startWalk(int spd, int x, int y) {
+	// Move
+	this->move(spd, UtilMath::getInstance()->calcDeg2D(pos, Vec2(x, y)));
+	walkDst.x = x;
+	walkDst.y = y;
+	walkLen = UtilMath::getInstance()->calcDistance2D(pos, Vec2(x, y));
+	// State
+	this->changeState(StateChara::WALK);
 }

@@ -1,13 +1,9 @@
 #ifndef _SPRITECHICKEN_H_
 #define _SPRITECHICKEN_H_
 
-#include "SpriteFrames.h"
+#include "SpriteChara.h"
 
-class SpriteChicken : public SpriteFrames {
-
-protected:
-	Vec2 dst;
-	float distance;
+class SpriteChicken : public SpriteChara {
 
 public:
 	static SpriteChicken *createSprite(const string &fileName, float x, float y);
@@ -16,11 +12,11 @@ public:
 
 	virtual ~SpriteChicken();
 
-	virtual bool init(const string &fileName) override;
+	bool init(const string &fileName) override;
 
 	void update(const float delay) override;
 
-	void moveTo(int spd, int x, int y);
+	void changeState(StateChara sta) override;
 };
 
 #endif // _SPRITECHICKEN_H_

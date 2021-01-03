@@ -9,9 +9,10 @@ protected:
 	Vec2 pos, vel;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
+
+private:
 	bool moveFlg;
 	int moveSpd, moveDeg;
-	unsigned int color;
 
 public:
 	static SpriteBase *createSprite(const string &fileName, float x, float y);
@@ -22,8 +23,6 @@ public:
 
 	virtual bool init(const string &fileName);
 
-	void setPosition(float x, float y);
-
 	void setPosX(float x);
 
 	void setPosY(float y);
@@ -32,25 +31,17 @@ public:
 
 	float getPosY() const { return pos.y; }
 
-	const Vec2 &getPos() { return pos; }
-
-	const Vec2 &getVel() { return vel; }
-
 	int getWidth() { return width; }
 
 	int getHeight() { return height; }
 
 	void setScale(int scl);
 
-	float getScale() const { return scale; }
-
 	void move(int spd, int deg);
 
 	void stop();
 
-	void setSpeed(int spd);
-
-	void setDegree(int deg);
+	bool getMoveFlg() { return moveFlg; }
 
 	int getSpeed() { return moveSpd; }
 

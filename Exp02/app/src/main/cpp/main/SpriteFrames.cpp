@@ -40,17 +40,9 @@ void SpriteFrames::changeFrames(const string &frameName, int loop) {
 	frameLoop = loop;
 }
 
-void SpriteFrames::startFrames(int loop) {
-	frameLoop = loop;
-}
-
-void SpriteFrames::stopFrames() {
-	frameLoop = 0;
-}
-
 void SpriteFrames::update(const float delay) {
 	// Move
-	if (moveFlg) {
+	if (this->getMoveFlg()) {
 		pos.x += vel.x * delay;
 		pos.y += vel.y * delay;
 	}

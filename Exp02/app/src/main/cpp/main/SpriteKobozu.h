@@ -1,9 +1,9 @@
 #ifndef _SPRITEKOBOZU_H_
 #define _SPRITEKOBOZU_H_
 
-#include "SpriteFrames.h"
+#include "SpriteChara.h"
 
-class SpriteKobozu : public SpriteFrames {
+class SpriteKobozu : public SpriteChara {
 
 public:
 	static SpriteKobozu *createSprite(const string &fileName, float x, float y);
@@ -12,7 +12,11 @@ public:
 
 	virtual ~SpriteKobozu();
 
-	virtual bool init(const string &fileName) override;
+	bool init(const string &fileName) override;
+
+	void update(const float delay) override;
+
+	void changeState(StateChara sta) override;
 };
 
 #endif // _SPRITEKOBOZU_H_

@@ -40,10 +40,20 @@ bool SceneGame::init() {
 	btns.push_back(btnTest);
 
 	// Background
-	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
+	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
+
+	// Characters
+	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
+	sprites.push_back(kobo);
+	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
+	sprites.push_back(osho);
+	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+	sprites.push_back(chicken);
+	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
+	sprites.push_back(tanuki);
 
 	// TODO: test!!
-	chicken = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
+	player = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
 
 	return true;
 }
@@ -62,7 +72,7 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 
 	// TODO: test!!
 	int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	chicken->moveTo(spd, x, y);
+	player->startWalk(spd, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -95,7 +105,7 @@ void SceneGame::update(const float delay) {
 	}
 
 	// TODO: test!!
-	chicken->update(delay);
+	player->update(delay);
 
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("=JUST DO IT!=", cX, cY - gSize * 6.0f,

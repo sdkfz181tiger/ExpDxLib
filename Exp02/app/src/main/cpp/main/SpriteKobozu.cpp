@@ -8,7 +8,7 @@ SpriteKobozu *SpriteKobozu::createSprite(const string &fileName, float x, float 
 	return nullptr;
 }
 
-SpriteKobozu::SpriteKobozu(float x, float y) : SpriteFrames(x, y) {
+SpriteKobozu::SpriteKobozu(float x, float y) : SpriteChara(x, y) {
 	LOGD("Main", "SpriteKobozu()\n");
 }
 
@@ -26,18 +26,60 @@ bool SpriteKobozu::init(const string &fileName) {
 	this->pushFrames("kobo_l");
 	this->pushFrames("kobo_d");
 
-	int rdm = UtilMath::getInstance()->getRandom(0, 5);
-	if(rdm == 0){
-		this->changeFrames("kobo_f", -1);
-	}else if(rdm == 1){
-		this->changeFrames("kobo_b", -1);
-	}else if(rdm == 2){
-		this->changeFrames("kobo_r", -1);
-	}else if(rdm == 3){
-		this->changeFrames("kobo_l", -1);
-	}else{
-		this->changeFrames("kobo_d", -1);
-	}
+	this->startIdle();// Idle
 
 	return true;
+}
+
+void SpriteKobozu::update(float delay) {
+	// Idle
+	if (state == StateChara::IDLE) {
+		if (0 < idleCnt) {
+			idleCnt--;
+		} else {
+			this->startIdle();
+		}
+	}
+	// Walk
+	if (state == StateChara::WALK) {
+		if (this->getMoveFlg()) {
+			pos.x += vel.x * delay;
+			pos.y += vel.y * delay;
+			walkLen -= this->getSpeed() * delay;
+			if (walkLen <= 0.0f) this->startIdle();
+		}
+	}
+	// Draw
+	this->draw();
+}
+
+void SpriteKobozu::changeState(StateChara sta) {
+	// State
+	state = sta;
+	if (state == StateChara::IDLE) {
+		LOGD("Main", "Let's idle!!");
+		idleCnt = UtilMath::getInstance()->getRandom(idleInterval/2, idleInterval);
+		// Frames
+		vector<string> frames = {"kobo_f", "kobo_r", "kobo_l", "kobo_b"};
+		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
+		this->changeFrames(frames.at(index), 2);
+		return;
+	}
+	if (state == StateChara::WALK) {
+		LOGD("Main", "Let's walk!!");
+		// Frames
+		int deg = this->getDegree();
+		if (deg < 45) {
+			this->changeFrames("kobo_r", -1);
+		} else if (deg < 135) {
+			this->changeFrames("kobo_f", -1);
+		} else if (deg < 225) {
+			this->changeFrames("kobo_l", -1);
+		} else if (deg < 315) {
+			this->changeFrames("kobo_b", -1);
+		} else {
+			this->changeFrames("kobo_r", -1);
+		}
+		return;
+	}
 }

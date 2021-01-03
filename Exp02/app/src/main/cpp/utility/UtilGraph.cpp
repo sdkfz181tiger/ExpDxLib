@@ -36,11 +36,11 @@ bool UtilGraph::init() {
 	this->createDivGraph("images/s_chi.png", "chi_r", 25, 5, 5, 16, 16, 10, 14);
 	this->createDivGraph("images/s_chi.png", "chi_l", 25, 5, 5, 16, 16, 15, 19);
 	this->createDivGraph("images/s_chi.png", "chi_d", 25, 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/s_bozu.png", "bozu_f", 25, 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/s_bozu.png", "bozu_b", 25, 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/s_bozu.png", "bozu_r", 25, 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/s_bozu.png", "bozu_l", 25, 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/s_bozu.png", "bozu_d", 25, 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_osho.png", "osho_f", 25, 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_osho.png", "osho_b", 25, 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_osho.png", "osho_r", 25, 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_osho.png", "osho_l", 25, 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_osho.png", "osho_d", 25, 5, 5, 16, 16, 20, 24);
 	this->createDivGraph("images/s_kobo.png", "kobo_f", 25, 5, 5, 16, 16, 0, 4);
 	this->createDivGraph("images/s_kobo.png", "kobo_b", 25, 5, 5, 16, 16, 5, 9);
 	this->createDivGraph("images/s_kobo.png", "kobo_r", 25, 5, 5, 16, 16, 10, 14);

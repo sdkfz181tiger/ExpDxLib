@@ -4,10 +4,10 @@
 #include "Utility.h"
 #include "BtnBase.h"
 #include "SpriteBase.h"
-#include "SpriteBozu.h"
 #include "SpriteChicken.h"
 #include "SpriteFrames.h"
 #include "SpriteKobozu.h"
+#include "SpriteOsho.h"
 #include "SpriteTanuki.h"
 
 // SceneTag
