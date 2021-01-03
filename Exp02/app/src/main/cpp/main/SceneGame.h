@@ -10,7 +10,7 @@ private:
 	BtnBase *btnQuit, *btnTest;
 	SpriteBase *background;
 	vector<SpriteBase *> sprites;
-	SpriteChicken *player;
+	SpriteKobozu *player;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);

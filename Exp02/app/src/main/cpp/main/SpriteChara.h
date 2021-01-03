@@ -4,13 +4,14 @@
 #include "SpriteFrames.h"
 
 enum class StateChara {
-	DEFAULT, IDLE, WALK
+	DEFAULT, STAY, IDLE, WALK
 };
 
 class SpriteChara : public SpriteFrames {
 
 protected:
 	StateChara state;
+	int stayCnt, stayInterval;
 	int idleCnt, idleInterval;
 	Vec2 walkDst;
 	float walkLen;
@@ -27,6 +28,8 @@ public:
 	virtual void update(const float delay) override;
 
 	virtual void changeState(StateChara sta);
+
+	void startStay();
 
 	void startIdle();
 

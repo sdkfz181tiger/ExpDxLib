@@ -23,6 +23,8 @@ public:
 
 	void changeFrames(const string &frameName, int loop);
 
+	void stopFrames();
+
 	virtual void update(const float delay) override;
 
 	virtual void draw() override;

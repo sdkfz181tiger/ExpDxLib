@@ -53,7 +53,7 @@ bool SceneGame::init() {
 	sprites.push_back(tanuki);
 
 	// TODO: test!!
-	player = SpriteChicken::createSprite("images/c_chi.png", cX, cY);
+	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
 
 	return true;
 }

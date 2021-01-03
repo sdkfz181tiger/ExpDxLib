@@ -32,6 +32,14 @@ bool SpriteTanuki::init(const string &fileName) {
 }
 
 void SpriteTanuki::update(float delay) {
+	// Stay
+	if (state == StateChara::STAY) {
+		if (0 < stayCnt) {
+			stayCnt--;
+		} else {
+			this->startIdle();
+		}
+	}
 	// Idle
 	if (state == StateChara::IDLE) {
 		if (0 < idleCnt) {
@@ -46,7 +54,7 @@ void SpriteTanuki::update(float delay) {
 			pos.x += vel.x * delay;
 			pos.y += vel.y * delay;
 			walkLen -= this->getSpeed() * delay;
-			if (walkLen <= 0.0f) this->startIdle();
+			if (walkLen <= 0.0f) this->startStay();
 		}
 	}
 	// Draw
@@ -56,9 +64,13 @@ void SpriteTanuki::update(float delay) {
 void SpriteTanuki::changeState(StateChara sta) {
 	// State
 	state = sta;
+	if (state == StateChara::STAY) {
+		LOGD("Main", "Let's stay!!");
+		this->stopFrames();
+		return;
+	}
 	if (state == StateChara::IDLE) {
 		LOGD("Main", "Let's idle!!");
-		idleCnt = UtilMath::getInstance()->getRandom(idleInterval/2, idleInterval);
 		// Frames
 		vector<string> frames = {"tanu_f", "tanu_r", "tanu_l", "tanu_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
