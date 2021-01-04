@@ -34,11 +34,6 @@ bool BtnBase::init(const char *fileName) {
 	return true;
 }
 
-void BtnBase::setPosition(float x, float y) {
-	pos.x = x;
-	pos.y = y;
-}
-
 void BtnBase::setScale(int scale) {
 	this->scale = scale;
 	this->width *= scale;
@@ -93,7 +88,7 @@ void BtnBase::update(const float delay) {
 									  scale / 2, UtilAlign::CENTER);
 }
 
-void BtnBase::addBtnListener(BtnListener *btnListener, BtnTag btnTag) {
-	this->btnListener = btnListener;
-	this->btnTag = btnTag;
+void BtnBase::addBtnListener(BtnListener *listener, BtnTag tag) {
+	btnListener = listener;
+	btnTag = tag;
 }

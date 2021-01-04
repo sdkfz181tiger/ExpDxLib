@@ -44,8 +44,6 @@ public:
 
 	bool init(const char *fileName);
 
-	void setPosition(float x, float y);
-
 	void setScale(int scale);
 
 	bool containsPoint(int x, int y);
@@ -58,7 +56,7 @@ public:
 
 	void update(const float delay);
 
-	void addBtnListener(BtnListener *btnListener, BtnTag tag);
+	void addBtnListener(BtnListener *listener, BtnTag tag);
 };
 
 #endif // _BTNBASE_H_

@@ -28,7 +28,7 @@ public:
 
 	void update(const float delay) override;
 
-	void addSceneListener(SceneListener *sceneListener) override;
+	void addSceneListener(SceneListener *listener) override;
 
 	void onBtnPressed(BtnTag &tag) override;
 

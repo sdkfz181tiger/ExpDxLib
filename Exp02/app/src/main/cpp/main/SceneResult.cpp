@@ -72,8 +72,8 @@ void SceneResult::update(const float delay) {
 	for (auto btn : btns) btn->update(delay);
 }
 
-void SceneResult::addSceneListener(SceneListener *sceneListener) {
-	this->sceneListener = sceneListener;
+void SceneResult::addSceneListener(SceneListener *listener) {
+	sceneListener = listener;
 }
 
 void SceneResult::onBtnPressed(BtnTag &tag) {

@@ -3,12 +3,13 @@
 
 #include "SceneBase.h"
 
-class SceneGame : public SceneBase, BtnListener {
+class SceneGame : public SceneBase, BtnListener, DpadListener {
 
 private:
 	SceneListener *sceneListener;
 	BtnBase *btnQuit, *btnTest;
 	SpriteBase *background;
+	CtlDpad *dPad;
 	vector<SpriteBase *> sprites;
 	SpriteKobozu *player;
 
@@ -29,13 +30,19 @@ public:
 
 	void update(const float delay) override;
 
-	void addSceneListener(SceneListener *sceneListener) override;
+	void addSceneListener(SceneListener *listener) override;
 
 	void onBtnPressed(BtnTag &tag) override;
 
 	void onBtnCanceled(BtnTag &tag) override;
 
 	void onBtnReleased(BtnTag &tag) override;
+
+	void onDpadPressed(DpadTag &tag) override;
+
+	void onDpadCanceled(DpadTag &tag) override;
+
+	void onDpadReleased(DpadTag &tag) override;
 };
 
 #endif // _SCENEGAME_H_

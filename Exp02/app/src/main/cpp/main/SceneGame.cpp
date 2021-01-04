@@ -39,18 +39,19 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	// Background
+	dPad = CtlDpad::createDpad("images/c_mar.png", cX, cY + gSize * 5);
+	dPad->addDpadListener(this);
+
+	// Background, Dpad
 	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
 
 	// Characters
-	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
-	sprites.push_back(kobo);
-	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
-	sprites.push_back(osho);
-	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
-	sprites.push_back(chicken);
-	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
-	sprites.push_back(tanuki);
+//	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
+//	sprites.push_back(osho);
+//	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+//	sprites.push_back(chicken);
+//	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
+//	sprites.push_back(tanuki);
 
 	// TODO: test!!
 	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
@@ -61,6 +62,7 @@ bool SceneGame::init() {
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
+	dPad->setOnTouchBegan(id, x, y);
 
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
@@ -71,18 +73,20 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	}
 
 	// TODO: test!!
-	int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	player->startWalk(spd, x, y);
+	//int spd = UtilDebug::getInstance()->getGridSize() * 20;
+	//player->startWalk(spd, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
+	dPad->setOnTouchMoved(id, x, y);
 }
 
 void SceneGame::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
+	dPad->setOnTouchEnded(id, x, y);
 }
 
 void SceneGame::update(const float delay) {
@@ -112,10 +116,11 @@ void SceneGame::update(const float delay) {
 									  2, UtilAlign::CENTER);
 
 	for (auto btn : btns) btn->update(delay);
+	dPad->update(delay);
 }
 
-void SceneGame::addSceneListener(SceneListener *sceneListener) {
-	this->sceneListener = sceneListener;
+void SceneGame::addSceneListener(SceneListener *listener) {
+	sceneListener = listener;
 }
 
 void SceneGame::onBtnPressed(BtnTag &tag) {
@@ -135,4 +140,16 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 		UtilSound::getInstance()->playSE("se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::RESULT);
 	}
+}
+
+void SceneGame::onDpadPressed(DpadTag &tag) {
+	LOGD("Dpad", "onDpadPressed()");
+}
+
+void SceneGame::onDpadCanceled(DpadTag &tag) {
+	LOGD("Dpad", "onDpadCanceled()");
+}
+
+void SceneGame::onDpadReleased(DpadTag &tag) {
+	LOGD("Dpad", "onDpadReleased():%d", tag);
 }

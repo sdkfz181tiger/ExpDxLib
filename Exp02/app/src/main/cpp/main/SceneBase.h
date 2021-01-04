@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "BtnBase.h"
+#include "CtlDpad.h"
 #include "SpriteBase.h"
 #include "SpriteChicken.h"
 #include "SpriteFrames.h"
@@ -43,7 +44,7 @@ public:
 
 	virtual void update(const float delay) = 0;
 
-	virtual void addSceneListener(SceneListener *sceneListener) = 0;
+	virtual void addSceneListener(SceneListener *listener) = 0;
 };
 
 #endif // _SCENEBASE_H_
