@@ -30,6 +30,7 @@ bool SpriteChicken::init(const string &fileName) {
 
 	return true;
 }
+
 void SpriteChicken::update(float delay) {
 	// Stay
 	if (state == StateChara::STAY) {
@@ -52,8 +53,10 @@ void SpriteChicken::update(float delay) {
 		if (this->getMoveFlg()) {
 			pos.x += vel.x * delay;
 			pos.y += vel.y * delay;
-			walkLen -= this->getSpeed() * delay;
-			if (walkLen <= 0.0f) this->startStay();
+			if (!walkFlg) {
+				walkLen -= this->getSpeed() * delay;
+				if (walkLen <= 0.0f) this->startStay();
+			}
 		}
 	}
 	// Draw

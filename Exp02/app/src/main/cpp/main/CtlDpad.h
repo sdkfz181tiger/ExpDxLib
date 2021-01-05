@@ -6,7 +6,7 @@
 // DpadTag
 enum class DpadTag {
 	DEFAULT,
-	LEFT, RIGHT, UP, DOWN
+	RIGHT, DOWN, LEFT, UP
 };
 
 // DpadListener

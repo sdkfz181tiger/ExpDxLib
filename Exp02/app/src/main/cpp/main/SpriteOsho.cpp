@@ -53,8 +53,10 @@ void SpriteOsho::update(float delay) {
 		if (this->getMoveFlg()) {
 			pos.x += vel.x * delay;
 			pos.y += vel.y * delay;
-			walkLen -= this->getSpeed() * delay;
-			if (walkLen <= 0.0f) this->startStay();
+			if (!walkFlg) {
+				walkLen -= this->getSpeed() * delay;
+				if (walkLen <= 0.0f) this->startStay();
+			}
 		}
 	}
 	// Draw
@@ -72,7 +74,7 @@ void SpriteOsho::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		LOGD("Main", "Let's idle!!");
 		// Frames
-		vector <string> frames = {"osho_f", "osho_r", "osho_l", "osho_b"};
+		vector<string> frames = {"osho_f", "osho_r", "osho_l", "osho_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;

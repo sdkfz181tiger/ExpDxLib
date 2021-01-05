@@ -12,7 +12,8 @@ SpriteChara::SpriteChara(float x, float y) : SpriteFrames(x, y),
 											 state(StateChara::DEFAULT),
 											 stayCnt(0), stayInterval(50),
 											 idleCnt(0), idleInterval(300),
-											 walkDst(Vec2(x, y)), walkLen(0.0f) {
+											 walkDst(Vec2(x, y)), walkLen(0.0f),
+											 walkFlg(false) {
 	LOGD("Main", "SpriteChara()\n");
 }
 
@@ -36,7 +37,7 @@ void SpriteChara::changeState(StateChara sta) {
 	// Do something
 }
 
-void SpriteChara::startStay(){
+void SpriteChara::startStay() {
 	// Stay
 	stayCnt = stayInterval;
 	// Stop
@@ -44,28 +45,50 @@ void SpriteChara::startStay(){
 	walkDst.x = pos.x;
 	walkDst.y = pos.y;
 	walkLen = 0.0f;
+	walkFlg = false;
 	// State
 	this->changeState(StateChara::STAY);
 }
 
 void SpriteChara::startIdle() {
 	// Idle
-	idleCnt = UtilMath::getInstance()->getRandom(idleInterval/2, idleInterval);
+	idleCnt = UtilMath::getInstance()->getRandom(idleInterval / 2, idleInterval);
 	// Stop
 	this->stop();
 	walkDst.x = pos.x;
 	walkDst.y = pos.y;
 	walkLen = 0.0f;
+	walkFlg = false;
 	// State
 	this->changeState(StateChara::IDLE);
 }
 
-void SpriteChara::startWalk(int spd, int x, int y) {
+void SpriteChara::startWalk(int spd, int x, int y, bool flg) {
 	// Move
 	this->move(spd, UtilMath::getInstance()->calcDeg2D(pos, Vec2(x, y)));
 	walkDst.x = x;
 	walkDst.y = y;
 	walkLen = UtilMath::getInstance()->calcDistance2D(pos, Vec2(x, y));
+	walkFlg = flg;
 	// State
 	this->changeState(StateChara::WALK);
+}
+
+void SpriteChara::startWalk(int spd, int dir, bool flg) {
+	// Move
+	int x = pos.x;
+	int y = pos.y;
+	int d = dir % 360;
+	int o = 10;
+	if (d < 45) {
+		this->startWalk(spd, x + o, y, flg);
+	} else if (d < 135) {
+		this->startWalk(spd, x, y + o, flg);
+	} else if (d < 225) {
+		this->startWalk(spd, x - o, y, flg);
+	} else if (d < 315) {
+		this->startWalk(spd, x, y - o, flg);
+	} else {
+		this->startWalk(spd, x + o, y, flg);
+	}
 }

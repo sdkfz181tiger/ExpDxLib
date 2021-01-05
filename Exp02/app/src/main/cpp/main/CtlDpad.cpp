@@ -113,8 +113,7 @@ void CtlDpad::update(const float delay) {
 	// Marker
 	if (!dpadFlg) return;
 	int white = GetColor(255, 255, 255);
-	DrawLine(pos.x, pos.y, dpad.x, dpad.y, white, 1);
-	DrawBox(dpad.x - 10, dpad.y - 10, dpad.x + 10, dpad.y + 10, white, true);
+	DrawBox(dpad.x - 5, dpad.y - 5, dpad.x + 5, dpad.y + 5, white, true);
 }
 
 void CtlDpad::addDpadListener(DpadListener *listener) {

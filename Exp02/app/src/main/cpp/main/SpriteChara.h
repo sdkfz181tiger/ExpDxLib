@@ -15,6 +15,7 @@ protected:
 	int idleCnt, idleInterval;
 	Vec2 walkDst;
 	float walkLen;
+	bool walkFlg;
 
 public:
 	static SpriteChara *createSprite(const string &fileName, float x, float y);
@@ -33,7 +34,9 @@ public:
 
 	void startIdle();
 
-	void startWalk(int spd, int x, int y);
+	void startWalk(int spd, int x, int y, bool flg);
+
+	void startWalk(int spd, int dir, bool flg);
 };
 
 #endif // _SPRITECHARA_H_

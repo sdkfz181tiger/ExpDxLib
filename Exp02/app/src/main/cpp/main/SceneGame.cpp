@@ -39,7 +39,7 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	dPad = CtlDpad::createDpad("images/ctl_48x48.png", cX, cY + gSize * 5);
+	dPad = CtlDpad::createDpad("images/ctl_48x48.png", cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
 
 	// Background, Dpad
@@ -71,10 +71,6 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 			LOGD("Main", "Contains!!");
 		}
 	}
-
-	// TODO: test!!
-	//int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	//player->startWalk(spd, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -143,17 +139,31 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 }
 
 void SceneGame::onDpadPressed(DpadTag &tag) {
-	LOGD("Dpad", "onDpadPressed()");
+	LOGD("Dpad", "onDpadPressed():%d", tag);
+	// Walk
+	int spd = UtilDebug::getInstance()->getGridSize() * 5;
+	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
+	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
+	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
 }
 
 void SceneGame::onDpadCanceled(DpadTag &tag) {
-	LOGD("Dpad", "onDpadCanceled()");
+	LOGD("Dpad", "onDpadCanceled():%d", tag);
+	player->startStay();// Stay
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	LOGD("Dpad", "onDpadReleased():%d", tag);
+	player->startStay();// Stay
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	LOGD("Dpad", "onDpadChanged():%d", tag);
+	// Walk
+	int spd = UtilDebug::getInstance()->getGridSize() * 5;
+	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
+	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
+	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
 }
