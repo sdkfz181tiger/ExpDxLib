@@ -27,6 +27,7 @@ private:
 	Vec2 pos, dpad;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
+	int gRight, gDown, gLeft, gUp;
 	bool dpadFlg;
 	int dpadID, dpadDir;
 
@@ -35,13 +36,13 @@ private:
 	DpadTag dpadTag;
 
 public:
-	static CtlDpad *createDpad(const string &fileName, float x, float y);
+	static CtlDpad *createDpad(float x, float y);
 
 	CtlDpad(float x, float y);
 
 	virtual ~CtlDpad();
 
-	bool init(const string &fileName);
+	bool init();
 
 	void setScale(int scl);
 

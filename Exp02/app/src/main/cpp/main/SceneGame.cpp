@@ -39,7 +39,7 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	dPad = CtlDpad::createDpad("images/ctl_48x48.png", cX, cY + gSize * 10);
+	dPad = CtlDpad::createDpad(cX, cY + gSize * 5);
 	dPad->addDpadListener(this);
 
 	// Background, Dpad
