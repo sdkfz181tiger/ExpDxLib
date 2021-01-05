@@ -17,12 +17,14 @@ public:
 	virtual void onDpadCanceled(DpadTag &tag) = 0;
 
 	virtual void onDpadReleased(DpadTag &tag) = 0;
+
+	virtual void onDpadChanged(DpadTag &tag) = 0;
 };
 
 class CtlDpad {
 
 private:
-	Vec2 pos;
+	Vec2 pos, dpad;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
 	bool dpadFlg;
@@ -50,6 +52,8 @@ public:
 	void setOnTouchMoved(int id, int x, int y);
 
 	void setOnTouchEnded(int id, int x, int y);
+
+	void calcDirection(int x, int y);
 
 	void update(const float delay);
 

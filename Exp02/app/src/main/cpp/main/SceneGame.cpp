@@ -39,7 +39,7 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	dPad = CtlDpad::createDpad("images/c_mar.png", cX, cY + gSize * 5);
+	dPad = CtlDpad::createDpad("images/ctl_48x48.png", cX, cY + gSize * 5);
 	dPad->addDpadListener(this);
 
 	// Background, Dpad
@@ -152,4 +152,8 @@ void SceneGame::onDpadCanceled(DpadTag &tag) {
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	LOGD("Dpad", "onDpadReleased():%d", tag);
+}
+
+void SceneGame::onDpadChanged(DpadTag &tag) {
+	LOGD("Dpad", "onDpadChanged():%d", tag);
 }

@@ -43,6 +43,8 @@ public:
 	void onDpadCanceled(DpadTag &tag) override;
 
 	void onDpadReleased(DpadTag &tag) override;
+
+	void onDpadChanged(DpadTag &tag) override;
 };
 
 #endif // _SCENEGAME_H_

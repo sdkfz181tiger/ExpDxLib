@@ -9,7 +9,7 @@ CtlDpad *CtlDpad::createDpad(const string &fileName, float x, float y) {
 }
 
 CtlDpad::CtlDpad(float x, float y) :
-		pos(Vec2(x, y)),
+		pos(Vec2(x, y)), dpad(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
 		dpadFlg(false), dpadID(-1), dpadDir(0),
@@ -51,12 +51,16 @@ void CtlDpad::setOnTouchBegan(int id, int x, int y) {
 	if (dpadListener) dpadListener->onDpadPressed(dpadTag);
 	dpadFlg = true;
 	dpadID = id;
+	this->calcDirection(x, y);// Calc
 }
 
 void CtlDpad::setOnTouchMoved(int id, int x, int y) {
 	if (!dpadFlg) return;
 	if (dpadID != id) return;
-	if (this->containsPoint(x, y)) return;
+	if (this->containsPoint(x, y)) {
+		this->calcDirection(x, y);// Calc
+		return;
+	}
 	if (dpadListener) dpadListener->onDpadCanceled(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;
@@ -71,6 +75,33 @@ void CtlDpad::setOnTouchEnded(int id, int x, int y) {
 	dpadID = -1;
 }
 
+void CtlDpad::calcDirection(int x, int y) {
+	dpad.x = x;
+	dpad.y = y;
+	dpadDir = UtilMath::getInstance()->calcDeg2D(pos, dpad);
+	if (dpadDir < 45) {
+		if (dpadTag == DpadTag::RIGHT) return;
+		dpadTag = DpadTag::RIGHT;
+		if (dpadListener) dpadListener->onDpadChanged(dpadTag);
+	} else if (dpadDir < 135) {
+		if (dpadTag == DpadTag::DOWN) return;
+		dpadTag = DpadTag::DOWN;
+		if (dpadListener) dpadListener->onDpadChanged(dpadTag);
+	} else if (dpadDir < 225) {
+		if (dpadTag == DpadTag::LEFT) return;
+		dpadTag = DpadTag::LEFT;
+		if (dpadListener) dpadListener->onDpadChanged(dpadTag);
+	} else if (dpadDir < 315) {
+		if (dpadTag == DpadTag::UP) return;
+		dpadTag = DpadTag::UP;
+		if (dpadListener) dpadListener->onDpadChanged(dpadTag);
+	} else {
+		if (dpadTag == DpadTag::RIGHT) return;
+		dpadTag = DpadTag::RIGHT;
+		if (dpadListener) dpadListener->onDpadChanged(dpadTag);
+	}
+}
+
 void CtlDpad::update(const float delay) {
 	// Rect
 	minX = pos.x - width / 2;
@@ -79,6 +110,11 @@ void CtlDpad::update(const float delay) {
 	maxY = pos.y + height / 2;
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+	// Marker
+	if (!dpadFlg) return;
+	int white = GetColor(255, 255, 255);
+	DrawLine(pos.x, pos.y, dpad.x, dpad.y, white, 1);
+	DrawBox(dpad.x - 10, dpad.y - 10, dpad.x + 10, dpad.y + 10, white, true);
 }
 
 void CtlDpad::addDpadListener(DpadListener *listener) {
