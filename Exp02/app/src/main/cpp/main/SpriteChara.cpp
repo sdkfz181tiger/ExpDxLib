@@ -74,21 +74,13 @@ void SpriteChara::startWalk(int spd, int x, int y, bool flg) {
 	this->changeState(StateChara::WALK);
 }
 
-void SpriteChara::startWalk(int spd, int dir, bool flg) {
+void SpriteChara::startWalk(int spd, int deg, bool flg) {
 	// Move
-	int x = pos.x;
-	int y = pos.y;
-	int d = dir % 360;
-	int o = 10;
-	if (d < 45) {
-		this->startWalk(spd, x + o, y, flg);
-	} else if (d < 135) {
-		this->startWalk(spd, x, y + o, flg);
-	} else if (d < 225) {
-		this->startWalk(spd, x - o, y, flg);
-	} else if (d < 315) {
-		this->startWalk(spd, x, y - o, flg);
-	} else {
-		this->startWalk(spd, x + o, y, flg);
-	}
+	this->move(spd, deg);
+	walkDst.x = pos.x;
+	walkDst.y = pos.y;
+	walkLen = 256;
+	walkFlg = flg;
+	// State
+	this->changeState(StateChara::WALK);
 }

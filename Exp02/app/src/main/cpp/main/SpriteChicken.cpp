@@ -25,6 +25,10 @@ bool SpriteChicken::init(const string &fileName) {
 	this->pushFrames("chi_r");
 	this->pushFrames("chi_l");
 	this->pushFrames("chi_d");
+	this->pushFrames("chi_i1");
+	this->pushFrames("chi_i2");
+	this->pushFrames("chi_i3");
+	this->pushFrames("chi_i4");
 
 	this->startIdle();// Idle
 
@@ -74,7 +78,7 @@ void SpriteChicken::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"chi_f", "chi_r", "chi_l", "chi_b"};
+		vector<string> frames = {"chi_i1", "chi_i2", "chi_i3", "chi_i4"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;

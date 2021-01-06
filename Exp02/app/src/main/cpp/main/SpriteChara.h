@@ -36,7 +36,7 @@ public:
 
 	void startWalk(int spd, int x, int y, bool flg);
 
-	void startWalk(int spd, int dir, bool flg);
+	void startWalk(int spd, int deg, bool flg);
 };
 
 #endif // _SPRITECHARA_H_

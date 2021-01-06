@@ -39,19 +39,19 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
-	dPad = CtlDpad::createDpad(cX, cY + gSize * 5);
+	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
 
 	// Background, Dpad
 	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
 
 	// Characters
-//	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
-//	sprites.push_back(osho);
-//	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
-//	sprites.push_back(chicken);
-//	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
-//	sprites.push_back(tanuki);
+	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
+	sprites.push_back(osho);
+	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+	sprites.push_back(chicken);
+	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
+	sprites.push_back(tanuki);
 
 	// TODO: test!!
 	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
