@@ -51,6 +51,13 @@ bool SceneTitle::init() {
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
+	// TODO: test json
+	json jObj = UtilJson::getInstance()->read("json/sample.json");
+	bool happy = jObj["happy"].get<bool>();
+	string name = jObj["name"].get<string>();
+	int hp = jObj["hp"].get<int>();
+	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
+
 	return true;
 }
 
@@ -98,9 +105,7 @@ void SceneTitle::onBtnCanceled(BtnTag &tag) {
 
 void SceneTitle::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
-	if (tag == BtnTag::QUIT) {
-		UtilDx::getInstance()->setQuitFlg();
-	}
+	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::GAME) {
 		UtilSound::getInstance()->playSE("se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::GAME);

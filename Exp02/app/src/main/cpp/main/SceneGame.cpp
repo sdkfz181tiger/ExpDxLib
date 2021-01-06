@@ -129,9 +129,7 @@ void SceneGame::onBtnCanceled(BtnTag &tag) {
 
 void SceneGame::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
-	if (tag == BtnTag::QUIT) {
-		UtilDx::getInstance()->setQuitFlg();
-	}
+	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::RESULT) {
 		UtilSound::getInstance()->playSE("se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::RESULT);
@@ -139,8 +137,7 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 }
 
 void SceneGame::onDpadPressed(DpadTag &tag) {
-	LOGD("Dpad", "onDpadPressed():%d", tag);
-	// Walk
+	//LOGD("Dpad", "onDpadPressed():%d", tag);
 	int spd = UtilDebug::getInstance()->getGridSize() * 5;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
@@ -149,18 +146,17 @@ void SceneGame::onDpadPressed(DpadTag &tag) {
 }
 
 void SceneGame::onDpadCanceled(DpadTag &tag) {
-	LOGD("Dpad", "onDpadCanceled():%d", tag);
+	//LOGD("Dpad", "onDpadCanceled():%d", tag);
 	player->startStay();// Stay
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
-	LOGD("Dpad", "onDpadReleased():%d", tag);
+	//LOGD("Dpad", "onDpadReleased():%d", tag);
 	player->startStay();// Stay
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
-	LOGD("Dpad", "onDpadChanged():%d", tag);
-	// Walk
+	//LOGD("Dpad", "onDpadChanged():%d", tag);
 	int spd = UtilDebug::getInstance()->getGridSize() * 5;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);

@@ -16,14 +16,15 @@
 // Library
 #include "DxLib.h"
 #include "android/log.h"
-//#include "json11/json11.hpp"
-//#include "tweeny/tweeny.h"
+#include "nlohmann/json.hpp"
+#include "tweeny/tweeny.h"
 
 //==========
 // Utility
 #include "UtilDebug.h"
 #include "UtilDx.h"
 #include "UtilGraph.h"
+#include "UtilJson.h"
 #include "UtilLabel.h"
 #include "UtilMath.h"
 #include "UtilSound.h"
@@ -32,8 +33,8 @@
 //==========
 // Namespace
 using namespace std;
-//using namespace json11;
-//using tweeny::easing;
+using json = nlohmann::json;
+using easing = tweeny::easing;
 
 //==========
 // Macro

@@ -86,9 +86,7 @@ void SceneResult::onBtnCanceled(BtnTag &tag) {
 
 void SceneResult::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
-	if (tag == BtnTag::QUIT) {
-		UtilDx::getInstance()->setQuitFlg();
-	}
+	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::TITLE) {
 		UtilSound::getInstance()->playSE("se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::TITLE);
