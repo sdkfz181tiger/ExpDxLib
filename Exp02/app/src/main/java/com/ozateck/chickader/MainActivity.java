@@ -1,9 +1,13 @@
 package com.ozateck.chickader;
 
 import android.app.NativeActivity;
+import android.content.Context;
 import android.os.Bundle;
 
 public class MainActivity extends NativeActivity {
+
+	public static final String TAG = "MainActivity";
+	public static String filePath = "";
 
 	// Used to load the 'native-lib' library on application startup.
 	static {
@@ -15,6 +19,10 @@ public class MainActivity extends NativeActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		MainActivity.nativeOnCreate();// Native
+
+		// File path
+		final Context ctx = this.getApplicationContext();
+		filePath = ctx.getFilesDir().getPath();
 	}
 
 	@Override
@@ -48,7 +56,7 @@ public class MainActivity extends NativeActivity {
 	}
 
 	//==========
-	// JNI
+	// JNI(Java -> C++)
 	public static native void nativeOnCreate();
 
 	public static native void nativeOnStart();
@@ -60,4 +68,10 @@ public class MainActivity extends NativeActivity {
 	public static native void nativeOnStop();
 
 	public static native void nativeOnDestroy();
+
+	//==========
+	// JNI(C++ -> Java)
+	public void sayHello() {
+		CustomLog.d(TAG, "Say hello from C++!!");
+	}
 }

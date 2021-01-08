@@ -30,6 +30,7 @@ bool UtilSound::init() {
 	LOGD("Util", "UtilSound::init()\n");
 
 	vector<string> fileNames = {
+			"ji_finish.wav",
 			"se_coin_01.wav",
 			"se_coin_02.wav",
 			"se_coin_03.wav"
@@ -50,9 +51,9 @@ bool UtilSound::init() {
 void UtilSound::playSE(const string &fileName) {
 	if (!sounds.count(fileName)) return;
 	auto sound = sounds.find(fileName);
-	LOGD("Main", "playSE:%s, %d", sound->first.c_str(), sound->second);
-	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
-	PlaySoundMem(sound->second, DX_PLAYTYPE_NORMAL, true);
+	LOGD("Main", "playSE:%s, %d, %d", sound->first.c_str(), sound->second);
+	if (0 < CheckSoundMem(sound->second)) StopSoundMem(sound->second);
+	PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
 }
 
 void UtilSound::playBGM(const string &fileName) {

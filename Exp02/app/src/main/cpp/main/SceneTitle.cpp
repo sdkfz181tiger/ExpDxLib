@@ -64,6 +64,8 @@ bool SceneTitle::init() {
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
+	// TODO: test
+	UtilSound::getInstance()->playSE("se_coin_01.wav");
 }
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {

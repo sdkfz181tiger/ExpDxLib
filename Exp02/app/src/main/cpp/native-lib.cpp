@@ -6,7 +6,7 @@ int android_main(void) {
 	// Initialize
 	if (DxLib_Init() == -1) return -1;
 
-	// Display: Pixel2: 1080x1920
+	// Display
 	const int dWidth = UtilDx::getInstance()->getDispWidth();
 	const int dHeight = UtilDx::getInstance()->getDispHeight();
 	const int dDepth = UtilDx::getInstance()->getDispDepth();
@@ -48,7 +48,7 @@ int android_main(void) {
 }
 
 //==========
-// JNI
+// JNI(Java -> C++)
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_ozateck_chickader_MainActivity_nativeOnCreate(
@@ -84,4 +84,44 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_ozateck_chickader_MainActivity_nativeOnDestroy(
 		JNIEnv *env, jclass clz) {
 	LOGD("JNI", "onDestroy!!");
+}
+
+void findClass(JNIEnv *env) {
+	// Class
+	jclass cls = env->FindClass("com/ozateck/chickader/MainActivity");
+	if (cls == 0) {
+		LOGD("JNI", "Could not find class!!");
+		return;
+	}
+	jmethodID cns = env->GetMethodID(cls, "<init>", "()V");
+	if (cns == nullptr) {
+		LOGD("JNI", "Could not find init method!!");
+		return;
+	}
+	LOGD("JNI", "Well done!!");
+	jobject obj = env->NewObject(cls, cns);
+	jmethodID mid = env->GetMethodID(cls, "sayHello", "()V");
+	env->CallVoidMethod(obj, mid);
+}
+
+JavaVM *javaVM = nullptr;
+
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+	LOGD("JNI", "JNI_OnLoad!!");
+	javaVM = vm;
+	JNIEnv *env = nullptr;
+	jint ret = vm->GetEnv((void **) &env, JNI_VERSION_1_4);
+	switch (ret) {
+		case JNI_OK :
+			LOGD("JNI", "JNI:Success!!");
+			findClass(env);// Find class
+			break;
+		case JNI_ERR:
+			LOGE("JNI", "JNI:Unknown error!!");
+			break;
+		default:
+			LOGE("JNI", "JNI:Other error!!");
+			break;
+	}
+	return JNI_VERSION_1_4;
 }
