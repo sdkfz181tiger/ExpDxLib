@@ -24,6 +24,7 @@
 #include "UtilDebug.h"
 #include "UtilDx.h"
 #include "UtilGraph.h"
+#include "UtilJNI.h"
 #include "UtilJson.h"
 #include "UtilLabel.h"
 #include "UtilMath.h"

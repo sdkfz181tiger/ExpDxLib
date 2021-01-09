@@ -44,6 +44,7 @@ add_library( # Sets the name of the library.
         main/SpriteOsho.cpp
         main/SpriteTanuki.cpp
         utility/Utility.h
+        utility/UtilJNI.cpp
         utility/UtilJson.cpp
         utility/UtilDebug.cpp
         utility/UtilDx.cpp

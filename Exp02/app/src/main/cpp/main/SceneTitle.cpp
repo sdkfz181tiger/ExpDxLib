@@ -40,7 +40,7 @@ bool SceneTitle::init() {
 
 	// Background
 	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
-
+	/*
 	// Characters
 	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
 	sprites.push_back(kobo);
@@ -50,13 +50,15 @@ bool SceneTitle::init() {
 	sprites.push_back(chicken);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
-
+	*/
 	// TODO: test json
 	json jObj = UtilJson::getInstance()->read("json/sample.json");
 	bool happy = jObj["happy"].get<bool>();
 	string name = jObj["name"].get<string>();
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
+
+	UtilJNI::getInstance()->test();// TODO: test
 
 	return true;
 }

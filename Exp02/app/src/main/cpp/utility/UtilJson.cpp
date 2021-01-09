@@ -32,7 +32,7 @@ bool UtilJson::init() {
 }
 
 json UtilJson::read(const char *fileName) {
-	LOGD("Util", "UtilJson::test()\n");
+	LOGD("Util", "UtilJson::read()\n");
 	// Read
 	const int jHandle = FileRead_open(fileName);
 	if (jHandle == -1) return json::object();

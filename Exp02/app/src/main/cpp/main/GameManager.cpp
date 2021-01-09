@@ -15,6 +15,8 @@ GameManager::~GameManager() {
 	UtilDebug::getInstance()->destroyInstance();
 	UtilDx::getInstance()->destroyInstance();
 	UtilGraph::getInstance()->destroyInstance();
+	UtilJNI::getInstance()->destroyInstance();
+	UtilJson::getInstance()->destroyInstance();
 	UtilLabel::getInstance()->destroyInstance();
 	UtilMath::getInstance()->destroyInstance();
 	UtilSound::getInstance()->destroyInstance();

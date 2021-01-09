@@ -71,7 +71,7 @@ public class MainActivity extends NativeActivity {
 
 	//==========
 	// JNI(C++ -> Java)
-	public void sayHello() {
+	public static void sayHello() {
 		CustomLog.d(TAG, "Say hello from C++!!");
 	}
 }
