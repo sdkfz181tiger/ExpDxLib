@@ -10,9 +10,9 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												  sceneListener(nullptr),
+												  background(nullptr),
 												  vCode(UtilJNI::getInstance()->getVersionCode()),
-												  vName(UtilJNI::getInstance()->getVersionName()),
-												  background(nullptr) {
+												  vName(UtilJNI::getInstance()->getVersionName()) {
 	LOGD("Main", "SceneTitle()\n");
 }
 
@@ -58,14 +58,6 @@ bool SceneTitle::init() {
 	string name = jObj["name"].get<string>();
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
-
-	// TODO: test JNI
-	const string versionCode = UtilJNI::getInstance()->getVersionCode();
-	LOGD("Main", "VersionCode:%s", versionCode.c_str());
-	const string versionName = UtilJNI::getInstance()->getVersionName();
-	LOGD("Main", "VersionName:%s", versionName.c_str());
-	const string filePath = UtilJNI::getInstance()->getFilePath();
-	LOGD("Main", "FilePath:%s", filePath.c_str());
 
 	return true;
 }

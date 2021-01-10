@@ -28,7 +28,7 @@ void GameManager::init() {
 	SetGraphMode(dWidth, dHeight, cDepth);
 	SetOutApplicationLogValidFlag(true);
 	// Scenes
-	SceneBase *scene = SceneTitle::createScene(dWidth, dHeight);
+	SceneBase *scene = SceneGame::createScene(dWidth, dHeight);
 	scene->addSceneListener(this);
 	scenes.push_back(scene);
 }

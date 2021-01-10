@@ -37,6 +37,11 @@ bool CtlDpad::init() {
 	return true;
 }
 
+void CtlDpad::setPosition(int x, int y){
+	pos.x = x;
+	pos.y = y;
+}
+
 void CtlDpad::setScale(int scl) {
 	width *= scl;
 	height *= scl;
@@ -54,7 +59,7 @@ bool CtlDpad::containsPoint(int x, int y) {
 void CtlDpad::setOnTouchBegan(int id, int x, int y) {
 	if (dpadFlg) return;
 	if (dpadID != -1) return;
-	if (!this->containsPoint(x, y)) return;
+	if (!this->containsPoint(x, y)) this->setPosition(x, y);
 	if (dpadListener) dpadListener->onDpadPressed(dpadTag);
 	dpadFlg = true;
 	dpadID = id;
@@ -68,6 +73,7 @@ void CtlDpad::setOnTouchMoved(int id, int x, int y) {
 		this->calcDirection(x, y);// Calc
 		return;
 	}
+	this->setPosition(-width, -height);// Hide
 	if (dpadListener) dpadListener->onDpadCanceled(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;
@@ -78,6 +84,7 @@ void CtlDpad::setOnTouchEnded(int id, int x, int y) {
 	if (!dpadFlg) return;
 	if (dpadID != id) return;
 	if (!this->containsPoint(x, y)) return;
+	this->setPosition(-width, -height);// Hide
 	if (dpadListener) dpadListener->onDpadReleased(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;

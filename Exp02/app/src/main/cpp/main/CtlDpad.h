@@ -44,6 +44,8 @@ public:
 
 	bool init();
 
+	void setPosition(int x, int y);
+
 	void setScale(int scl);
 
 	bool containsPoint(int x, int y);

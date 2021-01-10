@@ -9,7 +9,9 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 }
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-												sceneListener(nullptr) {
+												sceneListener(nullptr),
+												background(nullptr), dPad(nullptr),
+												player(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -37,11 +39,15 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
+	// Background
+	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
+
+	// Dpad
 	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
 
-	// Background, Dpad
-	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
+	// Player
+	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
 
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
@@ -50,9 +56,6 @@ bool SceneGame::init() {
 	sprites.push_back(chicken);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
-
-	// TODO: test!!
-	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
 
 	return true;
 }
@@ -89,7 +92,9 @@ void SceneGame::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	background->update(delay);// Background
+	// Background, Player
+	background->update(delay);
+	player->update(delay);
 
 	// Sprites
 	auto it = sprites.end();
@@ -102,13 +107,11 @@ void SceneGame::update(const float delay) {
 		sprite->update(delay);
 	}
 
-	// TODO: test!!
-	player->update(delay);
-
-	// Label, Buttons
+	// Label
 	UtilLabel::getInstance()->drawStr("=JUST DO IT!=", cX, cY - gSize * 6.0f,
 									  2, UtilAlign::CENTER);
 
+	// Buttons, Dpad
 	for (auto btn : btns) btn->update(delay);
 	dPad->update(delay);
 }

@@ -9,8 +9,8 @@ private:
 	SceneListener *sceneListener;
 	SpriteBase *background;
 	CtlDpad *dPad;
-	vector<SpriteBase *> sprites;
 	SpriteKobozu *player;
+	vector<SpriteBase *> sprites;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);

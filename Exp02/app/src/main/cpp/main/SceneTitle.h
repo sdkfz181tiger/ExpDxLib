@@ -7,8 +7,8 @@ class SceneTitle : public SceneBase, BtnListener {
 
 private:
 	SceneListener *sceneListener;
-	string vCode, vName;
 	SpriteBase *background;
+	string vCode, vName;
 	vector<SpriteBase *> sprites;
 
 public:

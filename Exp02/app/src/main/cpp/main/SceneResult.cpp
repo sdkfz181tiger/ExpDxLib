@@ -9,7 +9,8 @@ SceneResult *SceneResult::createScene(int dWidth, int dHeight) {
 }
 
 SceneResult::SceneResult(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-													sceneListener(nullptr) {
+													sceneListener(nullptr),
+													background(nullptr) {
 	LOGD("Main", "SceneResult()\n");
 }
 
