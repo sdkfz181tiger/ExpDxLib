@@ -10,7 +10,6 @@ private:
 	BtnBase *btnQuit, *btnTest;
 	SpriteBase *background;
 	vector<SpriteBase *> sprites;
-	string strJNI;
 
 public:
 	static SceneTitle *createScene(int dWidth, int dHeight);

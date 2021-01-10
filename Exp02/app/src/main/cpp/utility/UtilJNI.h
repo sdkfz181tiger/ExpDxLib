@@ -20,7 +20,7 @@ public:
 
 	jint registerMethods(JNIEnv *env);
 
-	string test();
+	string getFilePath();
 };
 
 #endif // _UTILJNI_H_

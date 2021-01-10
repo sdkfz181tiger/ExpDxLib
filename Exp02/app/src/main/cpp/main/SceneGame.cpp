@@ -71,8 +71,6 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 			LOGD("Main", "Contains!!");
 		}
 	}
-
-	UtilJNI::getInstance()->test();// TODO: test
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {

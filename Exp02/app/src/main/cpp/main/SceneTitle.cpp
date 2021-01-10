@@ -11,7 +11,7 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												  sceneListener(nullptr),
 												  btnQuit(nullptr), btnTest(nullptr),
-												  background(nullptr), strJNI("") {
+												  background(nullptr) {
 	LOGD("Main", "SceneTitle()\n");
 }
 
@@ -59,7 +59,9 @@ bool SceneTitle::init() {
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
-	strJNI = UtilJNI::getInstance()->test();// TODO: test!!
+	// FilePath
+	const string filePath = UtilJNI::getInstance()->getFilePath();
+	LOGD("Main", "FilePath:%s", filePath.c_str());
 
 	return true;
 }
@@ -91,7 +93,7 @@ void SceneTitle::update(const float delay) {
 	for (auto sprite : sprites) sprite->update(delay);// Sprites
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr(strJNI, cX, 120,
+	UtilLabel::getInstance()->drawStr("==TITLE==", cX, 120,
 									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }

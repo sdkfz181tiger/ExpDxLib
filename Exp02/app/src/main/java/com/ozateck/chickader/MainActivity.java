@@ -71,20 +71,7 @@ public class MainActivity extends NativeActivity{
 
 	//==========
 	// JNI(C++ -> Java)
-	public static void sayHello(){
-		CustomLog.d(TAG, "Say hello from C++!!");
-	}
-
-	public static void sayGood(){
-		CustomLog.d(TAG, "Say good from C++!!");
-	}
-
-	public static void sayNice(){
-		CustomLog.d(TAG, "Say nice from C++!!");
-	}
-
-	public static String sayYahoo(){
-		CustomLog.d(TAG, "Say yahoo from C++!!");
-		return "Bye bye Proguard!!";
+	public static String getFilePath(){
+		return filePath;
 	}
 }

@@ -50,11 +50,6 @@ JNIEnv *Android_JNI_GetEnv(void) {
 	return env;
 }
 
-jint Android_JNI_SetupThread(void) {
-	if (Android_JNI_GetEnv() != nullptr) return JNI_OK;
-	return JNI_ERR;
-}
-
 UtilJNI::UtilJNI() {
 	LOGD("JNI", "UtilJNI()\n");
 }
@@ -84,7 +79,6 @@ jint UtilJNI::init(JavaVM *vm) {
 	JNIEnv *env;
 	if (javaVM->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) return JNI_ERR;
 	if (pthread_key_create(&keyThread, detachThread) != JNI_OK) return JNI_ERR;
-	//if (Android_JNI_SetupThread() != JNI_OK) return JNI_ERR;
 	if (this->registerMethods(env) != JNI_OK) return JNI_ERR;
 	return JNI_VERSION_1_6;
 }
@@ -107,32 +101,16 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	return JNI_OK;
 }
 
-string UtilJNI::test() {
-	LOGD("JNI", "UtilJNI::test(%p), %ld\n", javaVM, pthread_self());
+string UtilJNI::getFilePath() {
+	LOGD("JNI", "UtilJNI::getFilePath(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
 	if (env == nullptr) return "";
-	//Android_JNI_SetupThread();
-
-	// Static
-	jmethodID mID1 = env->GetStaticMethodID(activity,
-											"sayHello", "()V");
-	env->CallStaticVoidMethod(activity, mID1);
-
-	jmethodID mID2 = env->GetStaticMethodID(activity,
-											"sayGood", "()V");
-	env->CallStaticVoidMethod(activity, mID2);
-
-	jmethodID mID3 = env->GetStaticMethodID(activity,
-											"sayNice", "()V");
-	env->CallStaticVoidMethod(activity, mID3);
-
-	jmethodID mID4 = env->GetStaticMethodID(activity,
-											"sayYahoo", "()Ljava/lang/String;");
-	const jstring jstr = (jstring) env->CallStaticObjectMethod(activity, mID4);
-	const char *cstr = env->GetStringUTFChars(jstr, 0);
-	const string result = cstr;
-	env->ReleaseStringUTFChars(jstr, cstr);
-
-	LOGD("JNI", "Hello, someone there? :%s\n", result.c_str());
-	return result;
+	// JNI
+	jmethodID mID = env->GetStaticMethodID(activity,
+										   "getFilePath", "()Ljava/lang/String;");
+	const jstring j = (jstring) env->CallStaticObjectMethod(activity, mID);
+	const char *c = env->GetStringUTFChars(j, JNI_FALSE);
+	const string str = c;
+	env->ReleaseStringUTFChars(j, c);
+	return str;
 }
