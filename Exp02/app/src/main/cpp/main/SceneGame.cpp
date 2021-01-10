@@ -40,7 +40,7 @@ bool SceneGame::init() {
 	btns.push_back(btnTest);
 
 	// Background
-	background = SpriteBase::createSprite("images/c_temple.png", cX, cY - gSize * 3);
+	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY - gSize * 18);
 
 	// Dpad
 	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
@@ -108,7 +108,7 @@ void SceneGame::update(const float delay) {
 	}
 
 	// Label
-	UtilLabel::getInstance()->drawStr("=JUST DO IT!=", cX, cY - gSize * 6.0f,
+	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 8,
 									  2, UtilAlign::CENTER);
 
 	// Buttons, Dpad
