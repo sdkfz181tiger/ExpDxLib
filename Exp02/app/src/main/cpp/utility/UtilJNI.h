@@ -20,7 +20,7 @@ public:
 
 	jint registerMethods(JNIEnv *env);
 
-	void test();
+	string test();
 };
 
 #endif // _UTILJNI_H_

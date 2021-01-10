@@ -4,18 +4,18 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.os.Bundle;
 
-public class MainActivity extends NativeActivity {
+public class MainActivity extends NativeActivity{
 
 	public static final String TAG = "MainActivity";
 	public static String filePath = "";
 
 	// Used to load the 'native-lib' library on application startup.
-	static {
+	static{
 		System.loadLibrary("native-lib");
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		MainActivity.nativeOnCreate();// Native
@@ -26,31 +26,31 @@ public class MainActivity extends NativeActivity {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void onStart(){
 		super.onStart();
 		MainActivity.nativeOnStart();// Native
 	}
 
 	@Override
-	protected void onResume() {
+	protected void onResume(){
 		super.onResume();
 		MainActivity.nativeOnResume();// Native
 	}
 
 	@Override
-	protected void onPause() {
+	protected void onPause(){
 		MainActivity.nativeOnPause();// Native
 		super.onPause();
 	}
 
 	@Override
-	protected void onStop() {
+	protected void onStop(){
 		MainActivity.nativeOnStop();// Native
 		super.onStop();
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onDestroy(){
 		MainActivity.nativeOnDestroy();// Native
 		super.onDestroy();
 	}
@@ -71,17 +71,20 @@ public class MainActivity extends NativeActivity {
 
 	//==========
 	// JNI(C++ -> Java)
-	public static void sayHello() {
+	public static void sayHello(){
 		CustomLog.d(TAG, "Say hello from C++!!");
 	}
-	public static void sayGood() {
+
+	public static void sayGood(){
 		CustomLog.d(TAG, "Say good from C++!!");
 	}
-	public static void sayNice() {
+
+	public static void sayNice(){
 		CustomLog.d(TAG, "Say nice from C++!!");
 	}
 
-	public void sayBetter()  {
-		CustomLog.d(TAG, "Say better from C++!!");
+	public static String sayYahoo(){
+		CustomLog.d(TAG, "Say yahoo from C++!!");
+		return "Bye bye Proguard!!";
 	}
 }

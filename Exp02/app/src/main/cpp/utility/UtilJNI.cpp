@@ -3,7 +3,7 @@
 // Singleton Object
 static UtilJNI *selfUtilJNI = nullptr;
 
-// Java Virtual machine, JNI
+// Java Virtual machine
 static JavaVM *javaVM = nullptr;
 static pthread_key_t keyThread;
 static jclass activity;
@@ -107,10 +107,10 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	return JNI_OK;
 }
 
-void UtilJNI::test() {
+string UtilJNI::test() {
 	LOGD("JNI", "UtilJNI::test(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
-	if (env == nullptr) return;
+	if (env == nullptr) return "";
 	//Android_JNI_SetupThread();
 
 	// Static
@@ -126,8 +126,13 @@ void UtilJNI::test() {
 											"sayNice", "()V");
 	env->CallStaticVoidMethod(activity, mID3);
 
-	// Instance
+	jmethodID mID4 = env->GetStaticMethodID(activity,
+											"sayYahoo", "()Ljava/lang/String;");
+	const jstring jstr = (jstring) env->CallStaticObjectMethod(activity, mID4);
+	const char *cstr = env->GetStringUTFChars(jstr, 0);
+	const string result = cstr;
+	env->ReleaseStringUTFChars(jstr, cstr);
 
-
-	LOGD("JNI", "Hello, someone there?\n");
+	LOGD("JNI", "Hello, someone there? :%s\n", result.c_str());
+	return result;
 }
