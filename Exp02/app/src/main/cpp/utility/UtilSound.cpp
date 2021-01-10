@@ -51,7 +51,7 @@ bool UtilSound::init() {
 void UtilSound::playSE(const string &fileName) {
 	if (!sounds.count(fileName)) return;
 	auto sound = sounds.find(fileName);
-	LOGD("Main", "playSE:%s, %d, %d", sound->first.c_str(), sound->second);
+	//LOGD("Main", "playSE:%s, %d, %d", sound->first.c_str(), sound->second);
 	if (0 < CheckSoundMem(sound->second)) StopSoundMem(sound->second);
 	PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
 }
@@ -59,7 +59,7 @@ void UtilSound::playSE(const string &fileName) {
 void UtilSound::playBGM(const string &fileName) {
 	if (!sounds.count(fileName)) return;
 	auto sound = sounds.find(fileName);
-	LOGD("Main", "playBGM:%s, %d", sound->first.c_str(), sound->second);
+	//LOGD("Main", "playBGM:%s, %d", sound->first.c_str(), sound->second);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
 	PlaySoundMem(sound->second, DX_PLAYTYPE_LOOPBIT, true);
 }

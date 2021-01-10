@@ -4,11 +4,12 @@
 static UtilJNI *selfUtilJNI = nullptr;
 
 // Java Virtual machine, JNI
-static JavaVM javaVM = nullptr;
-static pthread_key_t threadKey;
+static JavaVM *javaVM = nullptr;
+static pthread_key_t keyThread;
+static jclass activity;
 
 void nativeOnCreate(JNIEnv *env, jobject thiz) {
-	LOGD("JNI", "onCreate!?");
+	LOGD("JNI", "onCreate!!");
 }
 
 void nativeOnStart(JNIEnv *env, jobject thiz) {
@@ -29,6 +30,29 @@ void nativeOnStop(JNIEnv *env, jobject thiz) {
 
 void nativeOnDestroy(JNIEnv *env, jobject thiz) {
 	LOGD("JNI", "onDestroy!!");
+}
+
+static void detachThread(void *value) {
+	/* The thread is being destroyed, detach it from the Java VM
+	 * and set the mThreadKey value to NULL as required */
+	LOGD("JNI", "threadDestroy!!");
+	JNIEnv *env = (JNIEnv *) value;
+	if (env == nullptr) return;
+	javaVM->DetachCurrentThread();
+	pthread_setspecific(keyThread, nullptr);
+}
+
+JNIEnv *Android_JNI_GetEnv(void) {
+	JNIEnv *env;
+	jint status = javaVM->AttachCurrentThread(&env, nullptr);
+	if (status != JNI_OK) return nullptr;
+	pthread_setspecific(keyThread, (void *) env);
+	return env;
+}
+
+jint Android_JNI_SetupThread(void) {
+	if (Android_JNI_GetEnv() != nullptr) return JNI_OK;
+	return JNI_ERR;
 }
 
 UtilJNI::UtilJNI() {
@@ -55,23 +79,18 @@ void UtilJNI::destroyInstance() {
 }
 
 jint UtilJNI::init(JavaVM *vm) {
-	LOGD("JNI", "UtilJNI::init()\n");
+	LOGD("JNI", "UtilJNI::init(%p), %ld\n", javaVM, pthread_self());
 	javaVM = vm;// Java virtual machine
 	JNIEnv *env;
-	if ((*javaVM)->GetEnv(javaVM, (void**) &env, JNI_VERSION_1_4) != JNI_OK) {
-		LOGE("Failed to get the environment using GetEnv()");
-		return -1;
-	}
-
-
-	javaVM->GetEnv((void **) &env, JNI_VERSION_1_6);
-	if (env == nullptr) return JNI_ERR;
+	if (javaVM->GetEnv((void **) &env, JNI_VERSION_1_4) != JNI_OK) return JNI_ERR;
+	if (pthread_key_create(&keyThread, detachThread) != JNI_OK) return JNI_ERR;
+	//if (Android_JNI_SetupThread() != JNI_OK) return JNI_ERR;
 	if (this->registerMethods(env) != JNI_OK) return JNI_ERR;
 	return JNI_VERSION_1_6;
 }
 
 jint UtilJNI::registerMethods(JNIEnv *env) {
-	LOGD("JNI", "UtilJNI::registerMethods()\n");
+	LOGD("JNI", "UtilJNI::registerMethods(%p), %ld\n", javaVM, pthread_self());
 	jclass cls = env->FindClass("com/ozateck/chickader/MainActivity");
 	if (cls == nullptr) return JNI_ERR;
 	const JNINativeMethod methods[] = {
@@ -84,13 +103,30 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	};
 	int total = sizeof(methods) / sizeof(JNINativeMethod);
 	if (env->RegisterNatives(cls, methods, total) != JNI_OK) return JNI_ERR;
+	activity = (jclass) env->NewGlobalRef(cls);// Activity
 	return JNI_OK;
 }
 
 void UtilJNI::test() {
 	LOGD("JNI", "UtilJNI::test(%p), %ld\n", javaVM, pthread_self());
-	if (javaVM == nullptr) return;
+	JNIEnv *env = Android_JNI_GetEnv();
+	if (env == nullptr) return;
+	//Android_JNI_SetupThread();
 
+	// Static
+	jmethodID mID1 = env->GetStaticMethodID(activity,
+											"sayHello", "()V");
+	env->CallStaticVoidMethod(activity, mID1);
+
+	jmethodID mID2 = env->GetStaticMethodID(activity,
+											"sayGood", "()V");
+	env->CallStaticVoidMethod(activity, mID2);
+
+	jmethodID mID3 = env->GetStaticMethodID(activity,
+											"sayNice", "()V");
+	env->CallStaticVoidMethod(activity, mID3);
+
+	// Instance
 
 
 	LOGD("JNI", "Hello, someone there?\n");

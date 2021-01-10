@@ -58,8 +58,6 @@ bool SceneTitle::init() {
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
-	UtilJNI::getInstance()->test();// TODO: test
-
 	return true;
 }
 

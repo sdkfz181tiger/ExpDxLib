@@ -74,4 +74,14 @@ public class MainActivity extends NativeActivity {
 	public static void sayHello() {
 		CustomLog.d(TAG, "Say hello from C++!!");
 	}
+	public static void sayGood() {
+		CustomLog.d(TAG, "Say good from C++!!");
+	}
+	public static void sayNice() {
+		CustomLog.d(TAG, "Say nice from C++!!");
+	}
+
+	public void sayBetter()  {
+		CustomLog.d(TAG, "Say better from C++!!");
+	}
 }
