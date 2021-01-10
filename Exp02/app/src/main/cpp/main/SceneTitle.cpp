@@ -10,6 +10,8 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												  sceneListener(nullptr),
+												  vCode(UtilJNI::getInstance()->getVersionCode()),
+												  vName(UtilJNI::getInstance()->getVersionName()),
 												  background(nullptr) {
 	LOGD("Main", "SceneTitle()\n");
 }
@@ -39,7 +41,7 @@ bool SceneTitle::init() {
 
 	// Background
 	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
-	/*
+
 	// Characters
 	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
 	sprites.push_back(kobo);
@@ -49,7 +51,7 @@ bool SceneTitle::init() {
 	sprites.push_back(chicken);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
-	*/
+
 	// TODO: test json
 	json jObj = UtilJson::getInstance()->read("json/sample.json");
 	bool happy = jObj["happy"].get<bool>();
@@ -58,11 +60,11 @@ bool SceneTitle::init() {
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
 	// TODO: test JNI
-	const string versionCode = UtilJNI::getInstance()->getJNIStr("getVersionCode");
+	const string versionCode = UtilJNI::getInstance()->getVersionCode();
 	LOGD("Main", "VersionCode:%s", versionCode.c_str());
-	const string versionName = UtilJNI::getInstance()->getJNIStr("getVersionName");
+	const string versionName = UtilJNI::getInstance()->getVersionName();
 	LOGD("Main", "VersionName:%s", versionName.c_str());
-	const string filePath = UtilJNI::getInstance()->getJNIStr("getFilePath");
+	const string filePath = UtilJNI::getInstance()->getFilePath();
 	LOGD("Main", "FilePath:%s", filePath.c_str());
 
 	return true;
@@ -94,6 +96,10 @@ void SceneTitle::update(const float delay) {
 
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("==TITLE==", cX, 120,
+									  2, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
+									  2, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr(vName, cX, 180,
 									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }

@@ -19,6 +19,12 @@ public:
 	jint registerMethods(JNIEnv *env);
 
 	string getJNIStr(const char *methodName);
+
+	string getVersionCode();
+
+	string getVersionName();
+
+	string getFilePath();
 };
 
 #endif // _UTILJNI_H_

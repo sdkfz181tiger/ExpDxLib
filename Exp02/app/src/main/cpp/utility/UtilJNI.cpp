@@ -112,3 +112,15 @@ string UtilJNI::getJNIStr(const char *methodName) {
 	env->ReleaseStringUTFChars(jstr, cchar);
 	return str;
 }
+
+string UtilJNI::getVersionCode() {
+	return this->getJNIStr("getVersionCode");
+}
+
+string UtilJNI::getVersionName() {
+	return this->getJNIStr("getVersionName");
+}
+
+string UtilJNI::getFilePath() {
+	return this->getJNIStr("getFilePath");
+}
