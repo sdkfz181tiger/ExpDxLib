@@ -101,16 +101,14 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	return JNI_OK;
 }
 
-string UtilJNI::getFilePath() {
-	LOGD("JNI", "UtilJNI::getFilePath(%p), %ld\n", javaVM, pthread_self());
+string UtilJNI::getJNIStr(const char *methodName) {
+	//LOGD("JNI", "UtilJNI::getJNIStr(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
 	if (env == nullptr) return "";
-	// JNI
-	jmethodID mID = env->GetStaticMethodID(activity,
-										   "getFilePath", "()Ljava/lang/String;");
-	const jstring j = (jstring) env->CallStaticObjectMethod(activity, mID);
-	const char *c = env->GetStringUTFChars(j, JNI_FALSE);
-	const string str = c;
-	env->ReleaseStringUTFChars(j, c);
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, "()Ljava/lang/String;");
+	const jstring jstr = (jstring) env->CallStaticObjectMethod(activity, mID);
+	const char *cchar = env->GetStringUTFChars(jstr, JNI_FALSE);
+	const string str = cchar;
+	env->ReleaseStringUTFChars(jstr, cchar);
 	return str;
 }

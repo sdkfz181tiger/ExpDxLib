@@ -60,5 +60,5 @@ using easing = tweeny::easing;
 #endif
 
 #ifndef DX_SAFE_DELETE_VECTOR
-#define DX_SAFE_DELETE_VECTOR(v) auto it = v.end(); while (it-- != v.begin()) { delete (*it);v.erase(it); }
+#define DX_SAFE_DELETE_VECTOR(v) { auto it = v.end(); while (it-- != v.begin()) { delete (*it); v.erase(it); } }
 #endif

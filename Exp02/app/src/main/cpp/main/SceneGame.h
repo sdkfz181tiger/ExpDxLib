@@ -7,7 +7,6 @@ class SceneGame : public SceneBase, BtnListener, DpadListener {
 
 private:
 	SceneListener *sceneListener;
-	BtnBase *btnQuit, *btnTest;
 	SpriteBase *background;
 	CtlDpad *dPad;
 	vector<SpriteBase *> sprites;

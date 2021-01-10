@@ -10,7 +10,6 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												  sceneListener(nullptr),
-												  btnQuit(nullptr), btnTest(nullptr),
 												  background(nullptr) {
 	LOGD("Main", "SceneTitle()\n");
 }
@@ -18,8 +17,7 @@ SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
 	// Delete
-	DX_SAFE_DELETE(btnQuit);
-	DX_SAFE_DELETE(btnTest);
+	DX_SAFE_DELETE_VECTOR(btns);
 }
 
 bool SceneTitle::init() {
@@ -29,13 +27,13 @@ bool SceneTitle::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-								 dWidth - gSize * 1, gSize * 1);
+	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+										  dWidth - gSize * 1, gSize * 1);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_12x12.png", "G",
-								 gSize * 1, gSize * 1);
+	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "G",
+										  gSize * 1, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::GAME);
 	btns.push_back(btnTest);
 
@@ -59,8 +57,12 @@ bool SceneTitle::init() {
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
-	// FilePath
-	const string filePath = UtilJNI::getInstance()->getFilePath();
+	// TODO: test JNI
+	const string versionCode = UtilJNI::getInstance()->getJNIStr("getVersionCode");
+	LOGD("Main", "VersionCode:%s", versionCode.c_str());
+	const string versionName = UtilJNI::getInstance()->getJNIStr("getVersionName");
+	LOGD("Main", "VersionName:%s", versionName.c_str());
+	const string filePath = UtilJNI::getInstance()->getJNIStr("getFilePath");
 	LOGD("Main", "FilePath:%s", filePath.c_str());
 
 	return true;
@@ -69,8 +71,6 @@ bool SceneTitle::init() {
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	// TODO: test
-	UtilSound::getInstance()->playSE("se_coin_01.wav");
 }
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {

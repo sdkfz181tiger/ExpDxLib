@@ -9,16 +9,14 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 }
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-												sceneListener(nullptr),
-												btnQuit(nullptr), btnTest(nullptr) {
+												sceneListener(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
 SceneGame::~SceneGame() {
 	LOGD("Main", "~SceneGame()\n");
 	// Delete
-	DX_SAFE_DELETE(btnQuit);
-	DX_SAFE_DELETE(btnTest);
+	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(sprites);
 }
 
@@ -29,13 +27,13 @@ bool SceneGame::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-								 dWidth - gSize * 1, gSize * 1);
+	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+										  dWidth - gSize * 1, gSize * 1);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
-	btnTest = BtnBase::createBtn("images/box_12x12.png", "R",
-								 gSize * 1, gSize * 1);
+	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "R",
+										  gSize * 1, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 

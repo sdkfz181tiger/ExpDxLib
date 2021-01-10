@@ -5,8 +5,6 @@
 
 class UtilJNI {
 
-private:
-
 public:
 	UtilJNI();
 
@@ -20,7 +18,7 @@ public:
 
 	jint registerMethods(JNIEnv *env);
 
-	string getFilePath();
+	string getJNIStr(const char *methodName);
 };
 
 #endif // _UTILJNI_H_
