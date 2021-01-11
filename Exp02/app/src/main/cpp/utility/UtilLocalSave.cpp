@@ -36,16 +36,33 @@ void UtilLocalSave::test() {
 	// Open file
 	string filePath = UtilJNI::getInstance()->getFilePath();
 	string fullPath = this->getFullPath(filePath, "hoge.txt");
+	LOGD("Util", "filePath::%s\n", filePath.c_str());
 	LOGD("Util", "fullPath::%s\n", fullPath.c_str());
 
-	int handle = FileRead_open(fullPath.c_str(), true);
-	if (handle < 0) return;
+	int size = FileRead_size(fullPath.c_str());
+	LOGD("Util", "size:%d\n", size);
+
+	int handle = FileRead_open(fullPath.c_str(), false);
 	LOGD("Util", "open:%d\n", handle);
 	FileRead_close(handle);
+
+	{
+		char filePath[256];
+		GetInternalDataPath(filePath, sizeof(filePath));
+		strcat(filePath, "/hoge.txt");
+		LOGD("Util", "Ready:%s\n", filePath);
+		FILE *fp = fopen(filePath, "wb");
+		if (fp != nullptr) {
+			LOGD("Util", "You did it!!\n");
+			char msg[50] = "ABCDEFGH";
+			fwrite(msg, 1, 6, fp);
+			fclose(fp);
+		}
+	}
 }
 
 string UtilLocalSave::getFullPath(string dirPath, string fileName) {
-	string str = dirPath;
+	string str = dirPath + "/";
 	string fullPath;
 	size_t len = str.length();
 	for (size_t i = len - 1; 0 <= i && i != string::npos; i = str.rfind('/')) {
