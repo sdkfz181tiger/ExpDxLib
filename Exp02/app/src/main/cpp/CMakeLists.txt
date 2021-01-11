@@ -52,6 +52,7 @@ add_library( # Sets the name of the library.
         utility/UtilGraph.cpp
         utility/UtilLabel.cpp
         utility/UtilMath.cpp
+        utility/UtilLocalSave.cpp
         utility/UtilSound.cpp
         utility/Vec2.cpp
         )

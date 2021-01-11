@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <ctime>
 #include <chrono>
+#include <filesystem>
 #include <functional>
 #include <iomanip>
 #include <iostream>
@@ -27,6 +28,7 @@
 #include "UtilJNI.h"
 #include "UtilJson.h"
 #include "UtilLabel.h"
+#include "UtilLocalSave.h"
 #include "UtilMath.h"
 #include "UtilSound.h"
 #include "Vec2.h"

@@ -60,6 +60,9 @@ bool SceneTitle::init() {
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
+	// TODO: test save
+	UtilLocalSave::getInstance()->test();
+
 	// BGM
 	UtilSound::getInstance()->stopBGM();
 	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false);

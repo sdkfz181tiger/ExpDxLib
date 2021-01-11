@@ -18,6 +18,7 @@ GameManager::~GameManager() {
 	UtilJNI::getInstance()->destroyInstance();
 	UtilJson::getInstance()->destroyInstance();
 	UtilLabel::getInstance()->destroyInstance();
+	UtilLocalSave::getInstance()->destroyInstance();
 	UtilMath::getInstance()->destroyInstance();
 	UtilSound::getInstance()->destroyInstance();
 }
@@ -28,7 +29,7 @@ void GameManager::init() {
 	SetGraphMode(dWidth, dHeight, cDepth);
 	SetOutApplicationLogValidFlag(true);
 	// Scenes
-	SceneBase *scene = SceneGame::createScene(dWidth, dHeight);
+	SceneBase *scene = SceneTitle::createScene(dWidth, dHeight);
 	scene->addSceneListener(this);
 	scenes.push_back(scene);
 }
