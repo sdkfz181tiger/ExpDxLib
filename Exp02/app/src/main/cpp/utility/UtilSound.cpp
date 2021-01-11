@@ -30,16 +30,16 @@ bool UtilSound::init() {
 	LOGD("Util", "UtilSound::init()\n");
 
 	vector<string> fileSEs = {
-			"sounds/jing_title.wav",
-			"sounds/jing_result_ng.wav",
-			"sounds/jing_result_ok.wav",
 			"sounds/se_coin_01.wav",
 			"sounds/se_coin_02.wav",
 			"sounds/se_coin_03.wav"
 	};
 
 	vector<string> fileBGMs = {
-			"sounds/bgm_game.wav"
+			"sounds/bgm_game.wav",
+			"sounds/bgm_result_ng.wav",
+			"sounds/bgm_result_ok.wav",
+			"sounds/bgm_title.wav"
 	};
 
 	auto itS = fileSEs.end();
@@ -68,13 +68,26 @@ void UtilSound::playSE(const string &fileName) {
 	PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
 }
 
-void UtilSound::playBGM(const string &fileName) {
+void UtilSound::playBGM(const string &fileName, bool loop) {
 	if (!soundBGMs.count(fileName)) return;
 	auto sound = soundBGMs.find(fileName);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
-	PlaySoundMem(sound->second, DX_PLAYTYPE_LOOP, true);
+	if (loop) {
+		PlaySoundMem(sound->second, DX_PLAYTYPE_LOOP, true);
+	} else {
+		PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
+	}
+}
+
+void UtilSound::stopSE() {
+	for (pair<string, int> sound : soundSEs) StopSoundMem(sound.second);
 }
 
 void UtilSound::stopBGM() {
 	for (pair<string, int> sound : soundBGMs) StopSoundMem(sound.second);
+}
+
+void UtilSound::stopAllSounds() {
+	this->stopSE();
+	this->stopBGM();
 }

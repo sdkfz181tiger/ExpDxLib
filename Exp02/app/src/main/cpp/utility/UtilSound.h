@@ -22,9 +22,13 @@ public:
 
 	void playSE(const string &fileName);
 
-	void playBGM(const string &fileName);
+	void playBGM(const string &fileName, bool loop);
+
+	void stopSE();
 
 	void stopBGM();
+
+	void stopAllSounds();
 };
 
 #endif // _UTILSOUND_H_

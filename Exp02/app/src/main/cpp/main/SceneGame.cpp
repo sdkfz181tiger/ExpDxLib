@@ -66,7 +66,7 @@ bool SceneGame::init() {
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_game.wav");
+	UtilSound::getInstance()->playBGM("sounds/bgm_game.wav", true);
 
 	return true;
 }

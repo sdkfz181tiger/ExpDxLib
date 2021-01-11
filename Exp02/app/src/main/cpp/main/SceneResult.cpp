@@ -43,7 +43,7 @@ bool SceneResult::init() {
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playSE("sounds/jing_result_ng.wav");
+	UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false);
 
 	return true;
 }
