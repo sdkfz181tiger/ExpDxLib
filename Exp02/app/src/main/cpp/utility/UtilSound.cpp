@@ -29,37 +29,52 @@ void UtilSound::destroyInstance() {
 bool UtilSound::init() {
 	LOGD("Util", "UtilSound::init()\n");
 
-	vector<string> fileNames = {
-			"ji_finish.wav",
-			"se_coin_01.wav",
-			"se_coin_02.wav",
-			"se_coin_03.wav"
+	vector<string> fileSEs = {
+			"sounds/jing_title.wav",
+			"sounds/jing_result_ng.wav",
+			"sounds/jing_result_ok.wav",
+			"sounds/se_coin_01.wav",
+			"sounds/se_coin_02.wav",
+			"sounds/se_coin_03.wav"
 	};
 
-	auto it = fileNames.end();
-	while (it-- != fileNames.begin()) {
-		const string &fileName = static_cast<string>(*it);
-		const string path = "sounds/" + fileName;
-		int handle = LoadSoundMem(path.c_str());
+	vector<string> fileBGMs = {
+			"sounds/bgm_game.wav"
+	};
+
+	auto itS = fileSEs.end();
+	while (itS-- != fileSEs.begin()) {
+		const string &fileName = static_cast<string>(*itS);
+		int handle = LoadSoundMem(fileName.c_str());
 		if (handle < 0) continue;
-		sounds.insert(make_pair(fileName, handle));
+		soundSEs.insert(make_pair(fileName, handle));
+	}
+
+	auto itB = fileBGMs.end();
+	while (itB-- != fileBGMs.begin()) {
+		const string &fileName = static_cast<string>(*itB);
+		int handle = LoadSoundMem(fileName.c_str());
+		if (handle < 0) continue;
+		soundBGMs.insert(make_pair(fileName, handle));
 	}
 
 	return true;
 }
 
 void UtilSound::playSE(const string &fileName) {
-	if (!sounds.count(fileName)) return;
-	auto sound = sounds.find(fileName);
-	//LOGD("Main", "playSE:%s, %d, %d", sound->first.c_str(), sound->second);
-	if (0 < CheckSoundMem(sound->second)) StopSoundMem(sound->second);
+	if (!soundSEs.count(fileName)) return;
+	auto sound = soundSEs.find(fileName);
+	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
 	PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
 }
 
 void UtilSound::playBGM(const string &fileName) {
-	if (!sounds.count(fileName)) return;
-	auto sound = sounds.find(fileName);
-	//LOGD("Main", "playBGM:%s, %d", sound->first.c_str(), sound->second);
+	if (!soundBGMs.count(fileName)) return;
+	auto sound = soundBGMs.find(fileName);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
-	PlaySoundMem(sound->second, DX_PLAYTYPE_LOOPBIT, true);
+	PlaySoundMem(sound->second, DX_PLAYTYPE_LOOP, true);
+}
+
+void UtilSound::stopBGM() {
+	for (pair<string, int> sound : soundBGMs) StopSoundMem(sound.second);
 }

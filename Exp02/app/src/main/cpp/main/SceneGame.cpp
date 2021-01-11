@@ -10,14 +10,18 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												sceneListener(nullptr),
-												background(nullptr), dPad(nullptr),
-												player(nullptr) {
+												background(nullptr), bGrid(nullptr),
+												dPad(nullptr), player(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
 SceneGame::~SceneGame() {
 	LOGD("Main", "~SceneGame()\n");
 	// Delete
+	DX_SAFE_DELETE(background);
+	DX_SAFE_DELETE(bGrid);
+	DX_SAFE_DELETE(dPad);
+	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(sprites);
 }
@@ -42,6 +46,9 @@ bool SceneGame::init() {
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY - gSize * 18);
 
+	// BoardGrid
+	bGrid = BoardGrid::createBoard(cX, cY, gSize * 2, 9, 9);
+
 	// Dpad
 	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
@@ -57,13 +64,17 @@ bool SceneGame::init() {
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
+	// BGM
+	UtilSound::getInstance()->stopBGM();
+	UtilSound::getInstance()->playBGM("sounds/bgm_game.wav");
+
 	return true;
 }
 
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	dPad->setOnTouchBegan(id, x, y);
+	if (dHeight / 2 < y) dPad->setOnTouchBegan(id, x, y);
 
 	auto it = sprites.end();
 	while (it-- != sprites.begin()) {
@@ -77,13 +88,13 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
-	dPad->setOnTouchMoved(id, x, y);
+	if (dPad) dPad->setOnTouchMoved(id, x, y);
 }
 
 void SceneGame::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
-	dPad->setOnTouchEnded(id, x, y);
+	if (dPad) dPad->setOnTouchEnded(id, x, y);
 }
 
 void SceneGame::update(const float delay) {
@@ -92,8 +103,9 @@ void SceneGame::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Background, Player
+	// Background, Board, Player
 	background->update(delay);
+	bGrid->update(delay);
 	player->update(delay);
 
 	// Sprites
@@ -113,7 +125,7 @@ void SceneGame::update(const float delay) {
 
 	// Buttons, Dpad
 	for (auto btn : btns) btn->update(delay);
-	dPad->update(delay);
+	if (dPad) dPad->update(delay);
 }
 
 void SceneGame::addSceneListener(SceneListener *listener) {
@@ -132,7 +144,7 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::RESULT) {
-		UtilSound::getInstance()->playSE("se_coin_01.wav");
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::RESULT);
 	}
 }

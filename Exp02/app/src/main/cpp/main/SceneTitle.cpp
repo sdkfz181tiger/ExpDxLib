@@ -19,6 +19,7 @@ SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
 	// Delete
+	DX_SAFE_DELETE(background);
 	DX_SAFE_DELETE_VECTOR(btns);
 }
 
@@ -58,6 +59,10 @@ bool SceneTitle::init() {
 	string name = jObj["name"].get<string>();
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
+
+	// BGM
+	UtilSound::getInstance()->stopBGM();
+	UtilSound::getInstance()->playSE("sounds/jing_title.wav");
 
 	return true;
 }
@@ -112,7 +117,7 @@ void SceneTitle::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::GAME) {
-		UtilSound::getInstance()->playSE("se_coin_01.wav");
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::GAME);
 	}
 }

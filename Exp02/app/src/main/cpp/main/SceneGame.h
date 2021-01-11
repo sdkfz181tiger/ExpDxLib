@@ -8,6 +8,7 @@ class SceneGame : public SceneBase, BtnListener, DpadListener {
 private:
 	SceneListener *sceneListener;
 	SpriteBase *background;
+	BoardGrid *bGrid;
 	CtlDpad *dPad;
 	SpriteKobozu *player;
 	vector<SpriteBase *> sprites;

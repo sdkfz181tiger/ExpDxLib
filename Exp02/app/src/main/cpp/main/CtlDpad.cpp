@@ -49,10 +49,10 @@ void CtlDpad::setScale(int scl) {
 }
 
 bool CtlDpad::containsPoint(int x, int y) {
-	if (x < minX) return false;
-	if (maxX < x) return false;
-	if (y < minY) return false;
-	if (maxY < y) return false;
+	if (x < pos.x - width) return false;
+	if (pos.x + width < x) return false;
+	if (y < pos.y - height) return false;
+	if (pos.y + height < y) return false;
 	return true;
 }
 
@@ -63,7 +63,6 @@ void CtlDpad::setOnTouchBegan(int id, int x, int y) {
 	if (dpadListener) dpadListener->onDpadPressed(dpadTag);
 	dpadFlg = true;
 	dpadID = id;
-	this->calcDirection(x, y);// Calc
 }
 
 void CtlDpad::setOnTouchMoved(int id, int x, int y) {

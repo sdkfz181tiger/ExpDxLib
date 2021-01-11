@@ -6,7 +6,8 @@
 class UtilSound {
 
 private:
-	map<string, int> sounds;
+	map<string, int> soundSEs;
+	map<string, int> soundBGMs;
 
 public:
 	UtilSound();
@@ -22,6 +23,8 @@ public:
 	void playSE(const string &fileName);
 
 	void playBGM(const string &fileName);
+
+	void stopBGM();
 };
 
 #endif // _UTILSOUND_H_

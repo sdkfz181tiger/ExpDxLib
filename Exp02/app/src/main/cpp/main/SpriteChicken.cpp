@@ -71,12 +71,12 @@ void SpriteChicken::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::STAY) {
-		LOGD("Main", "Let's stay!!");
+		//LOGD("Main", "Let's stay!!");
 		this->stopFrames();
 		return;
 	}
 	if (state == StateChara::IDLE) {
-		LOGD("Main", "Let's idle!!");
+		//LOGD("Main", "Let's idle!!");
 		// Frames
 		vector<string> frames = {"chi_i1", "chi_i2", "chi_i3", "chi_i4"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
@@ -84,7 +84,7 @@ void SpriteChicken::changeState(StateChara sta) {
 		return;
 	}
 	if (state == StateChara::WALK) {
-		LOGD("Main", "Let's walk!!");
+		//LOGD("Main", "Let's walk!!");
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {

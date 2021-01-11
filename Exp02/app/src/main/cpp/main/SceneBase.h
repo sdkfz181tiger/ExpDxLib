@@ -2,6 +2,7 @@
 #define _SCENEBASE_H_
 
 #include "Utility.h"
+#include "BoardGrid.h"
 #include "BtnBase.h"
 #include "CtlDpad.h"
 #include "SpriteBase.h"

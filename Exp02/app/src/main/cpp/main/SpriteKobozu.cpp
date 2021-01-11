@@ -67,12 +67,12 @@ void SpriteKobozu::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::STAY) {
-		LOGD("Main", "Let's stay!!");
+		//LOGD("Main", "Let's stay!!");
 		this->stopFrames();
 		return;
 	}
 	if (state == StateChara::IDLE) {
-		LOGD("Main", "Let's idle!!");
+		//LOGD("Main", "Let's idle!!");
 		// Frames
 		vector<string> frames = {"kobo_f", "kobo_r", "kobo_l", "kobo_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
@@ -80,7 +80,7 @@ void SpriteKobozu::changeState(StateChara sta) {
 		return;
 	}
 	if (state == StateChara::WALK) {
-		LOGD("Main", "Let's walk!!");
+		//LOGD("Main", "Let's walk!!");
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {

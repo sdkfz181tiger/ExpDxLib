@@ -17,6 +17,7 @@ SceneResult::SceneResult(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 SceneResult::~SceneResult() {
 	LOGD("Main", "~SceneResult()\n");
 	// Delete
+	DX_SAFE_DELETE(background);
 	DX_SAFE_DELETE_VECTOR(btns);
 }
 
@@ -39,6 +40,10 @@ bool SceneResult::init() {
 
 	// Background
 	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
+
+	// BGM
+	UtilSound::getInstance()->stopBGM();
+	UtilSound::getInstance()->playSE("sounds/jing_result_ng.wav");
 
 	return true;
 }
@@ -87,7 +92,7 @@ void SceneResult::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::TITLE) {
-		UtilSound::getInstance()->playSE("se_coin_01.wav");
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::TITLE);
 	}
 }
