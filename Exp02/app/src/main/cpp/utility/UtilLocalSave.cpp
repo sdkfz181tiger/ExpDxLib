@@ -35,28 +35,25 @@ void UtilLocalSave::test() {
 	LOGD("Util", "UtilLocalSave::test()\n");
 	// Open file
 	string filePath = UtilJNI::getInstance()->getFilePath();
-	string fullPath = this->getFullPath(filePath, "hoge.txt");
+	string fullPath = this->getFullPath(filePath, "fuga.txt");
 	LOGD("Util", "filePath::%s\n", filePath.c_str());
 	LOGD("Util", "fullPath::%s\n", fullPath.c_str());
 
-	int size = FileRead_size(fullPath.c_str());
-	LOGD("Util", "size:%d\n", size);
-
-	int handle = FileRead_open(fullPath.c_str(), false);
-	LOGD("Util", "open:%d\n", handle);
-	FileRead_close(handle);
+	{
+		string msg = "Yahoo!!\nGoogle!!";
+		size_t size = static_cast<streamsize>(msg.length());
+		ofstream ofstr(fullPath.c_str());
+		ofstr.write(msg.c_str(), size);
+		ofstr.close();
+	}
 
 	{
-		char filePath[256];
-		GetInternalDataPath(filePath, sizeof(filePath));
-		strcat(filePath, "/hoge.txt");
-		LOGD("Util", "Ready:%s\n", filePath);
-		FILE *fp = fopen(filePath, "wb");
-		if (fp != nullptr) {
-			LOGD("Util", "You did it!!\n");
-			char msg[50] = "ABCDEFGH";
-			fwrite(msg, 1, 6, fp);
-			fclose(fp);
+		ifstream ifstr;
+		ifstr.open(fullPath.c_str(), ios::in);
+		string line;
+		while (!ifstr.eof()) {
+			getline(ifstr, line);
+			LOGD("Util", "Read::%s\n", line.c_str());
 		}
 	}
 }

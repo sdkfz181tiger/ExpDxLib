@@ -34,14 +34,14 @@ bool UtilJson::init() {
 json UtilJson::read(const char *fileName) {
 	LOGD("Util", "UtilJson::read()\n");
 	// Read
-	const int jHandle = FileRead_open(fileName);
-	if (jHandle == -1) return json::object();
-	char jLine[256];
-	stringstream jStr;
-	while (FileRead_eof(jHandle) == 0) {
-		FileRead_gets(jLine, 256, jHandle);
-		jStr << jLine;
+	const int handle = FileRead_open(fileName);
+	if (handle == -1) return json::object();
+	char line[256];
+	string str;
+	while (FileRead_eof(handle) == 0) {
+		FileRead_gets(line, 256, handle);
+		str += line;
 	}
-	FileRead_close(jHandle);
-	return json::parse(jStr.str());;
+	FileRead_close(handle);
+	return json::parse(str);
 }
