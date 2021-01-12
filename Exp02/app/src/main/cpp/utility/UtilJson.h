@@ -18,7 +18,7 @@ public:
 
 	bool init();
 
-	json read(const char *fileName);
+	json loadJson(const char *fileName);
 };
 
 #endif // _UTILJSON_H_

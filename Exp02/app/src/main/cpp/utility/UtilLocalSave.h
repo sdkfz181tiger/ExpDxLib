@@ -6,6 +6,8 @@
 class UtilLocalSave {
 
 private:
+	const string fileName;
+	json jsonObj;
 
 public:
 	UtilLocalSave();
@@ -18,9 +20,25 @@ public:
 
 	bool init();
 
-	void test();
+private:
+	void resetData();
 
-	string getFullPath(string dirPath, string fileName);
+	void loadData();
+
+	void saveData();
+
+	bool isOpen();
+
+	string getFullPath();
+
+public:
+	bool getBool(const string &key);
+
+	void setBool(const string &key, const bool flg);
+
+	string getString(const string &key);
+
+	void setString(const string &key, const string &str);
 };
 
 #endif // _UTILLOCALSAVE_H_

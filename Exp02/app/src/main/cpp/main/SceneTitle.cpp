@@ -54,14 +54,17 @@ bool SceneTitle::init() {
 	sprites.push_back(tanuki);
 
 	// TODO: test json
-	json jObj = UtilJson::getInstance()->read("json/sample.json");
+	json jObj = UtilJson::getInstance()->loadJson("json/sample.json");
 	bool happy = jObj["happy"].get<bool>();
 	string name = jObj["name"].get<string>();
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
 
 	// TODO: test save
-	UtilLocalSave::getInstance()->test();
+	string str1 = UtilLocalSave::getInstance()->getString("buho");
+	UtilLocalSave::getInstance()->setString("buho", "kitaro");
+	string str2 = UtilLocalSave::getInstance()->getString("buho");
+	LOGD("Main", "%s -> %s", str1.c_str(), str2.c_str());
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();

@@ -3,7 +3,7 @@
 // Singleton Object
 static UtilLocalSave *selfUtilLocalSave = nullptr;
 
-UtilLocalSave::UtilLocalSave() {
+UtilLocalSave::UtilLocalSave() : fileName("local_data.json") {
 	LOGD("Util", "UtilLocalSave()\n");
 }
 
@@ -28,38 +28,56 @@ void UtilLocalSave::destroyInstance() {
 
 bool UtilLocalSave::init() {
 	LOGD("Util", "UtilLocalSave::init()\n");
+	if (!this->isOpen()) this->resetData();
+	this->loadData();
 	return true;
 }
 
-void UtilLocalSave::test() {
-	LOGD("Util", "UtilLocalSave::test()\n");
-	// Open file
-	string filePath = UtilJNI::getInstance()->getFilePath();
-	string fullPath = this->getFullPath(filePath, "fuga.txt");
-	LOGD("Util", "filePath::%s\n", filePath.c_str());
-	LOGD("Util", "fullPath::%s\n", fullPath.c_str());
-
-	{
-		string msg = "Yahoo!!\nGoogle!!";
-		size_t size = static_cast<streamsize>(msg.length());
-		ofstream ofstr(fullPath.c_str());
-		ofstr.write(msg.c_str(), size);
-		ofstr.close();
-	}
-
-	{
-		ifstream ifstr;
-		ifstr.open(fullPath.c_str(), ios::in);
-		string line;
-		while (!ifstr.eof()) {
-			getline(ifstr, line);
-			LOGD("Util", "Read::%s\n", line.c_str());
-		}
-	}
+void UtilLocalSave::resetData() {
+	LOGD("Util", "resetData()\n");
+	const string fullPath = this->getFullPath();
+	json data = R"({})"_json;
+	string str = data.dump();
+	size_t size = static_cast<streamsize>(str.length());
+	ofstream ofstr(fullPath.c_str());
+	ofstr.write(str.c_str(), size);
+	ofstr.close();
 }
 
-string UtilLocalSave::getFullPath(string dirPath, string fileName) {
-	string str = dirPath + "/";
+void UtilLocalSave::loadData() {
+	LOGD("Util", "loadData()\n");
+	const string fullPath = this->getFullPath();
+	ifstream ifstr;
+	ifstr.open(fullPath.c_str(), ios::in);
+	string line, str;
+	while (!ifstr.eof()) {
+		getline(ifstr, line);
+		str += line;
+	}
+	jsonObj = json::parse(str);
+}
+
+void UtilLocalSave::saveData() {
+	LOGD("Util", "saveData()\n");
+	const string fullPath = this->getFullPath();
+	string str = jsonObj.dump();
+	size_t size = static_cast<streamsize>(str.length());
+	ofstream ofstr(fullPath.c_str());
+	ofstr.write(str.c_str(), size);
+	ofstr.close();
+}
+
+bool UtilLocalSave::isOpen() {
+	const string fullPath = this->getFullPath();
+	ifstream ifstr;
+	ifstr.open(fullPath.c_str(), ios::in);
+	bool flg = ifstr.is_open();
+	ifstr.close();
+	return flg;
+}
+
+string UtilLocalSave::getFullPath() {
+	string str = UtilJNI::getInstance()->getFilePath() + "/";
 	string fullPath;
 	size_t len = str.length();
 	for (size_t i = len - 1; 0 <= i && i != string::npos; i = str.rfind('/')) {
@@ -67,4 +85,24 @@ string UtilLocalSave::getFullPath(string dirPath, string fileName) {
 		str = str.substr(0, i);
 	}
 	return fullPath + fileName;
+}
+
+bool UtilLocalSave::getBool(const string &key) {
+	if (jsonObj.count(key) <= 0) return false;
+	return jsonObj.find(key).value();
+}
+
+void UtilLocalSave::setBool(const string &key, const bool flg) {
+	jsonObj[key] = flg;
+	this->saveData();
+}
+
+string UtilLocalSave::getString(const string &key) {
+	if (jsonObj.count(key) <= 0) return "";
+	return jsonObj.find(key).value();
+}
+
+void UtilLocalSave::setString(const string &key, const string &str) {
+	jsonObj[key] = str;
+	this->saveData();
 }
