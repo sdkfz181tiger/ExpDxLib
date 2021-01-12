@@ -21,7 +21,9 @@ public:
 
 	bool init();
 
-	bool toggleMute();
+	void toggleMute();
+
+	bool isMute();
 
 	void playSE(const string &fileName);
 

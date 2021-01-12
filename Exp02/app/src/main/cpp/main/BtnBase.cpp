@@ -48,31 +48,34 @@ bool BtnBase::containsPoint(int x, int y) {
 	return true;
 }
 
-void BtnBase::setOnTouchBegan(int id, int x, int y) {
-	if (touchFlg) return;
-	if (touchID != -1) return;
-	if (!this->containsPoint(x, y)) return;
+bool BtnBase::setOnTouchBegan(int id, int x, int y) {
+	if (touchFlg) return false;
+	if (touchID != -1) return false;
+	if (!this->containsPoint(x, y)) return false;
 	if (btnListener) btnListener->onBtnPressed(btnTag);
 	touchFlg = true;
 	touchID = id;
+	return true;
 }
 
-void BtnBase::setOnTouchMoved(int id, int x, int y) {
-	if (!touchFlg) return;
-	if (touchID != id) return;
-	if (this->containsPoint(x, y)) return;
+bool BtnBase::setOnTouchMoved(int id, int x, int y) {
+	if (!touchFlg) return false;
+	if (touchID != id) return false;
+	if (this->containsPoint(x, y)) return false;
 	if (btnListener) btnListener->onBtnCanceled(btnTag);
 	touchFlg = false;
 	touchID = -1;
+	return true;
 }
 
-void BtnBase::setOnTouchEnded(int id, int x, int y) {
-	if (!touchFlg) return;
-	if (touchID != id) return;
-	if (!this->containsPoint(x, y)) return;
+bool BtnBase::setOnTouchEnded(int id, int x, int y) {
+	if (!touchFlg) return false;
+	if (touchID != id) return false;
+	if (!this->containsPoint(x, y)) return false;
 	if (btnListener) btnListener->onBtnReleased(btnTag);
 	touchFlg = false;
 	touchID = -1;
+	return true;
 }
 
 void BtnBase::update(const float delay) {

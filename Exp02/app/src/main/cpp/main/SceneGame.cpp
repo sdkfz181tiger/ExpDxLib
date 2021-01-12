@@ -43,6 +43,11 @@ bool SceneGame::init() {
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
+	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
+												  dWidth - gSize * 3, gSize * 1);
+	btnSound->addBtnListener(this, BtnTag::SOUND);
+	btns.push_back(btnSound);
+
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY - gSize * 18);
 

@@ -17,6 +17,12 @@ public:
 	virtual ~BtnToggle();
 
 	bool init(const char *fileName) override;
+
+	bool setOnTouchBegan(int id, int x, int y) override;
+
+	bool setOnTouchMoved(int id, int x, int y) override;
+
+	bool setOnTouchEnded(int id, int x, int y) override;
 };
 
 #endif // _BTNTOGGLE_H_

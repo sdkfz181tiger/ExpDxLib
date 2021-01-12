@@ -61,10 +61,12 @@ bool UtilSound::init() {
 	return true;
 }
 
-bool UtilSound::toggleMute() {
-	LOGD("Util", "UtilSound::toggleMute()\n");
+void UtilSound::toggleMute() {
 	muteFlg = !muteFlg;
 	if (muteFlg) this->stopAllSounds();
+}
+
+bool UtilSound::isMute() {
 	return muteFlg;
 }
 

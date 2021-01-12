@@ -22,7 +22,7 @@ public:
 class BtnBase {
 
 protected:
-	const string title;
+	string title;
 	Vec2 pos;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
@@ -48,11 +48,11 @@ public:
 
 	bool containsPoint(int x, int y);
 
-	void setOnTouchBegan(int id, int x, int y);
+	virtual bool setOnTouchBegan(int id, int x, int y);
 
-	void setOnTouchMoved(int id, int x, int y);
+	virtual bool setOnTouchMoved(int id, int x, int y);
 
-	void setOnTouchEnded(int id, int x, int y);
+	virtual bool setOnTouchEnded(int id, int x, int y);
 
 	void update(const float delay);
 
