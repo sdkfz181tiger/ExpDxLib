@@ -40,6 +40,11 @@ bool SceneTitle::init() {
 	btnTest->addBtnListener(this, BtnTag::GAME);
 	btns.push_back(btnTest);
 
+	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
+												  cX, cY - gSize * 4);
+	btnSound->addBtnListener(this, BtnTag::SOUND);
+	btns.push_back(btnSound);
+
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
 
@@ -120,10 +125,11 @@ void SceneTitle::onBtnCanceled(BtnTag &tag) {
 }
 
 void SceneTitle::onBtnReleased(BtnTag &tag) {
-	LOGD("Main", "onBtnReleased():%d", tag);
+	LOGD("Main", "onBtnReleased()");
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::GAME) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
 		if (sceneListener) sceneListener->onSceneChange(SceneTag::GAME);
 	}
+	if (tag == BtnTag::SOUND) UtilSound::getInstance()->toggleMute();
 }

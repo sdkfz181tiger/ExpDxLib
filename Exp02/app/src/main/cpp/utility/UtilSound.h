@@ -6,6 +6,7 @@
 class UtilSound {
 
 private:
+	bool muteFlg;
 	map<string, int> soundSEs;
 	map<string, int> soundBGMs;
 
@@ -19,6 +20,8 @@ public:
 	void destroyInstance();
 
 	bool init();
+
+	bool toggleMute();
 
 	void playSE(const string &fileName);
 

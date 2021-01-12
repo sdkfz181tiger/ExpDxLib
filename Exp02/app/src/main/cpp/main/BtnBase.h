@@ -6,7 +6,7 @@
 // BtnTag
 enum class BtnTag {
 	DEFAULT, QUIT,
-	TITLE, GAME, RESULT
+	TITLE, GAME, RESULT, SOUND
 };
 
 // BtnListener
@@ -38,11 +38,11 @@ public:
 							  const string &title,
 							  float x, float y);
 
-	BtnBase(string title, float x, float y);
+	BtnBase(const string &title, float x, float y);
 
 	virtual ~BtnBase();
 
-	bool init(const char *fileName);
+	virtual bool init(const char *fileName);
 
 	void setScale(int scale);
 

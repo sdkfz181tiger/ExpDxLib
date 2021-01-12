@@ -3,7 +3,7 @@
 // Singleton Object
 static UtilSound *selfUtilSound = nullptr;
 
-UtilSound::UtilSound() {
+UtilSound::UtilSound() : muteFlg(false) {
 	LOGD("Util", "UtilSound()\n");
 }
 
@@ -61,7 +61,15 @@ bool UtilSound::init() {
 	return true;
 }
 
+bool UtilSound::toggleMute() {
+	LOGD("Util", "UtilSound::toggleMute()\n");
+	muteFlg = !muteFlg;
+	if (muteFlg) this->stopAllSounds();
+	return muteFlg;
+}
+
 void UtilSound::playSE(const string &fileName) {
+	if (muteFlg) return;
 	if (!soundSEs.count(fileName)) return;
 	auto sound = soundSEs.find(fileName);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
@@ -69,6 +77,7 @@ void UtilSound::playSE(const string &fileName) {
 }
 
 void UtilSound::playBGM(const string &fileName, bool loop) {
+	if (muteFlg) return;
 	if (!soundBGMs.count(fileName)) return;
 	auto sound = soundBGMs.find(fileName);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);

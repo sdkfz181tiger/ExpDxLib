@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "BoardGrid.h"
 #include "BtnBase.h"
+#include "BtnToggle.h"
 #include "CtlDpad.h"
 #include "SpriteBase.h"
 #include "SpriteChicken.h"

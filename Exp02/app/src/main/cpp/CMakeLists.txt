@@ -31,6 +31,7 @@ add_library( # Sets the name of the library.
         native-lib.cpp
         main/BoardGrid.cpp
         main/BtnBase.cpp
+        main/BtnToggle.cpp
         main/CtlDpad.cpp
         main/GameManager.cpp
         main/SceneBase.cpp

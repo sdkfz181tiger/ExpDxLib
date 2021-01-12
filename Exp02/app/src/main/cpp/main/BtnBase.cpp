@@ -12,7 +12,7 @@ BtnBase *BtnBase::createBtn(const string &fileName,
 	return nullptr;
 }
 
-BtnBase::BtnBase(string title, float x, float y) :
+BtnBase::BtnBase(const string &title, float x, float y) :
 		title(move(title)), pos(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
