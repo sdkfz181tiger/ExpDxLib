@@ -8,7 +8,7 @@ class BoardGrid {
 protected:
 	Vec2 pos;
 	int gSize, gRows, gCols;
-	unsigned int cWhite, cRed, cGreen, cBlue;
+	unsigned int cBlack, cWhite, cRed, cGreen, cBlue;
 
 public:
 	static BoardGrid *createBoard(float x, float y,

@@ -28,8 +28,7 @@ private:
 	int createGraph(const string &fileName);
 
 	void createDivGraph(const string &fileName, const string &frameName,
-						int total, int rows, int cols, int w, int h,
-						int from, int to);
+						int rows, int cols, int w, int h, int from, int to);
 };
 
 #endif // _UTILGRAPH_H_

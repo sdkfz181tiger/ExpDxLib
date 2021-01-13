@@ -25,6 +25,8 @@ bool SpriteHiyo::init(const string &fileName) {
 	this->pushFrames("hiyo_r");
 	this->pushFrames("hiyo_l");
 	this->pushFrames("hiyo_d");
+	this->pushFrames("hiyo_i1");
+	this->pushFrames("hiyo_i2");
 
 	this->startIdle();// Idle
 
@@ -74,7 +76,7 @@ void SpriteHiyo::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"hiyo_f", "hiyo_b", "hiyo_r", "hiyo_l"};
+		vector<string> frames = {"hiyo_f", "hiyo_b", "hiyo_r", "hiyo_l", "hiyo_i1", "hiyo_i2"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;

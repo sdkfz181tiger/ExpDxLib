@@ -12,6 +12,7 @@ BoardGrid *BoardGrid::createBoard(float x, float y,
 BoardGrid::BoardGrid(float x, float y) :
 		pos(Vec2(x, y)),
 		gSize(0), gRows(0), gCols(0),
+		cBlack(GetColor(0, 0, 0)),
 		cWhite(GetColor(255, 255, 255)),
 		cRed(GetColor(225, 65, 100)),
 		cGreen(GetColor(110, 140, 50)),
@@ -44,6 +45,8 @@ void BoardGrid::draw() {
 	int maxX = pos.x + width / 2;
 	int maxY = pos.y + height / 2;
 
+	DrawBox(minX, minY, maxX, maxY, cBlack, true);
+	/*
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
 			int i = c + r * gCols;
@@ -53,6 +56,7 @@ void BoardGrid::draw() {
 			DrawBox(x, y, x + gSize, y + gSize, cGreen, true);
 		}
 	}
+	 */
 	/*
 	for (int r = 1; r < gRows; r++)
 		DrawLine(minX, minY + r * gSize, maxX, minY + r * gSize, cWhite);
