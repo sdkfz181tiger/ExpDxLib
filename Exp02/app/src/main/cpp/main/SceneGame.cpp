@@ -66,6 +66,12 @@ bool SceneGame::init() {
 	sprites.push_back(osho);
 	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
 	sprites.push_back(chicken);
+	auto hiyo1 = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
+	sprites.push_back(hiyo1);
+	auto hiyo2 = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 5, cY + gSize * 4);
+	sprites.push_back(hiyo2);
+	auto hiyo3 = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 6, cY + gSize * 4);
+	sprites.push_back(hiyo3);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 

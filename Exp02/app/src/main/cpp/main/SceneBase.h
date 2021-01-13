@@ -9,6 +9,7 @@
 #include "SpriteBase.h"
 #include "SpriteChicken.h"
 #include "SpriteFrames.h"
+#include "SpriteHiyo.h"
 #include "SpriteKobozu.h"
 #include "SpriteOsho.h"
 #include "SpriteTanuki.h"

@@ -93,6 +93,7 @@ bool UtilLocalSave::getBool(const string &key) {
 }
 
 void UtilLocalSave::setBool(const string &key, const bool flg) {
+	if (jsonObj[key] == flg) return;
 	jsonObj[key] = flg;
 	this->saveData();
 }
@@ -103,6 +104,7 @@ string UtilLocalSave::getString(const string &key) {
 }
 
 void UtilLocalSave::setString(const string &key, const string &str) {
+	if (jsonObj[key] == str) return;
 	jsonObj[key] = str;
 	this->saveData();
 }

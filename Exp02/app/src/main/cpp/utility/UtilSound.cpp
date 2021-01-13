@@ -29,6 +29,9 @@ void UtilSound::destroyInstance() {
 bool UtilSound::init() {
 	LOGD("Util", "UtilSound::init()\n");
 
+	// Mute
+	muteFlg = UtilLocalSave::getInstance()->getBool("mute_flg");
+
 	vector<string> fileSEs = {
 			"sounds/se_coin_01.wav",
 			"sounds/se_coin_02.wav",
@@ -63,6 +66,7 @@ bool UtilSound::init() {
 
 void UtilSound::toggleMute() {
 	muteFlg = !muteFlg;
+	UtilLocalSave::getInstance()->setBool("mute_flg", muteFlg);
 	if (muteFlg) this->stopAllSounds();
 }
 

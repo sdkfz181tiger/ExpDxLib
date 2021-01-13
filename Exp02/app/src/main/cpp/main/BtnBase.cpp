@@ -88,7 +88,7 @@ void BtnBase::update(const float delay) {
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 	// Text
 	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
-									  scale / 2, UtilAlign::CENTER);
+									  scale, UtilAlign::CENTER);
 }
 
 void BtnBase::addBtnListener(BtnListener *listener, BtnTag tag) {

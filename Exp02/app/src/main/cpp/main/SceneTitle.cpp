@@ -55,6 +55,8 @@ bool SceneTitle::init() {
 	sprites.push_back(osho);
 	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
 	sprites.push_back(chicken);
+	auto hiyoko = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
+	sprites.push_back(hiyoko);
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
@@ -64,12 +66,6 @@ bool SceneTitle::init() {
 	string name = jObj["name"].get<string>();
 	int hp = jObj["hp"].get<int>();
 	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
-
-	// TODO: test save
-	string str1 = UtilLocalSave::getInstance()->getString("buho");
-	UtilLocalSave::getInstance()->setString("buho", "kitaro");
-	string str2 = UtilLocalSave::getInstance()->getString("buho");
-	LOGD("Main", "%s -> %s", str1.c_str(), str2.c_str());
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
@@ -104,11 +100,11 @@ void SceneTitle::update(const float delay) {
 
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("==TITLE==", cX, 120,
-									  2, UtilAlign::CENTER);
+									  3, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
-									  2, UtilAlign::CENTER);
+									  3, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
-									  2, UtilAlign::CENTER);
+									  3, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }
 

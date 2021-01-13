@@ -41,6 +41,12 @@ bool UtilGraph::init() {
 	this->createDivGraph("images/s_chi.png", "chi_i2", 45, 9, 5, 16, 16, 30, 34);
 	this->createDivGraph("images/s_chi.png", "chi_i3", 45, 9, 5, 16, 16, 35, 39);
 	this->createDivGraph("images/s_chi.png", "chi_i4", 45, 9, 5, 16, 16, 40, 44);
+	// Hiyo
+	this->createDivGraph("images/s_hiyo.png", "hiyo_f", 25, 5, 5, 9, 9, 0, 4);
+	this->createDivGraph("images/s_hiyo.png", "hiyo_b", 25, 5, 5, 9, 9, 5, 9);
+	this->createDivGraph("images/s_hiyo.png", "hiyo_r", 25, 5, 5, 9, 9, 10, 14);
+	this->createDivGraph("images/s_hiyo.png", "hiyo_l", 25, 5, 5, 9, 9, 15, 19);
+	this->createDivGraph("images/s_hiyo.png", "hiyo_d", 25, 5, 5, 9, 9, 20, 24);
 	// Osho
 	this->createDivGraph("images/s_osho.png", "osho_f", 25, 5, 5, 16, 16, 0, 4);
 	this->createDivGraph("images/s_osho.png", "osho_b", 25, 5, 5, 16, 16, 5, 9);

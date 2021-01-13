@@ -55,23 +55,23 @@ bool UtilLabel::init() {
 void UtilLabel::drawStr(const string &str, int x, int y,
 						int scale, UtilAlign align) {
 
-	int gOffX = fWidth * scale * fPadding;
-	int gOffY = fHeight * scale / 2;
-	int gWidth = gOffX * str.length();
-	if (align == UtilAlign::LEFT) x -= 0;
-	if (align == UtilAlign::RIGHT) x -= gWidth;
-	if (align == UtilAlign::CENTER) x -= gWidth / 2;
-	y -= gOffY;
+	int cW = (fWidth + fPadding) * scale;
+	int cH = fHeight * scale;
+	int sW = cW * str.length();
+	if (align == UtilAlign::LEFT) x = 0;
+	if (align == UtilAlign::RIGHT) x -= sW;
+	if (align == UtilAlign::CENTER) x -= sW / 2 - fPadding * scale / 2;
+	y -= cH / 2;
 
-	DrawBox(x, y - gOffY, x + gOffX * str.length(), y + gOffY * 2, black, true);
+	DrawBox(x, y, x + sW, y + cH, black, true);
 	for (int i = 0; i < str.length(); i++) {
 		const char c = str.at(i);
 		if (0 < handleMap.count(c)) {
-			DrawExtendGraph(x, y - gOffY,
+			DrawExtendGraph(x, y,
 							x + fWidth * scale,
 							y + fHeight * scale,
 							handleMap.find(c)->second, true);
 		}
-		x += gOffX;
+		x += cW;
 	}
 }
