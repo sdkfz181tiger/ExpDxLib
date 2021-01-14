@@ -53,7 +53,7 @@ bool SceneTitle::init() {
 	sprites.push_back(kobo);
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
 	sprites.push_back(osho);
-	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+	auto chicken = SpriteChicken::createSprite("images/c_chi_m.png", cX - gSize * 4, cY + gSize * 2);
 	sprites.push_back(chicken);
 	auto hiyoko = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
 	sprites.push_back(hiyoko);
@@ -69,7 +69,7 @@ bool SceneTitle::init() {
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false);
+	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false, true);
 
 	return true;
 }

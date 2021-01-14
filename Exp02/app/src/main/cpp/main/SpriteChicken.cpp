@@ -20,15 +20,15 @@ bool SpriteChicken::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
-	this->pushFrames("chi_f");
-	this->pushFrames("chi_b");
-	this->pushFrames("chi_r");
-	this->pushFrames("chi_l");
-	this->pushFrames("chi_d");
-	this->pushFrames("chi_i1");
-	this->pushFrames("chi_i2");
-	this->pushFrames("chi_i3");
-	this->pushFrames("chi_i4");
+	this->pushFrames("chi_m_f");
+	this->pushFrames("chi_m_b");
+	this->pushFrames("chi_m_r");
+	this->pushFrames("chi_m_l");
+	this->pushFrames("chi_m_d");
+	this->pushFrames("chi_m_i1");
+	this->pushFrames("chi_m_i2");
+	this->pushFrames("chi_m_i3");
+	this->pushFrames("chi_m_i4");
 
 	this->startIdle();// Idle
 
@@ -78,7 +78,7 @@ void SpriteChicken::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"chi_i1", "chi_i2", "chi_i3", "chi_i4"};
+		vector<string> frames = {"chi_m_i1", "chi_m_i2", "chi_m_i3", "chi_m_i4"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;
@@ -88,15 +88,15 @@ void SpriteChicken::changeState(StateChara sta) {
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {
-			this->changeFrames("chi_r", -1);
+			this->changeFrames("chi_m_r", -1);
 		} else if (deg < 135) {
-			this->changeFrames("chi_f", -1);
+			this->changeFrames("chi_m_f", -1);
 		} else if (deg < 225) {
-			this->changeFrames("chi_l", -1);
+			this->changeFrames("chi_m_l", -1);
 		} else if (deg < 315) {
-			this->changeFrames("chi_b", -1);
+			this->changeFrames("chi_m_b", -1);
 		} else {
-			this->changeFrames("chi_r", -1);
+			this->changeFrames("chi_m_r", -1);
 		}
 		return;
 	}

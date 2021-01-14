@@ -23,13 +23,13 @@ public:
 
 	void toggleMute();
 
-	bool isMute();
+	bool isMute() const;
 
 	void playSE(const string &fileName);
 
-	void playBGM(const string &fileName, bool loop);
-
 	void stopSE();
+
+	void playBGM(const string &fileName, bool loop, bool top);
 
 	void stopBGM();
 

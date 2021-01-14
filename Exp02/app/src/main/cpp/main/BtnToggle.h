@@ -5,8 +5,6 @@
 
 class BtnToggle : public BtnBase {
 
-protected:
-
 public:
 	static BtnToggle *createToggle(const string &fileName,
 								   const string &title,

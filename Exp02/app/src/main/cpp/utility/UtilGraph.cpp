@@ -31,16 +31,26 @@ bool UtilGraph::init() {
 
 	// Create animation
 	this->createDivGraph("images/s_bone.png", "bone_f", 1, 5, 16, 16, 0, 4);
-	// Chicken
-	this->createDivGraph("images/s_chi.png", "chi_f", 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/s_chi.png", "chi_b", 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/s_chi.png", "chi_r", 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/s_chi.png", "chi_l", 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/s_chi.png", "chi_d", 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/s_chi.png", "chi_i1", 9, 5, 16, 16, 25, 29);
-	this->createDivGraph("images/s_chi.png", "chi_i2", 9, 5, 16, 16, 30, 34);
-	this->createDivGraph("images/s_chi.png", "chi_i3", 9, 5, 16, 16, 35, 39);
-	this->createDivGraph("images/s_chi.png", "chi_i4", 9, 5, 16, 16, 40, 44);
+	// Chicken_f
+	this->createDivGraph("images/s_chi_f.png", "chi_f_f", 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_b", 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_r", 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_l", 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_d", 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_i1", 9, 5, 16, 16, 25, 29);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_i2", 9, 5, 16, 16, 30, 34);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_i3", 9, 5, 16, 16, 35, 39);
+	this->createDivGraph("images/s_chi_f.png", "chi_f_i4", 9, 5, 16, 16, 40, 44);
+	// Chicken_m
+	this->createDivGraph("images/s_chi_m.png", "chi_m_f", 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_b", 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_r", 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_l", 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_d", 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_i1", 9, 5, 16, 16, 25, 29);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_i2", 9, 5, 16, 16, 30, 34);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_i3", 9, 5, 16, 16, 35, 39);
+	this->createDivGraph("images/s_chi_m.png", "chi_m_i4", 9, 5, 16, 16, 40, 44);
 	// Hiyo
 	this->createDivGraph("images/s_hiyo.png", "hiyo_f", 5, 5, 9, 9, 0, 4);
 	this->createDivGraph("images/s_hiyo.png", "hiyo_b", 5, 5, 9, 9, 5, 9);

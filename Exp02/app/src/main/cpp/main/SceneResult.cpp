@@ -48,7 +48,7 @@ bool SceneResult::init() {
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false);
+	UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false, true);
 
 	return true;
 }

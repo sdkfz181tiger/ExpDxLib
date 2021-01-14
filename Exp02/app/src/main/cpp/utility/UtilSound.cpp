@@ -42,7 +42,9 @@ bool UtilSound::init() {
 			"sounds/bgm_game.wav",
 			"sounds/bgm_result_ng.wav",
 			"sounds/bgm_result_ok.wav",
-			"sounds/bgm_title.wav"
+			"sounds/bgm_title.wav",
+			"sounds/bgm_walk_01.wav",
+			"sounds/bgm_walk_02.wav"
 	};
 
 	auto itS = fileSEs.end();
@@ -70,7 +72,7 @@ void UtilSound::toggleMute() {
 	if (muteFlg) this->stopAllSounds();
 }
 
-bool UtilSound::isMute() {
+bool UtilSound::isMute() const {
 	return muteFlg;
 }
 
@@ -82,20 +84,20 @@ void UtilSound::playSE(const string &fileName) {
 	PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
 }
 
-void UtilSound::playBGM(const string &fileName, bool loop) {
+void UtilSound::stopSE() {
+	for (pair<string, int> sound : soundSEs) StopSoundMem(sound.second);
+}
+
+void UtilSound::playBGM(const string &fileName, bool loop, bool top) {
 	if (muteFlg) return;
 	if (!soundBGMs.count(fileName)) return;
 	auto sound = soundBGMs.find(fileName);
 	if (CheckSoundMem(sound->second)) StopSoundMem(sound->second);
 	if (loop) {
-		PlaySoundMem(sound->second, DX_PLAYTYPE_LOOP, true);
+		PlaySoundMem(sound->second, DX_PLAYTYPE_LOOP, top);
 	} else {
-		PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, true);
+		PlaySoundMem(sound->second, DX_SOUNDTYPE_STREAMSTYLE, top);
 	}
-}
-
-void UtilSound::stopSE() {
-	for (pair<string, int> sound : soundSEs) StopSoundMem(sound.second);
 }
 
 void UtilSound::stopBGM() {

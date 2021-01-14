@@ -59,12 +59,12 @@ bool SceneGame::init() {
 	dPad->addDpadListener(this);
 
 	// Player
-	player = SpriteKobozu::createSprite("images/c_chi.png", cX, cY);
+	player = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
 
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
 	sprites.push_back(osho);
-	auto chicken = SpriteChicken::createSprite("images/c_chi.png", cX - gSize * 4, cY + gSize * 2);
+	auto chicken = SpriteChicken::createSprite("images/c_chi_m.png", cX - gSize * 4, cY + gSize * 2);
 	sprites.push_back(chicken);
 	auto hiyo1 = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
 	sprites.push_back(hiyo1);
@@ -75,9 +75,7 @@ bool SceneGame::init() {
 	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
-	// BGM
-	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_game.wav", true);
+	UtilSound::getInstance()->stopBGM();// BGM
 
 	return true;
 }
@@ -172,11 +170,13 @@ void SceneGame::onDpadPressed(DpadTag &tag) {
 void SceneGame::onDpadCanceled(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadCanceled():%d", tag);
 	player->startStay();// Stay
+	UtilSound::getInstance()->stopBGM();// BGM
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadReleased():%d", tag);
 	player->startStay();// Stay
+	UtilSound::getInstance()->stopBGM();// BGM
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
@@ -186,4 +186,7 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
 	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
+
+	UtilSound::getInstance()->stopBGM();// BGM
+	UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
 }
