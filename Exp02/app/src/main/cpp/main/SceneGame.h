@@ -10,7 +10,7 @@ private:
 	SpriteBase *background;
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
-	SpriteKobozu *player;
+	SpriteKobo *player;
 	vector<SpriteBase *> sprites;
 
 public:

@@ -1,43 +1,43 @@
-#include "SpriteTanuki.h"
+#include "SpriteKobo.h"
 
-SpriteTanuki *SpriteTanuki::createSprite(const string &fileName, float x, float y) {
+SpriteKobo *SpriteKobo::createSprite(const string &fileName, float x, float y) {
 	// New
-	SpriteTanuki *sprite = new SpriteTanuki(x, y);
+	SpriteKobo *sprite = new SpriteKobo(x, y);
 	if (sprite && sprite->init(fileName)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-SpriteTanuki::SpriteTanuki(float x, float y) : SpriteChara(x, y) {
-	LOGD("Main", "SpriteTanuki()\n");
+SpriteKobo::SpriteKobo(float x, float y) : SpriteChara(x, y) {
+	LOGD("Main", "SpriteKobo()\n");
 }
 
-SpriteTanuki::~SpriteTanuki() {
-	LOGD("Main", "~SpriteTanuki()\n");
+SpriteKobo::~SpriteKobo() {
+	LOGD("Main", "~SpriteKobo()\n");
 }
 
-bool SpriteTanuki::init(const string &fileName) {
+bool SpriteKobo::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
-	this->pushFrames("tanu_f");
-	this->pushFrames("tanu_b");
-	this->pushFrames("tanu_r");
-	this->pushFrames("tanu_l");
-	this->pushFrames("tanu_d");
+	this->pushFrames("kobo_f");
+	this->pushFrames("kobo_b");
+	this->pushFrames("kobo_r");
+	this->pushFrames("kobo_l");
+	this->pushFrames("kobo_d");
 
 	this->startIdle();// Idle
 
 	return true;
 }
 
-void SpriteTanuki::update(float delay) {
+void SpriteKobo::update(float delay) {
 	// Stay
 	if (state == StateChara::STAY) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
-			this->startIdle();
+			//this->startIdle();
 		}
 	}
 	// Idle
@@ -63,7 +63,7 @@ void SpriteTanuki::update(float delay) {
 	this->draw();
 }
 
-void SpriteTanuki::changeState(StateChara sta) {
+void SpriteKobo::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::STAY) {
@@ -74,7 +74,7 @@ void SpriteTanuki::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"tanu_f", "tanu_r", "tanu_l", "tanu_b"};
+		vector<string> frames = {"kobo_f", "kobo_r", "kobo_l", "kobo_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;
@@ -84,15 +84,15 @@ void SpriteTanuki::changeState(StateChara sta) {
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {
-			this->changeFrames("tanu_r", -1);
+			this->changeFrames("kobo_r", -1);
 		} else if (deg < 135) {
-			this->changeFrames("tanu_f", -1);
+			this->changeFrames("kobo_f", -1);
 		} else if (deg < 225) {
-			this->changeFrames("tanu_l", -1);
+			this->changeFrames("kobo_l", -1);
 		} else if (deg < 315) {
-			this->changeFrames("tanu_b", -1);
+			this->changeFrames("kobo_b", -1);
 		} else {
-			this->changeFrames("tanu_r", -1);
+			this->changeFrames("kobo_r", -1);
 		}
 		return;
 	}

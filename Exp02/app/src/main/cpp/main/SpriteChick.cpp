@@ -1,22 +1,22 @@
-#include "SpriteChicken.h"
+#include "SpriteChick.h"
 
-SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, float y) {
+SpriteChick *SpriteChick::createSprite(const string &fileName, float x, float y) {
 	// New
-	SpriteChicken *sprite = new SpriteChicken(x, y);
+	SpriteChick *sprite = new SpriteChick(x, y);
 	if (sprite && sprite->init(fileName)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y) {
-	LOGD("Main", "SpriteChicken()\n");
+SpriteChick::SpriteChick(float x, float y) : SpriteChara(x, y) {
+	LOGD("Main", "SpriteChick()\n");
 }
 
-SpriteChicken::~SpriteChicken() {
-	LOGD("Main", "~SpriteChicken()\n");
+SpriteChick::~SpriteChick() {
+	LOGD("Main", "~SpriteChick()\n");
 }
 
-bool SpriteChicken::init(const string &fileName) {
+bool SpriteChick::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
@@ -35,7 +35,7 @@ bool SpriteChicken::init(const string &fileName) {
 	return true;
 }
 
-void SpriteChicken::update(float delay) {
+void SpriteChick::update(float delay) {
 	// Stay
 	if (state == StateChara::STAY) {
 		if (0 < stayCnt) {
@@ -67,7 +67,7 @@ void SpriteChicken::update(float delay) {
 	this->draw();
 }
 
-void SpriteChicken::changeState(StateChara sta) {
+void SpriteChick::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::STAY) {

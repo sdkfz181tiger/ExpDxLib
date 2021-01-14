@@ -40,12 +40,13 @@ add_library( # Sets the name of the library.
         main/SceneTitle.cpp
         main/SpriteBase.cpp
         main/SpriteChara.cpp
-        main/SpriteChicken.cpp
+        main/SpriteChick.cpp
         main/SpriteFrames.cpp
         main/SpriteHiyo.cpp
-        main/SpriteKobozu.cpp
+        main/SpriteItem.cpp
+        main/SpriteKobo.cpp
         main/SpriteOsho.cpp
-        main/SpriteTanuki.cpp
+        main/SpriteTanu.cpp
         utility/Utility.h
         utility/UtilJNI.cpp
         utility/UtilJson.cpp

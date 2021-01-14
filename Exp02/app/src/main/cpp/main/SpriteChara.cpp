@@ -9,6 +9,7 @@ SpriteChara *SpriteChara::createSprite(const string &fileName, float x, float y)
 }
 
 SpriteChara::SpriteChara(float x, float y) : SpriteFrames(x, y),
+											 type(TypeChara::DEFAULT),
 											 state(StateChara::DEFAULT),
 											 stayCnt(0), stayInterval(50),
 											 idleCnt(0), idleInterval(300),
@@ -23,14 +24,20 @@ SpriteChara::~SpriteChara() {
 
 bool SpriteChara::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
 	// Do something
-
 	return true;
 }
 
 void SpriteChara::update(float delay) {
 	// Do something
+}
+
+void SpriteChara::setType(TypeChara typ) {
+	type = typ;
+}
+
+TypeChara SpriteChara::getType() const {
+	return type;
 }
 
 void SpriteChara::changeState(StateChara sta) {

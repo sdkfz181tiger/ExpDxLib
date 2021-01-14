@@ -3,6 +3,10 @@
 
 #include "SpriteFrames.h"
 
+enum class TypeChara {
+	DEFAULT, CHI_M, CHI_F, HIYO, TANU, OSHO, KOBO
+};
+
 enum class StateChara {
 	DEFAULT, STAY, IDLE, WALK
 };
@@ -10,6 +14,7 @@ enum class StateChara {
 class SpriteChara : public SpriteFrames {
 
 protected:
+	TypeChara type;
 	StateChara state;
 	int stayCnt, stayInterval;
 	int idleCnt, idleInterval;
@@ -27,6 +32,10 @@ public:
 	virtual bool init(const string &fileName) override;
 
 	virtual void update(const float delay) override;
+
+	void setType(TypeChara typ);
+
+	TypeChara getType() const;
 
 	virtual void changeState(StateChara sta);
 

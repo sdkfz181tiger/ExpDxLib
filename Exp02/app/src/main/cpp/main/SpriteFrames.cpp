@@ -20,11 +20,9 @@ SpriteFrames::~SpriteFrames() {
 
 bool SpriteFrames::init(const string &fileName) {
 	if (!SpriteBase::init(fileName)) return false;
-
 	// Frames
-	this->pushFrames("bone");
-	this->changeFrames("bone", -1);
-
+	//this->pushFrames("bone");// Push
+	//this->changeFrames("bone", -1);// Change
 	return true;
 }
 
@@ -60,6 +58,11 @@ void SpriteFrames::draw() {
 	maxX = pos.x + width / 2;
 	minY = pos.y - height / 2;
 	maxY = pos.y + height / 2;
+	// Draw
+	if (frames.size() <= 0) {
+		DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+		return;
+	}
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, frames.at(frameIndex), true);
 	if (frameLoop == 0) return;

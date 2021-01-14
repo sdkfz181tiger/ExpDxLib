@@ -1,43 +1,43 @@
-#include "SpriteKobozu.h"
+#include "SpriteTanu.h"
 
-SpriteKobozu *SpriteKobozu::createSprite(const string &fileName, float x, float y) {
+SpriteTanu *SpriteTanu::createSprite(const string &fileName, float x, float y) {
 	// New
-	SpriteKobozu *sprite = new SpriteKobozu(x, y);
+	SpriteTanu *sprite = new SpriteTanu(x, y);
 	if (sprite && sprite->init(fileName)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-SpriteKobozu::SpriteKobozu(float x, float y) : SpriteChara(x, y) {
-	LOGD("Main", "SpriteKobozu()\n");
+SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y) {
+	LOGD("Main", "SpriteTanu()\n");
 }
 
-SpriteKobozu::~SpriteKobozu() {
-	LOGD("Main", "~SpriteKobozu()\n");
+SpriteTanu::~SpriteTanu() {
+	LOGD("Main", "~SpriteTanu()\n");
 }
 
-bool SpriteKobozu::init(const string &fileName) {
+bool SpriteTanu::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
 
 	// Frames
-	this->pushFrames("kobo_f");
-	this->pushFrames("kobo_b");
-	this->pushFrames("kobo_r");
-	this->pushFrames("kobo_l");
-	this->pushFrames("kobo_d");
+	this->pushFrames("tanu_f");
+	this->pushFrames("tanu_b");
+	this->pushFrames("tanu_r");
+	this->pushFrames("tanu_l");
+	this->pushFrames("tanu_d");
 
 	this->startIdle();// Idle
 
 	return true;
 }
 
-void SpriteKobozu::update(float delay) {
+void SpriteTanu::update(float delay) {
 	// Stay
 	if (state == StateChara::STAY) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
-			//this->startIdle();
+			this->startIdle();
 		}
 	}
 	// Idle
@@ -63,7 +63,7 @@ void SpriteKobozu::update(float delay) {
 	this->draw();
 }
 
-void SpriteKobozu::changeState(StateChara sta) {
+void SpriteTanu::changeState(StateChara sta) {
 	// State
 	state = sta;
 	if (state == StateChara::STAY) {
@@ -74,7 +74,7 @@ void SpriteKobozu::changeState(StateChara sta) {
 	if (state == StateChara::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"kobo_f", "kobo_r", "kobo_l", "kobo_b"};
+		vector<string> frames = {"tanu_f", "tanu_r", "tanu_l", "tanu_b"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;
@@ -84,15 +84,15 @@ void SpriteKobozu::changeState(StateChara sta) {
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {
-			this->changeFrames("kobo_r", -1);
+			this->changeFrames("tanu_r", -1);
 		} else if (deg < 135) {
-			this->changeFrames("kobo_f", -1);
+			this->changeFrames("tanu_f", -1);
 		} else if (deg < 225) {
-			this->changeFrames("kobo_l", -1);
+			this->changeFrames("tanu_l", -1);
 		} else if (deg < 315) {
-			this->changeFrames("kobo_b", -1);
+			this->changeFrames("tanu_b", -1);
 		} else {
-			this->changeFrames("kobo_r", -1);
+			this->changeFrames("tanu_r", -1);
 		}
 		return;
 	}

@@ -49,15 +49,15 @@ bool SceneTitle::init() {
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
 
 	// Characters
-	auto kobo = SpriteKobozu::createSprite("images/c_kobo.png", cX, cY);
+	auto kobo = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
 	sprites.push_back(kobo);
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
 	sprites.push_back(osho);
-	auto chicken = SpriteChicken::createSprite("images/c_chi_m.png", cX - gSize * 4, cY + gSize * 2);
+	auto chicken = SpriteChick::createSprite("images/c_chi_m.png", cX - gSize * 4, cY + gSize * 2);
 	sprites.push_back(chicken);
 	auto hiyoko = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
 	sprites.push_back(hiyoko);
-	auto tanuki = SpriteTanuki::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
+	auto tanuki = SpriteTanu::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
 	// TODO: test json

@@ -7,12 +7,13 @@
 #include "BtnToggle.h"
 #include "CtlDpad.h"
 #include "SpriteBase.h"
-#include "SpriteChicken.h"
+#include "SpriteChick.h"
 #include "SpriteFrames.h"
 #include "SpriteHiyo.h"
-#include "SpriteKobozu.h"
+#include "SpriteItem.h"
+#include "SpriteKobo.h"
 #include "SpriteOsho.h"
-#include "SpriteTanuki.h"
+#include "SpriteTanu.h"
 
 // SceneTag
 enum class SceneTag {
