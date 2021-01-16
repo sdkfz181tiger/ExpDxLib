@@ -4,6 +4,7 @@
 static UtilJNI *selfUtilJNI = nullptr;
 
 // Java Virtual machine
+static string CLASS_NAME = "com/ozateck/chickader/MainActivity";
 static JavaVM *javaVM = nullptr;
 static pthread_key_t keyThread;
 static jclass activity;
@@ -30,6 +31,14 @@ void nativeOnStop(JNIEnv *env, jobject thiz) {
 
 void nativeOnDestroy(JNIEnv *env, jobject thiz) {
 	LOGD("JNI", "onDestroy!!");
+}
+
+void nativeOnHttpSuccess(JNIEnv *env, jobject thiz) {
+	LOGD("JNI", "HttpSuccess!!");
+}
+
+void nativeOnHttpError(JNIEnv *env, jobject thiz) {
+	LOGD("JNI", "OnHttpError!!");
 }
 
 static void detachThread(void *value) {
@@ -85,15 +94,17 @@ jint UtilJNI::init(JavaVM *vm) {
 
 jint UtilJNI::registerMethods(JNIEnv *env) {
 	LOGD("JNI", "UtilJNI::registerMethods(%p), %ld\n", javaVM, pthread_self());
-	jclass cls = env->FindClass("com/ozateck/chickader/MainActivity");
+	jclass cls = env->FindClass(CLASS_NAME.c_str());
 	if (cls == nullptr) return JNI_ERR;
 	const JNINativeMethod methods[] = {
-			{"nativeOnCreate",  "()V", reinterpret_cast<void *>(nativeOnCreate)},
-			{"nativeOnStart",   "()V", reinterpret_cast<void *>(nativeOnStart)},
-			{"nativeOnResume",  "()V", reinterpret_cast<void *>(nativeOnResume)},
-			{"nativeOnPause",   "()V", reinterpret_cast<void *>(nativeOnPause)},
-			{"nativeOnStop",    "()V", reinterpret_cast<void *>(nativeOnStop)},
-			{"nativeOnDestroy", "()V", reinterpret_cast<void *>(nativeOnDestroy)}
+			{"nativeOnCreate",      "()V", reinterpret_cast<void *>(nativeOnCreate)},
+			{"nativeOnStart",       "()V", reinterpret_cast<void *>(nativeOnStart)},
+			{"nativeOnResume",      "()V", reinterpret_cast<void *>(nativeOnResume)},
+			{"nativeOnPause",       "()V", reinterpret_cast<void *>(nativeOnPause)},
+			{"nativeOnStop",        "()V", reinterpret_cast<void *>(nativeOnStop)},
+			{"nativeOnDestroy",     "()V", reinterpret_cast<void *>(nativeOnDestroy)},
+			{"nativeOnHttpSuccess", "()V", reinterpret_cast<void *>(nativeOnHttpSuccess)},
+			{"nativeOnHttpError",   "()V", reinterpret_cast<void *>(nativeOnHttpError)}
 	};
 	int total = sizeof(methods) / sizeof(JNINativeMethod);
 	if (env->RegisterNatives(cls, methods, total) != JNI_OK) return JNI_ERR;
