@@ -6,16 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-
 public class MainActivity extends NativeActivity {
 
 	public static final String TAG = "MainActivity";
@@ -41,7 +31,7 @@ public class MainActivity extends NativeActivity {
 		filePath = ctx.getFilesDir().getPath();
 		// Test
 		HttpConnector hCon = new HttpConnector();
-		hCon.connect("https://blog.goo.ne.jp/iwadas/index.rdf");
+		hCon.connect("https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/");
 	}
 
 	@Override
@@ -108,9 +98,9 @@ public class MainActivity extends NativeActivity {
 
 	public static native void nativeOnDestroy();
 
-	public static native void nativeOnHttpSuccess();
+	public static native void nativeOnHttpSuccess(final String result);
 
-	public static native void nativeOnHttpError();
+	public static native void nativeOnHttpError(final String err);
 
 	//==========
 	// JNI(C++ -> Java)
@@ -124,74 +114,5 @@ public class MainActivity extends NativeActivity {
 
 	public static String getFilePath() {
 		return filePath;
-	}
-}
-
-class HttpConnector implements HttpTask.HttpEventListener {
-
-	public static final String TAG = "HttpConnector";
-
-	HttpConnector() {
-		CustomLog.d(TAG, "HttpConnector");
-	}
-
-	void connect(final String url) {
-		CustomLog.d(TAG, "connect()");
-		// HttpTask
-		HttpTask task = new HttpTask(url);
-		task.addEventListener(this);
-		// Execute
-		ExecutorService eService = Executors.newSingleThreadExecutor();
-		eService.execute(task);
-	}
-
-	@Override
-	public void onSuccess(final String str) {
-		CustomLog.d(TAG, "onSuccess():" + str);
-		MainActivity.nativeOnHttpSuccess();// JNI
-	}
-
-	@Override
-	public void onError(final String err) {
-		CustomLog.d(TAG, "onError():" + err);
-		MainActivity.nativeOnHttpError();// JNI
-	}
-}
-
-class HttpTask implements Runnable {
-
-	public static final String TAG = "HttpTask";
-	private String url = null;
-	private HttpEventListener listener = null;
-
-	HttpTask(final String url) {
-		CustomLog.d(TAG, "HttpTask");
-		this.url = url;
-	}
-
-	public void addEventListener(HttpEventListener listener) {
-		this.listener = listener;
-	}
-
-	@Override
-	public void run() {
-		CustomLog.d(TAG, "run()");
-		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder().url(url).build();
-		Call call = client.newCall(request);
-		try {
-			Response response = call.execute();
-			ResponseBody body = response.body();
-			if (listener != null) listener.onSuccess(body.string());
-		} catch (IOException e) {
-			if (listener != null) listener.onError(e.toString());
-		}
-	}
-
-	interface HttpEventListener {
-
-		void onSuccess(final String str);
-
-		void onError(final String err);
 	}
 }

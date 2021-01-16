@@ -33,12 +33,20 @@ void nativeOnDestroy(JNIEnv *env, jobject thiz) {
 	LOGD("JNI", "onDestroy!!");
 }
 
-void nativeOnHttpSuccess(JNIEnv *env, jobject thiz) {
+void nativeOnHttpSuccess(JNIEnv *env, jobject thiz, jstring result) {
 	LOGD("JNI", "HttpSuccess!!");
+	const char *str = env->GetStringUTFChars(result, JNI_FALSE);
+	const json jObj = UtilJson::getInstance()->parseJson(str);
+	const string time = jObj["time"].get<string>();
+	const string packageName = jObj["packageName"].get<string>();
+	LOGD("JNI", "%s, %s", time.c_str(), packageName.c_str());
+	env->ReleaseStringUTFChars(result, str);
 }
 
-void nativeOnHttpError(JNIEnv *env, jobject thiz) {
-	LOGD("JNI", "OnHttpError!!");
+void nativeOnHttpError(JNIEnv *env, jobject thiz, jstring err) {
+	LOGD("JNI", "OnHttpError:%s", err);
+	const char *str = env->GetStringUTFChars(err, JNI_FALSE);
+	env->ReleaseStringUTFChars(err, str);
 }
 
 static void detachThread(void *value) {
@@ -97,14 +105,14 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	jclass cls = env->FindClass(CLASS_NAME.c_str());
 	if (cls == nullptr) return JNI_ERR;
 	const JNINativeMethod methods[] = {
-			{"nativeOnCreate",      "()V", reinterpret_cast<void *>(nativeOnCreate)},
-			{"nativeOnStart",       "()V", reinterpret_cast<void *>(nativeOnStart)},
-			{"nativeOnResume",      "()V", reinterpret_cast<void *>(nativeOnResume)},
-			{"nativeOnPause",       "()V", reinterpret_cast<void *>(nativeOnPause)},
-			{"nativeOnStop",        "()V", reinterpret_cast<void *>(nativeOnStop)},
-			{"nativeOnDestroy",     "()V", reinterpret_cast<void *>(nativeOnDestroy)},
-			{"nativeOnHttpSuccess", "()V", reinterpret_cast<void *>(nativeOnHttpSuccess)},
-			{"nativeOnHttpError",   "()V", reinterpret_cast<void *>(nativeOnHttpError)}
+			{"nativeOnCreate",      "()V",                   reinterpret_cast<void *>(nativeOnCreate)},
+			{"nativeOnStart",       "()V",                   reinterpret_cast<void *>(nativeOnStart)},
+			{"nativeOnResume",      "()V",                   reinterpret_cast<void *>(nativeOnResume)},
+			{"nativeOnPause",       "()V",                   reinterpret_cast<void *>(nativeOnPause)},
+			{"nativeOnStop",        "()V",                   reinterpret_cast<void *>(nativeOnStop)},
+			{"nativeOnDestroy",     "()V",                   reinterpret_cast<void *>(nativeOnDestroy)},
+			{"nativeOnHttpSuccess", "(Ljava/lang/String;)V", reinterpret_cast<void *>(nativeOnHttpSuccess)},
+			{"nativeOnHttpError",   "(Ljava/lang/String;)V", reinterpret_cast<void *>(nativeOnHttpError)}
 	};
 	int total = sizeof(methods) / sizeof(JNINativeMethod);
 	if (env->RegisterNatives(cls, methods, total) != JNI_OK) return JNI_ERR;

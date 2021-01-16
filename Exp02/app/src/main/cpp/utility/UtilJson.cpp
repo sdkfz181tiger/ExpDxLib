@@ -45,3 +45,9 @@ json UtilJson::loadJson(const char *fileName) {
 	FileRead_close(handle);
 	return json::parse(str);
 }
+
+json UtilJson::parseJson(const char *str) {
+	LOGD("Util", "UtilJson::parseJson()\n");
+	// Read
+	return json::parse(str);
+}
