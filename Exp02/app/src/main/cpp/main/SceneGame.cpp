@@ -77,10 +77,10 @@ bool SceneGame::init() {
 	auto egg = SpriteItem::createSprite("images/c_egg.png", cX - gSize * 8, cY);
 	sprites.push_back(egg);
 
-	// Test
-	string fileName = UtilJNI::getInstance()->getFilePath() + "s_shi.png";
-	auto test = SpriteItem::createSprite(fileName, cX - gSize * 4, cY);
-	sprites.push_back(test);
+	// TODO: test
+	string url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
+	string fileName = "s_maru.png";
+	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str());
 
 	UtilSound::getInstance()->stopBGM();// BGM
 

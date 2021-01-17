@@ -132,11 +132,30 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	return JNI_OK;
 }
 
+void UtilJNI::callJNIVoid(const char *methodName, const char *url, const char *fileName) {
+	//LOGD("JNI", "UtilJNI::callJNIVoid(%p), %ld\n", javaVM, pthread_self());
+	JNIEnv *env = Android_JNI_GetEnv();
+	if (env == nullptr) return;
+	const char *sig = "(Ljava/lang/String;Ljava/lang/String;)V";
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
+	char cUrl[64], cFileName[64];
+	strcpy(cUrl, url);
+	strcpy(cFileName, fileName);
+	LOGD("JNI", "test:%s, %s\n", cUrl, cFileName);
+	jstring jUrl = env->NewStringUTF(cUrl);
+	jstring jFileName = env->NewStringUTF(cFileName);
+
+//	env->CallStaticVoidMethod(activity, mID, jUrl, jFileName);
+//	env->ReleaseStringUTFChars(jUrl, cUrl);
+//	env->ReleaseStringUTFChars(jFileName, cFileName);
+}
+
 string UtilJNI::getJNIStr(const char *methodName) {
 	//LOGD("JNI", "UtilJNI::getJNIStr(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
 	if (env == nullptr) return "";
-	const jmethodID mID = env->GetStaticMethodID(activity, methodName, "()Ljava/lang/String;");
+	const char *sig = "()Ljava/lang/String;";
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
 	const jstring jstr = (jstring) env->CallStaticObjectMethod(activity, mID);
 	const char *cchar = env->GetStringUTFChars(jstr, JNI_FALSE);
 	const string str = cchar;
@@ -154,4 +173,8 @@ string UtilJNI::getVersionName() {
 
 string UtilJNI::getFilePath() {
 	return this->getJNIStr("getFilePath");
+}
+
+void UtilJNI::connectServer(const char *url, const char *fileName) {
+	this->callJNIVoid("connectServer", url, fileName);
 }

@@ -18,6 +18,8 @@ public:
 
 	jint registerMethods(JNIEnv *env);
 
+	void callJNIVoid(const char *methodName, const char *url, const char *fileName);
+
 	string getJNIStr(const char *methodName);
 
 	string getVersionCode();
@@ -25,6 +27,8 @@ public:
 	string getVersionName();
 
 	string getFilePath();
+
+	void connectServer(const char *url, const char *fileName);
 };
 
 #endif // _UTILJNI_H_

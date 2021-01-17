@@ -31,11 +31,6 @@ public class MainActivity extends NativeActivity {
 		versionCode = getVersionCode(ctx, ctx.getPackageManager());
 		versionName = getVersionName(ctx, ctx.getPackageManager());
 		filePath = ctx.getFilesDir().getPath() + File.separator;
-		// TODO: test
-		final String url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
-		final String fileName = "s_shi.png";
-		final HttpConnector hCon = new HttpConnector(ctx);
-		hCon.connect(url, fileName);
 	}
 
 	@Override
@@ -120,5 +115,11 @@ public class MainActivity extends NativeActivity {
 
 	public static String getFilePath() {
 		return filePath;
+	}
+
+	public static void connectServer(final String url, final String fileName) {
+		if (ctx == null) return;
+		final HttpConnector hCon = new HttpConnector(ctx);
+		hCon.connect(url, fileName);
 	}
 }
