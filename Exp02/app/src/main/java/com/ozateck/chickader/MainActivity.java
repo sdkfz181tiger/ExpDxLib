@@ -6,12 +6,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import java.io.File;
+
 public class MainActivity extends NativeActivity {
 
-	public static final String TAG = "MainActivity";
-	public static String versionCode = "";
-	public static String versionName = "";
-	public static String filePath = "";
+	private static final String TAG = "MainActivity";
+	private static Context ctx = null;
+	private static String versionCode = "";
+	private static String versionName = "";
+	private static String filePath = "";
 
 	// Used to load the 'native-lib' library on application startup.
 	static {
@@ -23,15 +26,16 @@ public class MainActivity extends NativeActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		MainActivity.nativeOnCreate();// Native
-		// Version
-		final Context ctx = this.getApplicationContext();
-		final PackageManager pm = ctx.getPackageManager();
-		versionCode = getVersionCode(ctx, pm);
-		versionName = getVersionName(ctx, pm);
-		filePath = ctx.getFilesDir().getPath();
-		// Test
-		HttpConnector hCon = new HttpConnector();
-		hCon.connect("https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/");
+		// Context, Version, filePath
+		ctx = this.getApplicationContext();
+		versionCode = getVersionCode(ctx, ctx.getPackageManager());
+		versionName = getVersionName(ctx, ctx.getPackageManager());
+		filePath = ctx.getFilesDir().getPath() + File.separator;
+		// TODO: test
+		final String url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
+		final String fileName = "s_shi.png";
+		final HttpConnector hCon = new HttpConnector(ctx);
+		hCon.connect(url, fileName);
 	}
 
 	@Override
@@ -98,9 +102,11 @@ public class MainActivity extends NativeActivity {
 
 	public static native void nativeOnDestroy();
 
-	public static native void nativeOnHttpSuccess(final String result);
+	public static native void nativeOnHttpSuccess(final String fileName);
 
-	public static native void nativeOnHttpError(final String err);
+	public static native void nativeOnHttpProgress(final String fileName);
+
+	public static native void nativeOnHttpError(final String fileName, final String err);
 
 	//==========
 	// JNI(C++ -> Java)

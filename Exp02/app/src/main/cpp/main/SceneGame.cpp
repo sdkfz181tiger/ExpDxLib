@@ -77,6 +77,11 @@ bool SceneGame::init() {
 	auto egg = SpriteItem::createSprite("images/c_egg.png", cX - gSize * 8, cY);
 	sprites.push_back(egg);
 
+	// Test
+	string fileName = UtilJNI::getInstance()->getFilePath() + "s_shi.png";
+	auto test = SpriteItem::createSprite(fileName, cX - gSize * 4, cY);
+	sprites.push_back(test);
+
 	UtilSound::getInstance()->stopBGM();// BGM
 
 	return true;

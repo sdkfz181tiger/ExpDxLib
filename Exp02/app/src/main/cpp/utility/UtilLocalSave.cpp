@@ -3,7 +3,7 @@
 // Singleton Object
 static UtilLocalSave *selfUtilLocalSave = nullptr;
 
-UtilLocalSave::UtilLocalSave() : fileName("local_data.json") {
+UtilLocalSave::UtilLocalSave() : fileName("data.json") {
 	LOGD("Util", "UtilLocalSave()\n");
 }
 
