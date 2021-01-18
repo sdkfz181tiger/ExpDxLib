@@ -36,12 +36,14 @@ void nativeOnDestroy(JNIEnv *env, jobject thiz) {
 void nativeOnHttpSuccess(JNIEnv *env, jobject thiz, jstring fileName) {
 	const char *str = env->GetStringUTFChars(fileName, JNI_FALSE);
 	LOGD("JNI", "HttpSuccess:%s", str);
+	UtilJNI::getInstance()->callbackClient(CallbackType::SUCCESS);// Callback
 	env->ReleaseStringUTFChars(fileName, str);
 }
 
 void nativeOnHttpProgress(JNIEnv *env, jobject thiz, jstring fileName) {
 	const char *str = env->GetStringUTFChars(fileName, JNI_FALSE);
 	LOGD("JNI", "HttpProgress:%s", str);
+	UtilJNI::getInstance()->callbackClient(CallbackType::PROGRESS);// Callback
 	env->ReleaseStringUTFChars(fileName, str);
 }
 
@@ -49,6 +51,7 @@ void nativeOnHttpError(JNIEnv *env, jobject thiz, jstring fileName, jstring err)
 	const char *strFileName = env->GetStringUTFChars(fileName, JNI_FALSE);
 	const char *strErr = env->GetStringUTFChars(err, JNI_FALSE);
 	LOGE("JNI", "HttpError:%s, %s", strFileName, strErr);
+	UtilJNI::getInstance()->callbackClient(CallbackType::ERROR);// Callback
 	env->ReleaseStringUTFChars(fileName, strFileName);
 	env->ReleaseStringUTFChars(err, strErr);
 }
@@ -69,7 +72,7 @@ JNIEnv *Android_JNI_GetEnv(void) {
 	return env;
 }
 
-UtilJNI::UtilJNI() {
+UtilJNI::UtilJNI() : callback(nullptr) {
 	LOGD("JNI", "UtilJNI()\n");
 }
 
@@ -138,43 +141,45 @@ void UtilJNI::callJNIVoid(const char *methodName, const char *url, const char *f
 	if (env == nullptr) return;
 	const char *sig = "(Ljava/lang/String;Ljava/lang/String;)V";
 	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
-	char cUrl[64], cFileName[64];
-	strcpy(cUrl, url);
-	strcpy(cFileName, fileName);
-	LOGD("JNI", "test:%s, %s\n", cUrl, cFileName);
-	jstring jUrl = env->NewStringUTF(cUrl);
-	jstring jFileName = env->NewStringUTF(cFileName);
-
-//	env->CallStaticVoidMethod(activity, mID, jUrl, jFileName);
-//	env->ReleaseStringUTFChars(jUrl, cUrl);
-//	env->ReleaseStringUTFChars(jFileName, cFileName);
+	const jstring jUrl = env->NewStringUTF(url);
+	const jstring jFileName = env->NewStringUTF(fileName);
+	env->CallStaticVoidMethod(activity, mID, jUrl, jFileName);
+	env->DeleteLocalRef(jUrl);
+	env->DeleteLocalRef(jFileName);
 }
 
-string UtilJNI::getJNIStr(const char *methodName) {
-	//LOGD("JNI", "UtilJNI::getJNIStr(%p), %ld\n", javaVM, pthread_self());
+string UtilJNI::callJNIStr(const char *methodName) {
+	//LOGD("JNI", "UtilJNI::callJNIStr(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
 	if (env == nullptr) return "";
 	const char *sig = "()Ljava/lang/String;";
 	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
 	const jstring jstr = (jstring) env->CallStaticObjectMethod(activity, mID);
 	const char *cchar = env->GetStringUTFChars(jstr, JNI_FALSE);
-	const string str = cchar;
+	const string str = env->GetStringUTFChars(jstr, JNI_FALSE);
 	env->ReleaseStringUTFChars(jstr, cchar);
 	return str;
 }
 
+void UtilJNI::connectServer(const char *url, const char *fileName,
+		function<void(CallbackType)> func) {
+	this->callJNIVoid("connectServer", url, fileName);
+	callback = func;// Callback
+}
+
+void UtilJNI::callbackClient(CallbackType type) {
+	if (!callback) return;
+	callback(type);
+}
+
 string UtilJNI::getVersionCode() {
-	return this->getJNIStr("getVersionCode");
+	return this->callJNIStr("getVersionCode");
 }
 
 string UtilJNI::getVersionName() {
-	return this->getJNIStr("getVersionName");
+	return this->callJNIStr("getVersionName");
 }
 
 string UtilJNI::getFilePath() {
-	return this->getJNIStr("getFilePath");
-}
-
-void UtilJNI::connectServer(const char *url, const char *fileName) {
-	this->callJNIVoid("connectServer", url, fileName);
+	return this->callJNIStr("getFilePath");
 }

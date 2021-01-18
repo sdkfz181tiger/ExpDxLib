@@ -3,7 +3,14 @@
 
 #include "Utility.h"
 
+enum class CallbackType {
+	DEFAULT, SUCCESS, PROGRESS, ERROR
+};
+
 class UtilJNI {
+
+private:
+	function<void(CallbackType)> callback;
 
 public:
 	UtilJNI();
@@ -20,15 +27,18 @@ public:
 
 	void callJNIVoid(const char *methodName, const char *url, const char *fileName);
 
-	string getJNIStr(const char *methodName);
+	string callJNIStr(const char *methodName);
+
+	void connectServer(const char *url, const char *fileName,
+			function<void(CallbackType)> func);
+
+	void callbackClient(CallbackType type);
 
 	string getVersionCode();
 
 	string getVersionName();
 
 	string getFilePath();
-
-	void connectServer(const char *url, const char *fileName);
 };
 
 #endif // _UTILJNI_H_

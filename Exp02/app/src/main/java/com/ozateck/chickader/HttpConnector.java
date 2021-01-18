@@ -87,7 +87,7 @@ class HttpTask implements Runnable {
 		InputStream iStream = body.byteStream();
 		OutputStream oStream = ctx.openFileOutput(fileName, ctx.MODE_PRIVATE);
 		int lenLoaded = 0, lenRead = 0;
-		byte buffer[] = new byte[256];
+		byte buffer[] = new byte[1024];
 		while (0 < (lenRead = iStream.read(buffer, 0, buffer.length))) {
 			lenLoaded += lenRead;
 			oStream.write(buffer, 0, lenRead);

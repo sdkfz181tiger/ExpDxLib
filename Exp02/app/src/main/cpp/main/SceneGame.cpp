@@ -79,8 +79,11 @@ bool SceneGame::init() {
 
 	// TODO: test
 	string url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
-	string fileName = "s_maru.png";
-	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str());
+	string fileName = "c_niwa.png";
+	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(),
+			[](CallbackType type)->void{
+		LOGD("Main", "Callback: %d", type);
+	});
 
 	UtilSound::getInstance()->stopBGM();// BGM
 
