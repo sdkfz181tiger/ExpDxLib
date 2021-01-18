@@ -60,13 +60,6 @@ bool SceneTitle::init() {
 	auto tanuki = SpriteTanu::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
 	sprites.push_back(tanuki);
 
-	// TODO: test json
-	json jObj = UtilJson::getInstance()->loadJson("json/sample.json");
-	bool happy = jObj["happy"].get<bool>();
-	string name = jObj["name"].get<string>();
-	int hp = jObj["hp"].get<int>();
-	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
-
 	// BGM
 	UtilSound::getInstance()->stopBGM();
 	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false, true);
@@ -102,9 +95,9 @@ void SceneTitle::update(const float delay) {
 	UtilLabel::getInstance()->drawStr("==TITLE==", cX, 120,
 									  3, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
-									  3, UtilAlign::CENTER);
+									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
-									  3, UtilAlign::CENTER);
+									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 }
 

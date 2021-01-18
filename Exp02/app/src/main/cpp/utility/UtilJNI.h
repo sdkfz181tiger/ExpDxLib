@@ -10,7 +10,7 @@ enum class CallbackType {
 class UtilJNI {
 
 private:
-	function<void(CallbackType)> callback;
+	function<void(CallbackType, const char *)> callback;
 
 public:
 	UtilJNI();
@@ -30,9 +30,9 @@ public:
 	string callJNIStr(const char *methodName);
 
 	void connectServer(const char *url, const char *fileName,
-			function<void(CallbackType)> func);
+					   function<void(CallbackType, const char *)> func);
 
-	void callbackClient(CallbackType type);
+	void callbackClient(CallbackType type, const char *fileName);
 
 	string getVersionCode();
 

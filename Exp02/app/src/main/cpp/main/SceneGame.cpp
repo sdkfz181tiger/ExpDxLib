@@ -77,14 +77,6 @@ bool SceneGame::init() {
 	auto egg = SpriteItem::createSprite("images/c_egg.png", cX - gSize * 8, cY);
 	sprites.push_back(egg);
 
-	// TODO: test
-	string url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
-	string fileName = "c_niwa.png";
-	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(),
-			[](CallbackType type)->void{
-		LOGD("Main", "Callback: %d", type);
-	});
-
 	UtilSound::getInstance()->stopBGM();// BGM
 
 	return true;

@@ -34,24 +34,24 @@ void nativeOnDestroy(JNIEnv *env, jobject thiz) {
 }
 
 void nativeOnHttpSuccess(JNIEnv *env, jobject thiz, jstring fileName) {
-	const char *str = env->GetStringUTFChars(fileName, JNI_FALSE);
-	LOGD("JNI", "HttpSuccess:%s", str);
-	UtilJNI::getInstance()->callbackClient(CallbackType::SUCCESS);// Callback
-	env->ReleaseStringUTFChars(fileName, str);
+	const char *strFileName = env->GetStringUTFChars(fileName, JNI_FALSE);
+	//LOGD("JNI", "HttpSuccess:%s", strFileName);
+	UtilJNI::getInstance()->callbackClient(CallbackType::SUCCESS, strFileName);// Callback
+	env->ReleaseStringUTFChars(fileName, strFileName);
 }
 
 void nativeOnHttpProgress(JNIEnv *env, jobject thiz, jstring fileName) {
-	const char *str = env->GetStringUTFChars(fileName, JNI_FALSE);
-	LOGD("JNI", "HttpProgress:%s", str);
-	UtilJNI::getInstance()->callbackClient(CallbackType::PROGRESS);// Callback
-	env->ReleaseStringUTFChars(fileName, str);
+	const char *strFileName = env->GetStringUTFChars(fileName, JNI_FALSE);
+	//LOGD("JNI", "HttpProgress:%s", strFileName);
+	UtilJNI::getInstance()->callbackClient(CallbackType::PROGRESS, strFileName);// Callback
+	env->ReleaseStringUTFChars(fileName, strFileName);
 }
 
 void nativeOnHttpError(JNIEnv *env, jobject thiz, jstring fileName, jstring err) {
 	const char *strFileName = env->GetStringUTFChars(fileName, JNI_FALSE);
 	const char *strErr = env->GetStringUTFChars(err, JNI_FALSE);
-	LOGE("JNI", "HttpError:%s, %s", strFileName, strErr);
-	UtilJNI::getInstance()->callbackClient(CallbackType::ERROR);// Callback
+	//LOGE("JNI", "HttpError:%s, %s", strFileName, strErr);
+	UtilJNI::getInstance()->callbackClient(CallbackType::ERROR, strFileName);// Callback
 	env->ReleaseStringUTFChars(fileName, strFileName);
 	env->ReleaseStringUTFChars(err, strErr);
 }
@@ -162,14 +162,14 @@ string UtilJNI::callJNIStr(const char *methodName) {
 }
 
 void UtilJNI::connectServer(const char *url, const char *fileName,
-		function<void(CallbackType)> func) {
+							function<void(CallbackType, const char *)> func) {
 	this->callJNIVoid("connectServer", url, fileName);
 	callback = func;// Callback
 }
 
-void UtilJNI::callbackClient(CallbackType type) {
+void UtilJNI::callbackClient(CallbackType type, const char *fileName) {
 	if (!callback) return;
-	callback(type);
+	callback(type, fileName);
 }
 
 string UtilJNI::getVersionCode() {

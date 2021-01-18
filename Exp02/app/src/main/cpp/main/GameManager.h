@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "SceneGame.h"
+#include "ScenePreload.h"
 #include "SceneResult.h"
 #include "SceneTitle.h"
 
