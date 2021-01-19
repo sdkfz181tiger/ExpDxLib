@@ -8,6 +8,8 @@ class ScenePreload : public SceneBase, BtnListener {
 private:
 	SceneListener *sceneListener;
 	string vCode, vName;
+	string dUrl, dMsg;
+	vector<string> fileNames;
 
 public:
 	static ScenePreload *createScene(int dWidth, int dHeight);
@@ -17,6 +19,12 @@ public:
 	~ScenePreload() override;
 
 	bool init() override;
+
+	void downloadJson(const char *fileName);
+
+	void downloadAssets(const json &jObj);
+
+	void downloadImages();
 
 	void setOnTouchBegan(int id, int x, int y) override;
 

@@ -29,6 +29,10 @@ public:
 
 	bool init();
 
+	string toUpper(const string &str);
+
+	string toLower(const string &str);
+
 	void drawStr(const string &str, int x, int y,
 				 int scale = 1, UtilAlign align = UtilAlign::DEFAULT);
 };

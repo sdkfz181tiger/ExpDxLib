@@ -11,7 +11,9 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 													  sceneListener(nullptr),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
-													  vName(UtilJNI::getInstance()->getVersionName()) {
+													  vName(UtilJNI::getInstance()->getVersionName()),
+													  dUrl("https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/"),
+													  dMsg("***") {
 	LOGD("Main", "ScenePreload()\n");
 }
 
@@ -43,33 +45,103 @@ bool ScenePreload::init() {
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 	btns.push_back(btnSound);
 
-	// TODO: test json
-	const json jObj = UtilJson::getInstance()->loadJson("json/sample.json");
-	const bool happy = jObj["happy"].get<bool>();
-	const string name = jObj["name"].get<string>();
-	const int hp = jObj["hp"].get<int>();
-	LOGD("Main", "Find:%s, %d", name.c_str(), hp);
-
 	// Connect to server
-	const string url = "https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/";
 	const string fileName = "index.php";
-	auto func = [](CallbackType type, const char *fileName) -> void {
+	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
+			this->downloadJson(fileName);// Json
 			return;
 		}
 		if (type == CallbackType::PROGRESS) {
 			LOGD("Main", "Progress: %d, %s", type, fileName);
+			// Do nothing
 			return;
 		}
 		if (type == CallbackType::ERROR) {
-			LOGD("Main", "Error: %d, %s", type, fileName);
+			LOGE("Main", "Error: %d, %s", type, fileName);
+			this->downloadJson(fileName);// Json
 			return;
 		}
 	};
-	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
+	UtilJNI::getInstance()->connectServer(dUrl.c_str(), fileName.c_str(), func);
 
 	return true;
+}
+
+void ScenePreload::downloadJson(const char *fileName) {
+	//LOGD("Main", "downloadJson()");
+	const string fullPath = UtilJNI::getInstance()->getFilePath() + fileName;
+	const json jObj = UtilJson::getInstance()->loadJson(fullPath.c_str());
+	const char *key = "time";
+	if (jObj.find(key) == jObj.end()) {
+		LOGW("Main", "Please connect to internet!!");
+		dMsg = "PLEASE CONNECT TO INTERNET";// Message
+		UtilLocalSave::getInstance()->setString(key, "");// Reset
+		return;
+	}
+	const string jTime = jObj[key].get<string>();
+	const string sTime = UtilLocalSave::getInstance()->getString(key);
+	LOGD("Main", "jTime:%s <-> sTime:%s", jTime.c_str(), sTime.c_str());
+	if (sTime.length() == 0) {
+		LOGW("Main", "Downloding assets!!");
+		dMsg = "DOWNLOADING ASSETS";// Message
+		UtilLocalSave::getInstance()->setString(key, jTime);
+		this->downloadAssets(jObj);// Download all assets
+		return;
+	}
+	if (jTime != sTime) {
+		LOGW("Main", "Updating assets!!");
+		dMsg = "UPDATING ASSETS";// Message
+		UtilLocalSave::getInstance()->setString(key, jTime);
+		this->downloadAssets(jObj);// Update all assets
+		return;
+	}
+	LOGW("Main", "Starting game!!");
+	dMsg = "STARTING GAME";// Message
+
+	// TODO: start game!!
+}
+
+void ScenePreload::downloadAssets(const json &jObj) {
+	LOGD("Main", "downloadAssets()");
+	const json jArr = jObj["assets"];
+	for (string fileName : jArr) fileNames.push_back(fileName);
+	this->downloadImages();
+}
+
+void ScenePreload::downloadImages() {
+	LOGD("Main", "downloadImages():%d", fileNames.size());
+	if (fileNames.empty()) {
+		LOGD("Main", "Completed!!");
+		dMsg = "COMPLETED";// Message
+		// TODO: start game!!
+		return;
+	}
+
+	auto func = [&](CallbackType type, const char *fileName) -> void {
+		if (type == CallbackType::SUCCESS) {
+			LOGD("Main", "Success: %d, %s", type, fileName);
+			dMsg = UtilLabel::getInstance()->toUpper(fileName);// Message
+			this->downloadImages();// Recursive
+			return;
+		}
+		if (type == CallbackType::PROGRESS) {
+			LOGD("Main", "Progress: %d, %s", type, fileName);
+			// Do nothing
+			return;
+		}
+		if (type == CallbackType::ERROR) {
+			LOGE("Main", "Error: %d, %s", type, fileName);
+			dMsg = "ERROR";// Message
+			UtilLocalSave::getInstance()->setString("time", "");// Reset
+			return;
+		}
+	};
+
+	const string fileName = fileNames.back();
+	fileNames.pop_back();
+	UtilJNI::getInstance()->connectServer(dUrl.c_str(), fileName.c_str(), func);
 }
 
 void ScenePreload::setOnTouchBegan(int id, int x, int y) {
@@ -99,6 +171,9 @@ void ScenePreload::update(const float delay) {
 									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
 									  2, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr(dMsg, cX, cY,
+									  2, UtilAlign::CENTER);
+
 	for (auto btn : btns) btn->update(delay);
 }
 

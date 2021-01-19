@@ -52,6 +52,18 @@ bool UtilLabel::init() {
 	return true;
 }
 
+string UtilLabel::toUpper(const string &str) {
+	string upper = str;
+	transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+	return upper;
+}
+
+string UtilLabel::toLower(const string &str) {
+	string lower = str;
+	transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+	return lower;
+}
+
 void UtilLabel::drawStr(const string &str, int x, int y,
 						int scale, UtilAlign align) {
 

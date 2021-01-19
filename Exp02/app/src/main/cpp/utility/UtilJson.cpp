@@ -35,7 +35,7 @@ json UtilJson::loadJson(const char *fileName) {
 	LOGD("Util", "UtilJson::loadJson()\n");
 	// Read
 	const int handle = FileRead_open(fileName);
-	if (handle == -1) return json::object();
+	if (handle == 0) return json::object();
 	char line[256];
 	string str;
 	while (FileRead_eof(handle) == 0) {
@@ -43,11 +43,5 @@ json UtilJson::loadJson(const char *fileName) {
 		str += line;
 	}
 	FileRead_close(handle);
-	return json::parse(str);
-}
-
-json UtilJson::parseJson(const char *str) {
-	LOGD("Util", "UtilJson::parseJson()\n");
-	// Read
 	return json::parse(str);
 }
