@@ -2,6 +2,8 @@ package com.ozateck.chickader;
 
 import android.content.Context;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,7 +74,7 @@ class HttpTask implements Runnable {
 	public void run() {
 		CustomLog.d(TAG, "run()");
 		final OkHttpClient client = new OkHttpClient();
-		final Request req = new Request.Builder().url(url+fileName).build();
+		final Request req = new Request.Builder().url(url + fileName).build();
 		try {
 			Response res = client.newCall(req).execute();
 			if (res.isSuccessful()) executeStreams(res.body());
@@ -83,9 +85,13 @@ class HttpTask implements Runnable {
 	}
 
 	private void executeStreams(final ResponseBody body) throws IOException {
+		// File
+		File fullFile = new File(MainActivity.getFilePath() + fileName);
+		File dirFile = new File(fullFile.getParent());
+		if (!dirFile.isDirectory()) dirFile.mkdir();
 		// InputStream, OutputStream
 		InputStream iStream = body.byteStream();
-		OutputStream oStream = ctx.openFileOutput(fileName, ctx.MODE_PRIVATE);
+		OutputStream oStream = new FileOutputStream(fullFile);
 		int lenLoaded = 0, lenRead = 0;
 		byte buffer[] = new byte[1024];
 		while (0 < (lenRead = iStream.read(buffer, 0, buffer.length))) {

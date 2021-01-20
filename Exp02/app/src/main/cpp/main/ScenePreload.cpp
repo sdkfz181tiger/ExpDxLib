@@ -99,7 +99,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 	}
 	LOGW("Main", "Starting game!!");
 	dMsg = "STARTING GAME";// Message
-
+	UtilLocalSave::getInstance()->setString(key, jTime);
 	// TODO: start game!!
 }
 
