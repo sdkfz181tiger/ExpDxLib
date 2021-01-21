@@ -50,7 +50,7 @@ bool UtilSound::init() {
 	auto itS = fileSEs.end();
 	while (itS-- != fileSEs.begin()) {
 		const string &fileName = static_cast<string>(*itS);
-		int handle = LoadSoundMem(fileName.c_str());
+		int handle = LoadSoundMem(this->getLocalPath(fileName).c_str());
 		if (handle < 0) continue;
 		soundSEs.insert(make_pair(fileName, handle));
 	}
@@ -58,12 +58,16 @@ bool UtilSound::init() {
 	auto itB = fileBGMs.end();
 	while (itB-- != fileBGMs.begin()) {
 		const string &fileName = static_cast<string>(*itB);
-		int handle = LoadSoundMem(fileName.c_str());
+		int handle = LoadSoundMem(this->getLocalPath(fileName).c_str());
 		if (handle < 0) continue;
 		soundBGMs.insert(make_pair(fileName, handle));
 	}
 
 	return true;
+}
+
+string UtilSound::getLocalPath(const string &fileName) {
+	return UtilJNI::getInstance()->getFilePath() + fileName;
 }
 
 void UtilSound::toggleMute() {

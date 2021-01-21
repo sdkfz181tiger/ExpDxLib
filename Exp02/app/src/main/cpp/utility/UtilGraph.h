@@ -29,6 +29,8 @@ private:
 
 	void createDivGraph(const string &fileName, const string &frameName,
 						int rows, int cols, int w, int h, int from, int to);
+
+	string getLocalPath(const string &fileName);
 };
 
 #endif // _UTILGRAPH_H_

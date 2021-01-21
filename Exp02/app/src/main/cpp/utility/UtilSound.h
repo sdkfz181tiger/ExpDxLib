@@ -21,6 +21,8 @@ public:
 
 	bool init();
 
+	string getLocalPath(const string &fileName);
+
 	void toggleMute();
 
 	bool isMute() const;

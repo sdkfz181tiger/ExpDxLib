@@ -92,7 +92,7 @@ const vector<int> &UtilGraph::getDivGraph(const string &frameName) {
 }
 
 int UtilGraph::createGraph(const string &fileName) {
-	int graph = LoadGraph(fileName.c_str());
+	int graph = LoadGraph(this->getLocalPath(fileName).c_str());
 	if (graph == -1) return -1;
 	graphMap.insert(make_pair(fileName, graph));
 	return graph;
@@ -102,9 +102,14 @@ void UtilGraph::createDivGraph(const string &fileName, const string &frameName,
 							   int rows, int cols, int w, int h, int from, int to) {
 	int total = rows * cols;
 	int graphs[total];
-	int result = LoadDivGraph(fileName.c_str(), total, cols, rows, w, h, graphs);
+	int result = LoadDivGraph(this->getLocalPath(fileName).c_str(),
+							  total, cols, rows, w, h, graphs);
 	if (result == -1) return;
 	vector<int> frames = {};
 	for (int i = from; i <= to; i++) frames.push_back(graphs[i]);
 	divMap.insert(make_pair(frameName, frames));
+}
+
+string UtilGraph::getLocalPath(const string &fileName) {
+	return UtilJNI::getInstance()->getFilePath().c_str() + fileName;
 }

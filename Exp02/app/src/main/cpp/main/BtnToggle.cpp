@@ -20,7 +20,7 @@ BtnToggle::~BtnToggle() {
 
 bool BtnToggle::init(const char *fileName) {
 	// Load graph
-	graph = LoadGraph(fileName);
+	graph = UtilGraph::getInstance()->getGraph(fileName);
 	if (graph == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());

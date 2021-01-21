@@ -48,6 +48,7 @@ add_library( # Sets the name of the library.
         main/SpriteKobo.cpp
         main/SpriteOsho.cpp
         main/SpriteTanu.cpp
+        main/TimerCpp.cpp
         utility/Utility.h
         utility/UtilJNI.cpp
         utility/UtilJson.cpp
