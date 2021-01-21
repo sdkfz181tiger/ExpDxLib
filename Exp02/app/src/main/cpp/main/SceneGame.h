@@ -6,7 +6,6 @@
 class SceneGame : public SceneBase, BtnListener, DpadListener {
 
 private:
-	SceneListener *sceneListener;
 	SpriteBase *background;
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
@@ -29,8 +28,6 @@ public:
 	void setOnTouchEnded(int id, int x, int y) override;
 
 	void update(const float delay) override;
-
-	void addSceneListener(SceneListener *listener) override;
 
 	void onBtnPressed(BtnTag &tag) override;
 

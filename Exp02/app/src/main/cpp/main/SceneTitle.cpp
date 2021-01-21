@@ -9,7 +9,6 @@ SceneTitle *SceneTitle::createScene(int dWidth, int dHeight) {
 }
 
 SceneTitle::SceneTitle(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-												  sceneListener(nullptr),
 												  background(nullptr),
 												  vCode(UtilJNI::getInstance()->getVersionCode()),
 												  vName(UtilJNI::getInstance()->getVersionName()) {
@@ -92,17 +91,15 @@ void SceneTitle::update(const float delay) {
 	for (auto sprite : sprites) sprite->update(delay);// Sprites
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("==TITLE==", cX, 120,
+	UtilLabel::getInstance()->drawStr("==REALLY==", cX, 120,
 									  3, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
 									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
 									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
-}
 
-void SceneTitle::addSceneListener(SceneListener *listener) {
-	sceneListener = listener;
+	this->tickWaitScene(delay);// NextScene
 }
 
 void SceneTitle::onBtnPressed(BtnTag &tag) {
@@ -118,6 +115,6 @@ void SceneTitle::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::GAME) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		if (sceneListener) sceneListener->onSceneChange(SceneTag::GAME);
+		this->tickWaitStart(0.2f, SceneTag::GAME);
 	}
 }

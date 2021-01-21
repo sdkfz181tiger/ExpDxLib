@@ -9,7 +9,6 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 }
 
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-													  sceneListener(nullptr),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
 													  dUrl("https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/"),
@@ -29,21 +28,6 @@ bool ScenePreload::init() {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
-
-	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-										  dWidth - gSize * 1, gSize * 1);
-	btnQuit->addBtnListener(this, BtnTag::QUIT);
-	btns.push_back(btnQuit);
-
-	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "T",
-										  gSize * 1, gSize * 1);
-	btnTest->addBtnListener(this, BtnTag::TITLE);
-	btns.push_back(btnTest);
-
-	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
-												  dWidth - gSize * 3, gSize * 1);
-	btnSound->addBtnListener(this, BtnTag::SOUND);
-	btns.push_back(btnSound);
 
 	// Connect to server
 	const string fileName = "index.php";
@@ -84,23 +68,23 @@ void ScenePreload::downloadJson(const char *fileName) {
 	const string sTime = UtilLocalSave::getInstance()->getString(key);
 	LOGD("Main", "jTime:%s <-> sTime:%s", jTime.c_str(), sTime.c_str());
 	if (sTime.length() == 0) {
-		LOGW("Main", "Downloding assets!!");
+		LOGD("Main", "Downloding assets!!");
 		dMsg = "DOWNLOADING ASSETS";// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Download all assets
 		return;
 	}
 	if (jTime != sTime) {
-		LOGW("Main", "Updating assets!!");
+		LOGD("Main", "Updating assets!!");
 		dMsg = "UPDATING ASSETS";// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Update all assets
 		return;
 	}
-	LOGW("Main", "Starting game!!");
+	LOGD("Main", "Starting game!!");
 	dMsg = "STARTING GAME";// Message
-	UtilLocalSave::getInstance()->setString(key, jTime);
-	// TODO: start game!!
+	// TODO: Start TITLE!!
+	this->tickWaitStart(1.0f, SceneTag::TITLE);
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -111,11 +95,12 @@ void ScenePreload::downloadAssets(const json &jObj) {
 }
 
 void ScenePreload::downloadImages() {
-	LOGD("Main", "downloadImages():%d", fileNames.size());
+	LOGD("Main", "downloadImages():%lu", fileNames.size());
 	if (fileNames.empty()) {
 		LOGD("Main", "Completed!!");
 		dMsg = "COMPLETED";// Message
-		// TODO: start game!!
+		// TODO: Start TITLE!!
+		this->tickWaitStart(1.0f, SceneTag::TITLE);
 		return;
 	}
 
@@ -175,10 +160,8 @@ void ScenePreload::update(const float delay) {
 									  2, UtilAlign::CENTER);
 
 	for (auto btn : btns) btn->update(delay);
-}
 
-void ScenePreload::addSceneListener(SceneListener *listener) {
-	sceneListener = listener;
+	this->tickWaitScene(delay);// NextScene
 }
 
 void ScenePreload::onBtnPressed(BtnTag &tag) {
@@ -191,9 +174,4 @@ void ScenePreload::onBtnCanceled(BtnTag &tag) {
 
 void ScenePreload::onBtnReleased(BtnTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
-	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
-	if (tag == BtnTag::TITLE) {
-		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		if (sceneListener) sceneListener->onSceneChange(SceneTag::TITLE);
-	}
 }

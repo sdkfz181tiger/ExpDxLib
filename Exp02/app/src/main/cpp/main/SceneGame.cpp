@@ -9,7 +9,6 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 }
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-												sceneListener(nullptr),
 												background(nullptr), bGrid(nullptr),
 												dPad(nullptr), player(nullptr) {
 	LOGD("Main", "SceneGame()\n");
@@ -137,10 +136,8 @@ void SceneGame::update(const float delay) {
 	// Buttons, Dpad
 	for (auto btn : btns) btn->update(delay);
 	if (dPad) dPad->update(delay);
-}
 
-void SceneGame::addSceneListener(SceneListener *listener) {
-	sceneListener = listener;
+	this->tickWaitScene(delay);// NextScene
 }
 
 void SceneGame::onBtnPressed(BtnTag &tag) {
@@ -156,7 +153,7 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::RESULT) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		if (sceneListener) sceneListener->onSceneChange(SceneTag::RESULT);
+		this->tickWaitStart(0.2f, SceneTag::RESULT);
 	}
 }
 

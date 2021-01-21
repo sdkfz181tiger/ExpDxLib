@@ -9,7 +9,6 @@ SceneResult *SceneResult::createScene(int dWidth, int dHeight) {
 }
 
 SceneResult::SceneResult(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-													sceneListener(nullptr),
 													background(nullptr) {
 	LOGD("Main", "SceneResult()\n");
 }
@@ -44,7 +43,7 @@ bool SceneResult::init() {
 	btns.push_back(btnSound);
 
 	// Background
-	background = SpriteBase::createSprite("images/box_135x240.png", cX, cY);
+	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY);
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
@@ -79,10 +78,8 @@ void SceneResult::update(const float delay) {
 	UtilLabel::getInstance()->drawStr("=RESULT=", cX, 120,
 									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
-}
 
-void SceneResult::addSceneListener(SceneListener *listener) {
-	sceneListener = listener;
+	this->tickWaitScene(delay);// NextScene
 }
 
 void SceneResult::onBtnPressed(BtnTag &tag) {
@@ -98,6 +95,6 @@ void SceneResult::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::TITLE) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		if (sceneListener) sceneListener->onSceneChange(SceneTag::TITLE);
+		this->tickWaitStart(0.2f, SceneTag::TITLE);
 	}
 }

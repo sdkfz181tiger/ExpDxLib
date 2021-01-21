@@ -6,7 +6,6 @@
 class SceneResult : public SceneBase, BtnListener {
 
 private:
-	SceneListener *sceneListener;
 	SpriteBase *background;
 
 public:
@@ -25,8 +24,6 @@ public:
 	void setOnTouchEnded(int id, int x, int y) override;
 
 	void update(const float delay) override;
-
-	void addSceneListener(SceneListener *listener) override;
 
 	void onBtnPressed(BtnTag &tag) override;
 

@@ -14,6 +14,7 @@
 #include "SpriteKobo.h"
 #include "SpriteOsho.h"
 #include "SpriteTanu.h"
+#include "TimerCpp.h"
 
 // SceneTag
 enum class SceneTag {
@@ -33,6 +34,12 @@ protected:
 	const int dWidth, dHeight;
 	vector<BtnBase *> btns;
 
+private:
+	SceneListener *sceneListener;
+	bool sceneWaitFlg;
+	float sceneWaitTime;
+	SceneTag sceneNextTag;
+
 public:
 	SceneBase(int dWidth, int dHeight);
 
@@ -48,7 +55,11 @@ public:
 
 	virtual void update(const float delay) = 0;
 
-	virtual void addSceneListener(SceneListener *listener) = 0;
+	void addSceneListener(SceneListener *listener);
+
+	void tickWaitStart(float wait, SceneTag tag);
+
+	void tickWaitScene(float delay);
 };
 
 #endif // _SCENEBASE_H_
