@@ -57,9 +57,9 @@ public:
 
 	void addSceneListener(SceneListener *listener);
 
-	void tickWaitStart(float wait, SceneTag tag);
+	void replaceSceneWait(float wait, SceneTag tag);
 
-	void tickWaitScene(float delay);
+	void replaceSceneTick(float delay);
 };
 
 #endif // _SCENEBASE_H_

@@ -12,6 +12,8 @@ ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight)
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
 													  dUrl("https://sdkfz181tiger.github.io/shimejigames/chickader/"),
+													  dPrefix(UtilJNI::getInstance()->getDebugFlg()
+															  ? "debug/" : "release/"),
 													  dMsg("***") {
 	LOGD("Main", "ScenePreload()\n");
 }
@@ -30,8 +32,8 @@ bool ScenePreload::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Connect to server
-	const string fileName = UtilJNI::getInstance()->getDebugFlg() ? "debug/index.json"
-																  : "release/index.json";
+	const string url = dUrl + dPrefix;
+	const string fileName = "index.json";
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
@@ -49,7 +51,7 @@ bool ScenePreload::init() {
 			return;
 		}
 	};
-	UtilJNI::getInstance()->connectServer(dUrl.c_str(), fileName.c_str(), func);
+	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
 
 	return true;
 }
@@ -84,7 +86,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 	}
 	LOGD("Main", "Starting game!!");
 	dMsg = "STARTING GAME";// Message
-	this->tickWaitStart(1.0f, SceneTag::TITLE);// Title
+	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -99,7 +101,7 @@ void ScenePreload::downloadImages() {
 	if (fileNames.empty()) {
 		LOGD("Main", "Completed!!");
 		dMsg = "COMPLETED";// Message
-		this->tickWaitStart(1.0f, SceneTag::TITLE);// Title
+		this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 		return;
 	}
 
@@ -123,9 +125,10 @@ void ScenePreload::downloadImages() {
 		}
 	};
 
+	const string url = dUrl + dPrefix;
 	const string fileName = fileNames.back();
 	fileNames.pop_back();
-	UtilJNI::getInstance()->connectServer(dUrl.c_str(), fileName.c_str(), func);
+	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
 }
 
 void ScenePreload::setOnTouchBegan(int id, int x, int y) {
@@ -160,7 +163,7 @@ void ScenePreload::update(const float delay) {
 
 	for (auto btn : btns) btn->update(delay);
 
-	this->tickWaitScene(delay);// NextScene
+	this->replaceSceneTick(delay);// NextScene
 }
 
 void ScenePreload::onBtnPressed(BtnTag &tag) {

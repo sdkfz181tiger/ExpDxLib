@@ -7,7 +7,7 @@ class ScenePreload : public SceneBase, BtnListener {
 
 private:
 	string vCode, vName;
-	string dUrl, dMsg;
+	string dUrl, dPrefix, dMsg;
 	vector<string> fileNames;
 
 public:

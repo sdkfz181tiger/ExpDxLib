@@ -102,6 +102,7 @@ class HttpTask implements Runnable {
 		oStream.flush();
 		oStream.close();
 		iStream.close();
+		body.close();
 	}
 
 	interface HttpEventListener {

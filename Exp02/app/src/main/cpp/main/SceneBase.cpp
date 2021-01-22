@@ -16,13 +16,13 @@ void SceneBase::addSceneListener(SceneListener *listener) {
 	sceneListener = listener;
 }
 
-void SceneBase::tickWaitStart(float wait, SceneTag tag) {
+void SceneBase::replaceSceneWait(float wait, SceneTag tag) {
 	sceneWaitFlg = false;
 	sceneWaitTime = wait;
 	sceneNextTag = tag;
 }
 
-void SceneBase::tickWaitScene(float delay) {
+void SceneBase::replaceSceneTick(float delay) {
 	if (sceneWaitFlg) return;
 	sceneWaitTime -= delay;
 	if (0.0f < sceneWaitTime) return;

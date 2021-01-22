@@ -99,7 +99,7 @@ void SceneTitle::update(const float delay) {
 									  2, UtilAlign::CENTER);
 	for (auto btn : btns) btn->update(delay);
 
-	this->tickWaitScene(delay);// NextScene
+	this->replaceSceneTick(delay);// NextScene
 }
 
 void SceneTitle::onBtnPressed(BtnTag &tag) {
@@ -115,6 +115,6 @@ void SceneTitle::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
 	if (tag == BtnTag::GAME) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		this->tickWaitStart(0.2f, SceneTag::GAME);
+		this->replaceSceneWait(0.2f, SceneTag::GAME);
 	}
 }
