@@ -14,6 +14,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDXlib01">
+        <!-- Activity -->
         <activity android:name=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"

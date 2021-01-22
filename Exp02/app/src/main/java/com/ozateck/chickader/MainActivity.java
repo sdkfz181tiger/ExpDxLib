@@ -119,7 +119,9 @@ public class MainActivity extends NativeActivity {
 		return filePath;
 	}
 
-	public static boolean getDebugFlg() { return debugFlg; }
+	public static boolean getDebugFlg() {
+		return debugFlg;
+	}
 
 	public static void connectServer(final String url, final String fileName) {
 		if (ctx == null) return;
