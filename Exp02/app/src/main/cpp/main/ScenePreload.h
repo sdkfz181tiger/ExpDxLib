@@ -7,6 +7,7 @@ class ScenePreload : public SceneBase, BtnListener {
 
 private:
 	string vCode, vName;
+	int fileCnt, fileTotal;
 	string dUrl, dPrefix, dMsg;
 	vector<string> fileNames;
 
@@ -24,6 +25,8 @@ public:
 	void downloadAssets(const json &jObj);
 
 	void downloadImages();
+
+	string getPercent();
 
 	void setOnTouchBegan(int id, int x, int y) override;
 

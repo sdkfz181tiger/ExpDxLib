@@ -11,6 +11,7 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
+													  fileCnt(0), fileTotal(0),
 													  dUrl("https://sdkfz181tiger.github.io/shimejigames/chickader/"),
 													  dPrefix(UtilJNI::getInstance()->getDebugFlg()
 															  ? "debug/" : "release/"),
@@ -86,13 +87,14 @@ void ScenePreload::downloadJson(const char *fileName) {
 	}
 	LOGD("Main", "Starting game!!");
 	dMsg = "STARTING GAME";// Message
-	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+	//this->replaceSceneWait(1.0f, SceneTag::TITLE);// TODO: test
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
 	LOGD("Main", "downloadAssets()");
 	const json jArr = jObj["assets"];
 	for (string fileName : jArr) fileNames.push_back(fileName);
+	fileTotal = fileNames.size();// Total
 	this->downloadImages();
 }
 
@@ -100,15 +102,15 @@ void ScenePreload::downloadImages() {
 	LOGD("Main", "downloadImages():%lu", fileNames.size());
 	if (fileNames.empty()) {
 		LOGD("Main", "Completed!!");
-		dMsg = "COMPLETED";// Message
-		this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+		dMsg = getPercent();// Message
+		//this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 		return;
 	}
 
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
-			dMsg = UtilLabel::getInstance()->toUpper(fileName);// Message
+			dMsg = getPercent();// Message
 			this->downloadImages();// Recursive
 			return;
 		}
@@ -129,6 +131,13 @@ void ScenePreload::downloadImages() {
 	const string fileName = fileNames.back();
 	fileNames.pop_back();
 	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
+}
+
+string ScenePreload::getPercent(){
+	float num = (float) fileCnt++ / (float) fileTotal * 100.0f;
+	stringstream ss;
+	ss << floor(num) << "%";
+	return ss.str();
 }
 
 void ScenePreload::setOnTouchBegan(int id, int x, int y) {
