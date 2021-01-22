@@ -161,6 +161,16 @@ string UtilJNI::callJNIStr(const char *methodName) {
 	return str;
 }
 
+bool UtilJNI::callJNIBool(const char *methodName) {
+	//LOGD("JNI", "UtilJNI::callJNIBool(%p), %ld\n", javaVM, pthread_self());
+	JNIEnv *env = Android_JNI_GetEnv();
+	if (env == nullptr) return false;
+	const char *sig = "()Z";
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
+	const jboolean jflg = (jboolean) env->CallStaticBooleanMethod(activity, mID);
+	return jflg == JNI_TRUE;
+}
+
 void UtilJNI::connectServer(const char *url, const char *fileName,
 							function<void(CallbackType, const char *)> func) {
 	this->callJNIVoid("connectServer", url, fileName);
@@ -182,4 +192,8 @@ string UtilJNI::getVersionName() {
 
 string UtilJNI::getFilePath() {
 	return this->callJNIStr("getFilePath");
+}
+
+bool UtilJNI::getDebugFlg() {
+	return this->callJNIBool("getDebugFlg");
 }

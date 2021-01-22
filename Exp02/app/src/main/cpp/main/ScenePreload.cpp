@@ -11,7 +11,7 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
-													  dUrl("https://ozateck.sakura.ne.jp/shimejigames/chickader/debug/"),
+													  dUrl("https://sdkfz181tiger.github.io/shimejigames/chickader/"),
 													  dMsg("***") {
 	LOGD("Main", "ScenePreload()\n");
 }
@@ -30,7 +30,8 @@ bool ScenePreload::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Connect to server
-	const string fileName = "index.php";
+	const string fileName = UtilJNI::getInstance()->getDebugFlg() ? "debug/index.json"
+																  : "release/index.json";
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
@@ -83,8 +84,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 	}
 	LOGD("Main", "Starting game!!");
 	dMsg = "STARTING GAME";// Message
-	// TODO: Start TITLE!!
-	this->tickWaitStart(1.0f, SceneTag::TITLE);
+	this->tickWaitStart(1.0f, SceneTag::TITLE);// Title
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -99,8 +99,7 @@ void ScenePreload::downloadImages() {
 	if (fileNames.empty()) {
 		LOGD("Main", "Completed!!");
 		dMsg = "COMPLETED";// Message
-		// TODO: Start TITLE!!
-		this->tickWaitStart(1.0f, SceneTag::TITLE);
+		this->tickWaitStart(1.0f, SceneTag::TITLE);// Title
 		return;
 	}
 

@@ -15,6 +15,7 @@ public class MainActivity extends NativeActivity {
 	private static String versionCode = "";
 	private static String versionName = "";
 	private static String filePath = "";
+	private static boolean debugFlg = false;
 
 	// Used to load the 'native-lib' library on application startup.
 	static {
@@ -31,6 +32,7 @@ public class MainActivity extends NativeActivity {
 		versionCode = getVersionCode(ctx, ctx.getPackageManager());
 		versionName = getVersionName(ctx, ctx.getPackageManager());
 		filePath = ctx.getFilesDir().getPath() + File.separator;
+		debugFlg = BuildConfig.DEBUG;
 	}
 
 	@Override
@@ -116,6 +118,8 @@ public class MainActivity extends NativeActivity {
 	public static String getFilePath() {
 		return filePath;
 	}
+
+	public static boolean getDebugFlg() { return debugFlg; }
 
 	public static void connectServer(final String url, final String fileName) {
 		if (ctx == null) return;

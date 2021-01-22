@@ -29,6 +29,8 @@ public:
 
 	string callJNIStr(const char *methodName);
 
+	bool callJNIBool(const char *methodName);
+
 	void connectServer(const char *url, const char *fileName,
 					   function<void(CallbackType, const char *)> func);
 
@@ -39,6 +41,8 @@ public:
 	string getVersionName();
 
 	string getFilePath();
+
+	bool getDebugFlg();
 };
 
 #endif // _UTILJNI_H_
