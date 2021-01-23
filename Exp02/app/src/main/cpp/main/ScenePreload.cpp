@@ -126,14 +126,16 @@ void ScenePreload::downloadImages() {
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
-			lMarker->setMsg("LOADED");
+			lMarker->setMsg("LOADING.");
 			lMarker->progress(1);// Progress
 			this->downloadImages();// Recursive
 			return;
 		}
 		if (type == CallbackType::PROGRESS) {
 			LOGD("Main", "Progress: %d, %s", type, fileName);
-			lMarker->setMsg("LOADING");
+			int rdm = UtilMath::getInstance()->getRandom(0, 10);
+			const string msg = (rdm % 2 == 0) ? "L A I G " : " O D N .";
+			lMarker->setMsg(msg.c_str());
 			return;
 		}
 		if (type == CallbackType::ERROR) {

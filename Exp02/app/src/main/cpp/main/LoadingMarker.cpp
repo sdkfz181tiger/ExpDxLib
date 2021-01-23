@@ -32,13 +32,17 @@ void LoadingMarker::setCnt(int cnt) {
 	loadCnt = cnt;
 }
 
+int LoadingMarker::getCnt() {
+	return loadCnt;
+}
+
 void LoadingMarker::setTotal(int total) {
 	loadTotal = total;
 }
 
 void LoadingMarker::progress(int progress) {
 	loadCnt += progress;
-	if(loadTotal < loadCnt) loadCnt = loadTotal;
+	if (loadTotal < loadCnt) loadCnt = loadTotal;
 }
 
 void LoadingMarker::update() {

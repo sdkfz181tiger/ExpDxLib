@@ -25,6 +25,8 @@ public:
 
 	void setCnt(int cnt);
 
+	int getCnt();
+
 	void setTotal(int total);
 
 	void progress(int progress);
