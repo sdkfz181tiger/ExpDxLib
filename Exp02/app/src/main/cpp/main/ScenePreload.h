@@ -2,14 +2,15 @@
 #define _SCENEPRELOAD_H_
 
 #include "SceneBase.h"
+#include "LoadingMarker.h"
 
 class ScenePreload : public SceneBase, BtnListener {
 
 private:
 	string vCode, vName;
-	int fileCnt, fileTotal;
-	string dUrl, dPrefix, dMsg;
+	string dUrl, dPrefix;
 	vector<string> fileNames;
+	LoadingMarker *lMarker;
 
 public:
 	static ScenePreload *createScene(int dWidth, int dHeight);
@@ -27,8 +28,6 @@ public:
 	void downloadImages();
 
 	bool checkAssets(const json &jObj);
-
-	string getPercent();
 
 	void setOnTouchBegan(int id, int x, int y) override;
 

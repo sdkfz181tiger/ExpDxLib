@@ -11,17 +11,16 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
-													  fileCnt(0), fileTotal(0),
 													  dUrl("https://sdkfz181tiger.github.io/shimejigames/chickader/"),
 													  dPrefix(UtilJNI::getInstance()->getDebugFlg()
-															  ? "debug/" : "release/"),
-													  dMsg("***") {
+															  ? "debug/" : "release/") {
 	LOGD("Main", "ScenePreload()\n");
 }
 
 ScenePreload::~ScenePreload() {
 	LOGD("Main", "~ScenePreload()\n");
 	// Delete
+	DX_SAFE_DELETE(lMarker);
 	DX_SAFE_DELETE_VECTOR(btns);
 }
 
@@ -54,6 +53,9 @@ bool ScenePreload::init() {
 	};
 	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
 
+	// LoadingMarker
+	lMarker = new LoadingMarker(cX, cY, gSize * 10, gSize / 4);
+
 	return true;
 }
 
@@ -65,7 +67,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	if (jObj.find(key) == jObj.end()) {
 		LOGW("Main", "Please connect to internet!!");
-		dMsg = "PLEASE CONNECT TO INTERNET";// Message
+		lMarker->setMsg("PLEASE CONNECT TO INTERNET");// Message
 		UtilLocalSave::getInstance()->setString(key, "");// Reset
 		return;
 	}
@@ -75,7 +77,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 	LOGD("Main", "jTime:%s <-> sTime:%s", jTime.c_str(), sTime.c_str());
 	if (sTime.length() == 0) {
 		LOGD("Main", "Downloding assets!!");
-		dMsg = "DOWNLOADING";// Message
+		lMarker->setMsg("DOWNLOADING");// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Download all assets
 		return;
@@ -83,7 +85,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	if (jTime != sTime) {
 		LOGD("Main", "Updating assets!!");
-		dMsg = "UPDATING";// Message
+		lMarker->setMsg("UPDATING");// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Update all assets
 		return;
@@ -91,23 +93,23 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	if (!this->checkAssets(jObj)) {
 		LOGD("Main", "Redownloading assets!!");
-		dMsg = "REDOWNLOADING";// Message
+		lMarker->setMsg("REDOWNLOADING");// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Redownload all assets
 		return;
 	}
 
 	LOGD("Main", "Starting game!!");
-	dMsg = "STARTING";// Message
-	//this->replaceSceneWait(1.0f, SceneTag::TITLE);
+	lMarker->setMsg("STARTING");// Message
+	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
 	LOGD("Main", "downloadAssets()");
 	const json jArr = jObj["assets"];
 	for (string fileName : jArr) fileNames.push_back(fileName);
-	fileCnt = 0;// Reset
-	fileTotal = fileNames.size();// Total
+	lMarker->setCnt(0);// Reset
+	lMarker->setTotal(fileNames.size());// Total
 	this->downloadImages();
 }
 
@@ -115,26 +117,28 @@ void ScenePreload::downloadImages() {
 	LOGD("Main", "downloadImages():%lu", fileNames.size());
 	if (fileNames.empty()) {
 		LOGD("Main", "Completed!!");
-		dMsg = getPercent();// Message
-		//this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+		lMarker->setMsg("COMPLETED");
+		lMarker->progress(1);// Progress
+		this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 		return;
 	}
 
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
-			dMsg = getPercent();// Message
+			lMarker->setMsg("LOADED");
+			lMarker->progress(1);// Progress
 			this->downloadImages();// Recursive
 			return;
 		}
 		if (type == CallbackType::PROGRESS) {
 			LOGD("Main", "Progress: %d, %s", type, fileName);
-			// Do nothing
+			lMarker->setMsg("LOADING");
 			return;
 		}
 		if (type == CallbackType::ERROR) {
 			LOGE("Main", "Error: %d, %s", type, fileName);
-			dMsg = "ERROR";// Message
+			lMarker->setMsg("ERROR");
 			UtilLocalSave::getInstance()->setString("time", "");// Reset
 			return;
 		}
@@ -154,13 +158,6 @@ bool ScenePreload::checkAssets(const json &jObj) {
 		if (!UtilDx::getInstance()->isFileExists(fullPath)) return false;
 	}
 	return true;
-}
-
-string ScenePreload::getPercent() {
-	float num = (float) fileCnt++ / (float) fileTotal * 100.0f;
-	stringstream ss;
-	ss << floor(num) << "%";
-	return ss.str();
 }
 
 void ScenePreload::setOnTouchBegan(int id, int x, int y) {
@@ -187,10 +184,8 @@ void ScenePreload::update(const float delay) {
 	// Label
 	UtilLabel::getInstance()->drawStr(vName, dWidth - gSize / 2, dHeight - gSize / 2,
 									  2, UtilAlign::RIGHT);
-	UtilLabel::getInstance()->drawStr(dMsg, cX, cY,
-									  2, UtilAlign::CENTER);
 
-	for (auto btn : btns) btn->update(delay);
+	lMarker->update();// Loading
 
 	this->replaceSceneTick(delay);// NextScene
 }
