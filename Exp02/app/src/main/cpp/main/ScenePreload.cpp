@@ -62,38 +62,51 @@ void ScenePreload::downloadJson(const char *fileName) {
 	const string fullPath = UtilJNI::getInstance()->getFilePath() + fileName;
 	const json jObj = UtilJson::getInstance()->loadJson(fullPath.c_str());
 	const char *key = "time";
+
 	if (jObj.find(key) == jObj.end()) {
 		LOGW("Main", "Please connect to internet!!");
 		dMsg = "PLEASE CONNECT TO INTERNET";// Message
 		UtilLocalSave::getInstance()->setString(key, "");// Reset
 		return;
 	}
+
 	const string jTime = jObj[key].get<string>();
 	const string sTime = UtilLocalSave::getInstance()->getString(key);
 	LOGD("Main", "jTime:%s <-> sTime:%s", jTime.c_str(), sTime.c_str());
 	if (sTime.length() == 0) {
 		LOGD("Main", "Downloding assets!!");
-		dMsg = "DOWNLOADING ASSETS";// Message
+		dMsg = "DOWNLOADING";// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Download all assets
 		return;
 	}
+
 	if (jTime != sTime) {
 		LOGD("Main", "Updating assets!!");
-		dMsg = "UPDATING ASSETS";// Message
+		dMsg = "UPDATING";// Message
 		UtilLocalSave::getInstance()->setString(key, jTime);
 		this->downloadAssets(jObj);// Update all assets
 		return;
 	}
+
+	if (!this->checkAssets(jObj)) {
+		LOGD("Main", "Redownloading assets!!");
+		dMsg = "REDOWNLOADING";// Message
+		UtilLocalSave::getInstance()->setString(key, jTime);
+		this->downloadAssets(jObj);// Redownload all assets
+		return;
+	}
+
 	LOGD("Main", "Starting game!!");
-	dMsg = "STARTING GAME";// Message
-	//this->replaceSceneWait(1.0f, SceneTag::TITLE);// TODO: test
+	dMsg = "STARTING";// Message
+	//this->replaceSceneWait(1.0f, SceneTag::TITLE);
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
 	LOGD("Main", "downloadAssets()");
 	const json jArr = jObj["assets"];
 	for (string fileName : jArr) fileNames.push_back(fileName);
+	fileCnt = 0;// Reset
 	fileTotal = fileNames.size();// Total
 	this->downloadImages();
 }
@@ -133,7 +146,17 @@ void ScenePreload::downloadImages() {
 	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
 }
 
-string ScenePreload::getPercent(){
+bool ScenePreload::checkAssets(const json &jObj) {
+	LOGD("Main", "checkAssets()");
+	const json jArr = jObj["assets"];
+	for (string fileName : jArr) {
+		const string fullPath = UtilJNI::getInstance()->getFilePath() + fileName;
+		if (!UtilDx::getInstance()->isFileExists(fullPath)) return false;
+	}
+	return true;
+}
+
+string ScenePreload::getPercent() {
 	float num = (float) fileCnt++ / (float) fileTotal * 100.0f;
 	stringstream ss;
 	ss << floor(num) << "%";
@@ -159,14 +182,11 @@ void ScenePreload::update(const float delay) {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("==PRELOAD==", cX, 120,
-									  3, UtilAlign::CENTER);
-	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
-									  2, UtilAlign::CENTER);
-	UtilLabel::getInstance()->drawStr(vName, cX, 180,
-									  2, UtilAlign::CENTER);
+	// Label
+	UtilLabel::getInstance()->drawStr(vName, dWidth - gSize / 2, dHeight - gSize / 2,
+									  2, UtilAlign::RIGHT);
 	UtilLabel::getInstance()->drawStr(dMsg, cX, cY,
 									  2, UtilAlign::CENTER);
 

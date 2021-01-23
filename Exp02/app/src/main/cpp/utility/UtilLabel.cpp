@@ -70,7 +70,7 @@ void UtilLabel::drawStr(const string &str, int x, int y,
 	int cW = (fWidth + fPadding) * scale;
 	int cH = fHeight * scale;
 	int sW = cW * str.length();
-	if (align == UtilAlign::LEFT) x = 0;
+	if (align == UtilAlign::LEFT) x -= 0;
 	if (align == UtilAlign::RIGHT) x -= sW;
 	if (align == UtilAlign::CENTER) x -= sW / 2 - fPadding * scale / 2;
 	y -= cH / 2;

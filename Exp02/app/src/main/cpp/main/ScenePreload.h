@@ -26,6 +26,8 @@ public:
 
 	void downloadImages();
 
+	bool checkAssets(const json &jObj);
+
 	string getPercent();
 
 	void setOnTouchBegan(int id, int x, int y) override;

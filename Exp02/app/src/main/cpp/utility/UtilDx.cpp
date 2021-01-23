@@ -35,3 +35,10 @@ bool UtilDx::init() {
 void UtilDx::setQuitFlg() {
 	this->quitFlg = true;
 }
+
+bool UtilDx::isFileExists(const string &path) {
+	int handle = FileRead_open(path.c_str());
+	if (handle == 0) return false;
+	FileRead_close(handle);
+	return true;
+}

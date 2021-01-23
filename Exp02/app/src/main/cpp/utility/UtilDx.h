@@ -33,6 +33,8 @@ public:
 	int getDefScale() { return defScale; }
 
 	int getFPS() { return fps; }
+
+	bool isFileExists(const string &path);
 };
 
 #endif // _UTILDX_H_
