@@ -10,7 +10,8 @@ private:
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
 	SpriteKobo *player;
-	vector<SpriteBase *> sprites;
+	vector<SpriteItem *> eggs;
+	vector<SpriteHiyo *> hiyos;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);

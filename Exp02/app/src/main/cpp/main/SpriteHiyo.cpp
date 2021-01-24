@@ -8,7 +8,9 @@ SpriteHiyo *SpriteHiyo::createSprite(const string &fileName, float x, float y) {
 	return nullptr;
 }
 
-SpriteHiyo::SpriteHiyo(float x, float y) : SpriteChara(x, y) {
+SpriteHiyo::SpriteHiyo(float x, float y) : SpriteChara(x, y),
+										   target(nullptr),
+										   footprints(8, Vec2(0, 0)) {
 	LOGD("Main", "SpriteHiyo()\n");
 }
 
@@ -34,68 +36,48 @@ bool SpriteHiyo::init(const string &fileName) {
 }
 
 void SpriteHiyo::update(float delay) {
-	// Stay
-	if (state == StateChara::STAY) {
-		if (0 < stayCnt) {
-			stayCnt--;
-		} else {
-			this->startIdle();
-		}
-	}
-	// Idle
-	if (state == StateChara::IDLE) {
-		if (0 < idleCnt) {
-			idleCnt--;
-		} else {
-			this->startIdle();
-		}
-	}
-	// Walk
-	if (state == StateChara::WALK) {
-		if (this->getMoveFlg()) {
-			pos.x += vel.x * delay;
-			pos.y += vel.y * delay;
-			if (!walkFlg) {
-				walkLen -= this->getSpeed() * delay;
-				if (walkLen <= 0.0f) this->startStay();
-			}
-		}
-	}
+	// Footprints
+	this->checkFootprints();
 	// Draw
 	this->draw();
 }
 
-void SpriteHiyo::changeState(StateChara sta) {
-	// State
-	state = sta;
-	if (state == StateChara::STAY) {
-		//LOGD("Main", "Let's stay!!");
-		this->stopFrames();
-		return;
-	}
-	if (state == StateChara::IDLE) {
-		//LOGD("Main", "Let's idle!!");
-		// Frames
-		vector<string> frames = {"hiyo_f", "hiyo_b", "hiyo_r", "hiyo_l", "hiyo_i1", "hiyo_i2"};
-		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
-		this->changeFrames(frames.at(index), 2);
-		return;
-	}
-	if (state == StateChara::WALK) {
-		//LOGD("Main", "Let's walk!!");
-		// Frames
-		int deg = this->getDegree();
-		if (deg < 45) {
-			this->changeFrames("hiyo_r", -1);
-		} else if (deg < 135) {
-			this->changeFrames("hiyo_f", -1);
-		} else if (deg < 225) {
-			this->changeFrames("hiyo_l", -1);
-		} else if (deg < 315) {
-			this->changeFrames("hiyo_b", -1);
-		} else {
-			this->changeFrames("hiyo_r", -1);
+void SpriteHiyo::checkFootprints() {
+	if (!target) return;
+	if (target->getPosX() != footprints.front().x ||
+		target->getPosY() != footprints.front().y) {
+
+		footprints.emplace_front(target->getPosX(), target->getPosY());
+
+		int deg = UtilMath::getInstance()->calcDeg2D(pos, footprints.back());
+		if (deg != getDegree()) {
+			if (deg < 45) {
+				this->changeFrames("hiyo_r", -1);
+			} else if (deg < 135) {
+				this->changeFrames("hiyo_f", -1);
+			} else if (deg < 225) {
+				this->changeFrames("hiyo_l", -1);
+			} else if (deg < 315) {
+				this->changeFrames("hiyo_b", -1);
+			} else {
+				this->changeFrames("hiyo_r", -1);
+			}
 		}
+		setDegree(deg);
+		resumeFrames();
+
+		pos.x = footprints.back().x;
+		pos.y = footprints.back().y;
+		footprints.pop_back();
 		return;
+	}
+	this->pauseFrames();
+}
+
+void SpriteHiyo::setTarget(SpriteBase *tgt) {
+	target = tgt;
+	for (auto &footprint : footprints) {
+		footprint.x = getPosX();
+		footprint.y = getPosY();
 	}
 }

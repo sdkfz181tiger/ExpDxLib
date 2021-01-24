@@ -9,6 +9,7 @@ private:
 	map<string, vector<int>> frameMap;
 	vector<int> frames;
 	int frameCnt, frameInterval, frameIndex, frameLoop;
+	bool framePause;
 
 public:
 	static SpriteFrames *createSprite(const string &fileName, float x, float y);
@@ -23,7 +24,9 @@ public:
 
 	void changeFrames(const string &frameName, int loop);
 
-	void stopFrames();
+	void pauseFrames();
+
+	void resumeFrames();
 
 	virtual void update(const float delay) override;
 

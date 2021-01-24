@@ -68,7 +68,7 @@ void SpriteTanu::changeState(StateChara sta) {
 	state = sta;
 	if (state == StateChara::STAY) {
 		//LOGD("Main", "Let's stay!!");
-		this->stopFrames();
+		this->pauseFrames();
 		return;
 	}
 	if (state == StateChara::IDLE) {

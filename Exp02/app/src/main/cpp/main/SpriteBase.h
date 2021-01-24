@@ -41,9 +41,15 @@ public:
 
 	void stop();
 
+	void setMoveFlg(bool flg);
+
 	bool getMoveFlg() { return moveFlg; }
 
+	void setSpeed(int spd);
+
 	int getSpeed() { return moveSpd; }
+
+	void setDegree(int deg);
 
 	int getDegree() { return moveDeg; }
 

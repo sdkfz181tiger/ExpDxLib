@@ -32,13 +32,16 @@ bool UtilSound::init() {
 	// Mute
 	muteFlg = UtilLocalSave::getInstance()->getBool("mute_flg");
 
-	vector<string> fileSEs = {
+	const vector<string> fileSEs = {
 			"sounds/se_coin_01.wav",
 			"sounds/se_coin_02.wav",
-			"sounds/se_coin_03.wav"
+			"sounds/se_coin_03.wav",
+			"sounds/se_coin_04.wav",
+			"sounds/se_get_01.wav",
+			"sounds/se_jump_01.wav"
 	};
 
-	vector<string> fileBGMs = {
+	const vector<string> fileBGMs = {
 			"sounds/bgm_game.wav",
 			"sounds/bgm_result_ng.wav",
 			"sounds/bgm_result_ok.wav",

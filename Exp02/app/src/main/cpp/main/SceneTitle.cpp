@@ -48,16 +48,16 @@ bool SceneTitle::init() {
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
 
 	// Characters
-	auto kobo = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
-	sprites.push_back(kobo);
-	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY);
+	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX + gSize * 3, cY);
 	sprites.push_back(osho);
-	auto chicken = SpriteChick::createSprite("images/c_chi_m.png", cX - gSize * 4, cY + gSize * 2);
-	sprites.push_back(chicken);
-	auto hiyoko = SpriteHiyo::createSprite("images/c_hiyo.png", cX - gSize * 4, cY + gSize * 4);
-	sprites.push_back(hiyoko);
-	auto tanuki = SpriteTanu::createSprite("images/c_tanu.png", cX + gSize * 5, cY + gSize * 3);
-	sprites.push_back(tanuki);
+	auto chick = SpriteChick::createSprite("images/c_chi_m.png", cX, cY);
+	sprites.push_back(chick);
+	auto hiyo1 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 1, cY + gSize * 1.5f);
+	sprites.push_back(hiyo1);
+	auto hiyo2 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 2, cY + gSize * 1.5f);
+	sprites.push_back(hiyo2);
+	auto tanu = SpriteTanu::createSprite("images/c_tanu.png", cX - gSize * 3, cY);
+	sprites.push_back(tanu);
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();

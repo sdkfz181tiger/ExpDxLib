@@ -22,7 +22,8 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE_VECTOR(btns);
-	DX_SAFE_DELETE_VECTOR(sprites);
+	DX_SAFE_DELETE_VECTOR(eggs);
+	DX_SAFE_DELETE_VECTOR(hiyos);
 }
 
 bool SceneGame::init() {
@@ -60,21 +61,25 @@ bool SceneGame::init() {
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
 
-	// Characters
-	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX + gSize * 3, cY);
-	sprites.push_back(osho);
-	auto chick = SpriteChick::createSprite("images/c_chi_m.png", cX, cY);
-	sprites.push_back(chick);
-	auto hiyo1 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 1, cY + gSize * 1.5f);
-	sprites.push_back(hiyo1);
-	auto hiyo2 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 2, cY + gSize * 1.5f);
-	sprites.push_back(hiyo2);
-	auto tanu = SpriteTanu::createSprite("images/c_tanu.png", cX - gSize * 3, cY);
-	sprites.push_back(tanu);
+	// Eggs
+	for (int i = 0; i < 30; i++) {
+		int x = UtilMath::getInstance()->getRandom(0, dWidth);
+		int y = UtilMath::getInstance()->getRandom(0, dHeight);
+		auto egg = SpriteItem::createSprite("images/c_egg.png", x, y);
+		eggs.push_back(egg);
+	}
 
-	// Items
-	auto egg = SpriteItem::createSprite("images/c_egg.png", cX - gSize * 8, cY);
-	sprites.push_back(egg);
+	// Hiyos
+	for (int i = 0; i < 10; i++) {
+		int x = player->getPosX();
+		int y = player->getPosY();
+		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png", x, y);
+		hiyos.push_back(hiyo);
+	}
+	hiyos.at(0)->setTarget(player);
+	for (int i = 1; i < hiyos.size(); i++) {
+		hiyos.at(i)->setTarget(hiyos.at(i - 1));
+	}
 
 	UtilSound::getInstance()->stopBGM();// BGM
 
@@ -85,14 +90,6 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 	if (dHeight / 2 < y) dPad->setOnTouchBegan(id, x, y);
-
-	auto it = sprites.end();
-	while (it-- != sprites.begin()) {
-		auto sprite = static_cast<SpriteBase *>(*it);
-		if (sprite->containsPoint(x, y)) {
-			LOGD("Main", "Contains!!");
-		}
-	}
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -113,24 +110,34 @@ void SceneGame::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Background, Board, Player
+	// Background, Board
 	background->update(delay);
 	bGrid->update(delay);
-	player->update(delay);
 
-	// Sprites
-	auto it = sprites.end();
-	while (it-- != sprites.begin()) {
-		auto sprite = static_cast<SpriteBase *>(*it);
-		if (sprite->getPosX() < 0) sprite->setPosX(dWidth);
-		if (dWidth < sprite->getPosX()) sprite->setPosX(0);
-		if (sprite->getPosY() < 0) sprite->setPosY(dHeight);
-		if (dHeight < sprite->getPosY()) sprite->setPosY(0);
-		sprite->update(delay);
+	// Eggs
+	auto itE = eggs.end();
+	while (itE-- != eggs.begin()) {
+		auto egg = static_cast<SpriteItem *>(*itE);
+		egg->update(delay);
+		if (player->containsPoint(egg->getPosX(), egg->getPosY())) {
+			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
+			eggs.erase(itE);
+			DX_SAFE_DELETE(egg);
+		}
 	}
 
+	// Hiyos
+	auto itH = hiyos.end();
+	while (itH-- != hiyos.begin()) {
+		auto hiyo = static_cast<SpriteHiyo *>(*itH);
+		hiyo->update(delay);
+	}
+
+	// Player
+	player->update(delay);
+
 	// Label
-	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 8,
+	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
 									  2, UtilAlign::CENTER);
 
 	// Buttons, Dpad
@@ -180,12 +187,12 @@ void SceneGame::onDpadReleased(DpadTag &tag) {
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
-	int spd = UtilDebug::getInstance()->getGridSize() * 5;
+	int spd = UtilDebug::getInstance()->getGridSize() * 6;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
 	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
 
-	UtilSound::getInstance()->stopBGM();// BGM
-	UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
+	//UtilSound::getInstance()->stopBGM();// BGM
+	//UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
 }

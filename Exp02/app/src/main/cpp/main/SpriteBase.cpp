@@ -59,6 +59,18 @@ void SpriteBase::stop() {
 	vel.y = 0.0f;
 }
 
+void SpriteBase::setMoveFlg(bool flg) {
+	moveFlg = flg;
+}
+
+void SpriteBase::setSpeed(int spd) {
+	moveSpd = spd;
+}
+
+void SpriteBase::setDegree(int deg) {
+	moveDeg = deg;
+}
+
 bool SpriteBase::containsPoint(int x, int y) {
 	if (x < minX) return false;
 	if (maxX < x) return false;

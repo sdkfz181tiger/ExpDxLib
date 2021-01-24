@@ -5,6 +5,10 @@
 
 class SpriteHiyo : public SpriteChara {
 
+private:
+	SpriteBase *target;
+	list<Vec2> footprints;
+
 public:
 	static SpriteHiyo *createSprite(const string &fileName, float x, float y);
 
@@ -16,7 +20,9 @@ public:
 
 	void update(const float delay) override;
 
-	void changeState(StateChara sta) override;
+	void checkFootprints();
+
+	void setTarget(SpriteBase *tgt);
 };
 
 #endif // _SPRITEHIYO_H_

@@ -10,7 +10,8 @@ SpriteFrames *SpriteFrames::createSprite(const string &fileName, float x, float 
 
 SpriteFrames::SpriteFrames(float x, float y) : SpriteBase(x, y),
 											   frameCnt(0), frameInterval(5),
-											   frameIndex(0), frameLoop(-1) {
+											   frameIndex(0), frameLoop(-1),
+											   framePause(false) {
 	LOGD("Main", "SpriteFrames()\n");
 }
 
@@ -36,10 +37,15 @@ void SpriteFrames::changeFrames(const string &frameName, int loop) {
 	frameCnt = 0;
 	frameIndex = 0;
 	frameLoop = loop;
+	framePause = false;
 }
 
-void SpriteFrames::stopFrames() {
-	frameLoop = 0;
+void SpriteFrames::pauseFrames() {
+	framePause = true;
+}
+
+void SpriteFrames::resumeFrames() {
+	framePause = false;
 }
 
 void SpriteFrames::update(const float delay) {
@@ -66,6 +72,7 @@ void SpriteFrames::draw() {
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, frames.at(frameIndex), true);
 	if (frameLoop == 0) return;
+	if (framePause) return;
 	if (++frameCnt < frameInterval) return;
 	frameCnt = 0;
 	if (++frameIndex < frames.size()) return;
