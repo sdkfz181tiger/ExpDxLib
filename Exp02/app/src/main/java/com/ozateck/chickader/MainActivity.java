@@ -4,14 +4,19 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import java.io.File;
 
 public class MainActivity extends NativeActivity {
 
 	private static final String TAG = "MainActivity";
-	private static Context ctx = null;
+	private static NativeActivity activity = null;
 	private static String versionCode = "";
 	private static String versionName = "";
 	private static String filePath = "";
@@ -25,13 +30,13 @@ public class MainActivity extends NativeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+
 		MainActivity.nativeOnCreate();// Native
-		// Context, Version, filePath
-		ctx = this.getApplicationContext();
-		versionCode = getVersionCode(ctx, ctx.getPackageManager());
-		versionName = getVersionName(ctx, ctx.getPackageManager());
-		filePath = ctx.getFilesDir().getPath() + File.separator;
+		// Activity, Version, filePath
+		activity = this;
+		versionCode = getVersionCode(this, this.getPackageManager());
+		versionName = getVersionName(this, this.getPackageManager());
+		filePath = this.getFilesDir().getPath() + File.separator;
 		debugFlg = BuildConfig.DEBUG;
 	}
 
@@ -123,9 +128,36 @@ public class MainActivity extends NativeActivity {
 		return debugFlg;
 	}
 
-	public static void connectServer(final String url, final String fileName) {
-		if (ctx == null) return;
-		final HttpConnector hCon = new HttpConnector(ctx);
+	public static void connectAdMob() {
+		if (activity == null) return;
+
+		// Banner
+		activity.runOnUiThread(
+				new Runnable() {
+					@Override
+					public void run() {
+						LinearLayout fLayout = new LinearLayout(activity);
+						fLayout.setLayoutParams(new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT
+						));
+						fLayout.setBackgroundColor(Color.RED);
+
+						Button btn = new Button(activity);
+						btn.setText("=BANNER=");
+
+						PopupWindow pWindow = new PopupWindow(activity);
+						pWindow.setContentView(btn);
+						pWindow.showAtLocation(fLayout, Gravity.BOTTOM, 0, 0);
+						pWindow.update();
+					}
+				}
+		);
+	}
+
+	public static void connectGitHub(final String url, final String fileName) {
+		if (activity == null) return;
+		final HttpConnector hCon = new HttpConnector(activity);
 		hCon.connect(url, fileName);
 	}
 }

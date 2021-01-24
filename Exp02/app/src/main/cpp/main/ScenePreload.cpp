@@ -31,7 +31,7 @@ bool ScenePreload::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Connect to server
+	// Callback
 	const string url = dUrl + dPrefix;
 	const string fileName = "index.json";
 	auto func = [&](CallbackType type, const char *fileName) -> void {
@@ -51,7 +51,10 @@ bool ScenePreload::init() {
 			return;
 		}
 	};
-	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
+
+	// JNI
+	UtilJNI::getInstance()->connectAdMob();
+	UtilJNI::getInstance()->connectGitHub(url.c_str(), fileName.c_str(), func);
 
 	// LoadingMarker
 	lMarker = new LoadingMarker(cX, cY, gSize * 10, gSize / 4);
@@ -101,7 +104,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	LOGD("Main", "Starting game!!");
 	lMarker->setMsg("STARTING");// Message
-	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+	this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -126,7 +129,7 @@ void ScenePreload::downloadImages() {
 	auto func = [&](CallbackType type, const char *fileName) -> void {
 		if (type == CallbackType::SUCCESS) {
 			LOGD("Main", "Success: %d, %s", type, fileName);
-			lMarker->setMsg("LOADING.");
+			lMarker->setMsg("LOADING");
 			lMarker->progress(1);// Progress
 			this->downloadImages();// Recursive
 			return;
@@ -134,7 +137,7 @@ void ScenePreload::downloadImages() {
 		if (type == CallbackType::PROGRESS) {
 			LOGD("Main", "Progress: %d, %s", type, fileName);
 			int rdm = UtilMath::getInstance()->getRandom(0, 10);
-			const string msg = (rdm % 2 == 0) ? "L A I G " : " O D N .";
+			const string msg = (rdm % 2 == 0) ? "L A I G " : " O D N ";
 			lMarker->setMsg(msg.c_str());
 			return;
 		}
@@ -149,7 +152,7 @@ void ScenePreload::downloadImages() {
 	const string url = dUrl + dPrefix;
 	const string fileName = fileNames.back();
 	fileNames.pop_back();
-	UtilJNI::getInstance()->connectServer(url.c_str(), fileName.c_str(), func);
+	UtilJNI::getInstance()->connectGitHub(url.c_str(), fileName.c_str(), func);
 }
 
 bool ScenePreload::checkAssets(const json &jObj) {

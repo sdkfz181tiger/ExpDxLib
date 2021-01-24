@@ -135,6 +135,15 @@ jint UtilJNI::registerMethods(JNIEnv *env) {
 	return JNI_OK;
 }
 
+void UtilJNI::callJNIVoid(const char *methodName) {
+	//LOGD("JNI", "UtilJNI::callJNITest(%p), %ld\n", javaVM, pthread_self());
+	JNIEnv *env = Android_JNI_GetEnv();
+	if (env == nullptr) return;
+	const char *sig = "()V";
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
+	env->CallStaticVoidMethod(activity, mID);
+}
+
 void UtilJNI::callJNIVoid(const char *methodName, const char *url, const char *fileName) {
 	//LOGD("JNI", "UtilJNI::callJNIVoid(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
@@ -171,9 +180,13 @@ bool UtilJNI::callJNIBool(const char *methodName) {
 	return jflg == JNI_TRUE;
 }
 
-void UtilJNI::connectServer(const char *url, const char *fileName,
+void UtilJNI::connectAdMob() {
+	this->callJNIVoid("connectAdMob");
+}
+
+void UtilJNI::connectGitHub(const char *url, const char *fileName,
 							function<void(CallbackType, const char *)> func) {
-	this->callJNIVoid("connectServer", url, fileName);
+	this->callJNIVoid("connectGitHub", url, fileName);
 	callback = func;// Callback
 }
 
