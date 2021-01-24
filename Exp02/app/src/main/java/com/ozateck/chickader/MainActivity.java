@@ -4,12 +4,16 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import java.io.File;
 
@@ -136,20 +140,7 @@ public class MainActivity extends NativeActivity {
 				new Runnable() {
 					@Override
 					public void run() {
-						LinearLayout fLayout = new LinearLayout(activity);
-						fLayout.setLayoutParams(new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT
-						));
-						fLayout.setBackgroundColor(Color.RED);
-
-						Button btn = new Button(activity);
-						btn.setText("=BANNER=");
-
-						PopupWindow pWindow = new PopupWindow(activity);
-						pWindow.setContentView(btn);
-						pWindow.showAtLocation(fLayout, Gravity.BOTTOM, 0, 0);
-						pWindow.update();
+						showBanner();
 					}
 				}
 		);
@@ -159,5 +150,62 @@ public class MainActivity extends NativeActivity {
 		if (activity == null) return;
 		final HttpConnector hCon = new HttpConnector(activity);
 		hCon.connect(url, fileName);
+	}
+
+	public static void showBanner() {
+		if (activity == null) return;
+
+		// Banner
+		AdView mBanner = new AdView(activity);
+		mBanner.setLayoutParams(new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.WRAP_CONTENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT));
+		mBanner.setAdSize(AdSize.SMART_BANNER);
+		mBanner.setAdUnitId(activity.getResources().getString(R.string.admob_ad_unit_id_banner));
+		mBanner.setAdListener(new AdListener() {
+			@Override
+			public void onAdLoaded() {
+				CustomLog.d(TAG, "Banner:onAdLoaded()");
+				// FrameLayout
+				FrameLayout fLayout = new FrameLayout(activity);
+				fLayout.setLayoutParams(new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.WRAP_CONTENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT
+				));
+				// PopupWindow
+				PopupWindow pWindow = new PopupWindow(activity);
+				pWindow.setContentView(mBanner);
+				pWindow.setWidth(mBanner.getAdSize().getWidthInPixels(activity));
+				pWindow.setHeight(mBanner.getAdSize().getHeightInPixels(activity));
+				pWindow.showAtLocation(fLayout, Gravity.TOP, 0, 0);
+				pWindow.update();
+			}
+
+			@Override
+			public void onAdFailedToLoad(int errorCode) {
+				CustomLog.d(TAG, "Banner:onAdFailedToLoad():" + errorCode);
+				switch (errorCode) {
+					case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+						CustomLog.d(TAG, "ERROR_CODE_INTERNAL_ERROR");
+						break;
+					case AdRequest.ERROR_CODE_INVALID_REQUEST:
+						CustomLog.d(TAG, "ERROR_CODE_INVALID_REQUEST");
+						break;
+					case AdRequest.ERROR_CODE_NETWORK_ERROR:
+						CustomLog.d(TAG, "ERROR_CODE_NETWORK_ERROR");
+						break;
+					case AdRequest.ERROR_CODE_NO_FILL:
+						CustomLog.d(TAG, "ERROR_CODE_NO_FILL");
+						break;
+					default:
+						break;
+				}
+			}
+		});
+		// Request
+		AdRequest.Builder bannerBuilder = new AdRequest.Builder();
+		bannerBuilder.addTestDevice(activity.getResources().getString(R.string.device_pixel2));
+		AdRequest mRequest = bannerBuilder.build();
+		mBanner.loadAd(mRequest);
 	}
 }
