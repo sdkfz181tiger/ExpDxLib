@@ -59,6 +59,7 @@ bool SceneTitle::init() {
 	auto tanu = SpriteTanu::createSprite("images/c_tanu.png", cX - gSize * 3, cY);
 	sprites.push_back(tanu);
 
+
 	// BGM
 	UtilSound::getInstance()->stopBGM();
 	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false, true);

@@ -20,6 +20,8 @@ public:
 
 	virtual bool init(const string &fileName) override;
 
+	void readyFrames(const string &frameName, int loop);
+
 	void pushFrames(const string &frameName);
 
 	void changeFrames(const string &frameName, int loop);

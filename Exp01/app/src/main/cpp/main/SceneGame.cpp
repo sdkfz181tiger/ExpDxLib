@@ -66,19 +66,8 @@ bool SceneGame::init() {
 		int x = UtilMath::getInstance()->getRandom(0, dWidth);
 		int y = UtilMath::getInstance()->getRandom(0, dHeight);
 		auto egg = SpriteItem::createSprite("images/c_egg.png", x, y);
+		egg->readyFrames("egg_d", -1);
 		eggs.push_back(egg);
-	}
-
-	// Hiyos
-	for (int i = 0; i < 10; i++) {
-		int x = player->getPosX();
-		int y = player->getPosY();
-		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png", x, y);
-		hiyos.push_back(hiyo);
-	}
-	hiyos.at(0)->setTarget(player);
-	for (int i = 1; i < hiyos.size(); i++) {
-		hiyos.at(i)->setTarget(hiyos.at(i - 1));
 	}
 
 	UtilSound::getInstance()->stopBGM();// BGM
@@ -123,6 +112,7 @@ void SceneGame::update(const float delay) {
 			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 			eggs.erase(itE);
 			DX_SAFE_DELETE(egg);
+			this->chainHiyo(1);// Hiyos
 		}
 	}
 
@@ -195,4 +185,26 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 
 	//UtilSound::getInstance()->stopBGM();// BGM
 	//UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
+}
+
+void SceneGame::chainHiyo(int num) {
+
+	// Chains x player
+	if (hiyos.size() == 0) {
+		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png",
+											 player->getPosX(),
+											 player->getPosY());
+		hiyo->setTarget(player);
+		hiyos.push_back(hiyo);
+		num--;// Decrement
+	}
+	// Chains x hiyo
+	for (int i = 0; i < num; i++) {
+		size_t last = hiyos.size() - 1;
+		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png",
+											 hiyos.at(last)->getPosX(),
+											 hiyos.at(last)->getPosY());
+		hiyo->setTarget(hiyos.at(last));
+		hiyos.push_back(hiyo);
+	}
 }

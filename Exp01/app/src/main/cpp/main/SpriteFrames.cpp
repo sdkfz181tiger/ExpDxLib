@@ -27,6 +27,11 @@ bool SpriteFrames::init(const string &fileName) {
 	return true;
 }
 
+void SpriteFrames::readyFrames(const string &frameName, int loop) {
+	this->pushFrames(frameName);
+	this->changeFrames(frameName, loop);
+}
+
 void SpriteFrames::pushFrames(const string &frameName) {
 	frameMap.insert(make_pair(frameName, UtilGraph::getInstance()->getDivGraph(frameName)));
 }

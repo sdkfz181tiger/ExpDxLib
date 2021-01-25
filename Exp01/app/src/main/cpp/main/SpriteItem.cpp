@@ -18,6 +18,7 @@ SpriteItem::~SpriteItem() {
 
 bool SpriteItem::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
+
 	return true;
 }
 

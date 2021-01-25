@@ -43,6 +43,8 @@ public:
 	void onDpadReleased(DpadTag &tag) override;
 
 	void onDpadChanged(DpadTag &tag) override;
+
+	void chainHiyo(int num);
 };
 
 #endif // _SCENEGAME_H_
