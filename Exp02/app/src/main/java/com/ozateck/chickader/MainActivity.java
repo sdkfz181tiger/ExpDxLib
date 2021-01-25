@@ -7,15 +7,18 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends NativeActivity {
 
@@ -156,10 +159,9 @@ public class MainActivity extends NativeActivity {
 		if (activity == null) return;
 
 		// Banner
+		final int WC = FrameLayout.LayoutParams.WRAP_CONTENT;
 		AdView mBanner = new AdView(activity);
-		mBanner.setLayoutParams(new FrameLayout.LayoutParams(
-				FrameLayout.LayoutParams.WRAP_CONTENT,
-				FrameLayout.LayoutParams.WRAP_CONTENT));
+		mBanner.setLayoutParams(new FrameLayout.LayoutParams(WC, WC));
 		mBanner.setAdSize(AdSize.SMART_BANNER);
 		mBanner.setAdUnitId(activity.getResources().getString(R.string.admob_ad_unit_id_banner));
 		mBanner.setAdListener(new AdListener() {
@@ -168,10 +170,7 @@ public class MainActivity extends NativeActivity {
 				CustomLog.d(TAG, "Banner:onAdLoaded()");
 				// FrameLayout
 				FrameLayout fLayout = new FrameLayout(activity);
-				fLayout.setLayoutParams(new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.WRAP_CONTENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT
-				));
+				fLayout.setLayoutParams(new FrameLayout.LayoutParams(WC, WC));
 				// PopupWindow
 				PopupWindow pWindow = new PopupWindow(activity);
 				pWindow.setContentView(mBanner);
@@ -182,30 +181,18 @@ public class MainActivity extends NativeActivity {
 			}
 
 			@Override
-			public void onAdFailedToLoad(int errorCode) {
-				CustomLog.d(TAG, "Banner:onAdFailedToLoad():" + errorCode);
-				switch (errorCode) {
-					case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-						CustomLog.d(TAG, "ERROR_CODE_INTERNAL_ERROR");
-						break;
-					case AdRequest.ERROR_CODE_INVALID_REQUEST:
-						CustomLog.d(TAG, "ERROR_CODE_INVALID_REQUEST");
-						break;
-					case AdRequest.ERROR_CODE_NETWORK_ERROR:
-						CustomLog.d(TAG, "ERROR_CODE_NETWORK_ERROR");
-						break;
-					case AdRequest.ERROR_CODE_NO_FILL:
-						CustomLog.d(TAG, "ERROR_CODE_NO_FILL");
-						break;
-					default:
-						break;
-				}
+			public void onAdFailedToLoad(LoadAdError adError) {
+				CustomLog.w(TAG, "Banner:onAdFailedToLoad():" + adError.getMessage());
 			}
 		});
-		// Request
-		AdRequest.Builder bannerBuilder = new AdRequest.Builder();
-		bannerBuilder.addTestDevice(activity.getResources().getString(R.string.device_pixel2));
-		AdRequest mRequest = bannerBuilder.build();
+		// TestDevices
+		ArrayList<String> devices = new ArrayList<String>();
+		devices.add(activity.getResources().getString(R.string.device_pixel2));
+		RequestConfiguration mConfiguration = new RequestConfiguration.Builder().
+				setTestDeviceIds(devices).build();
+		MobileAds.setRequestConfiguration(mConfiguration);
+		// Load
+		AdRequest mRequest = new AdRequest.Builder().build();
 		mBanner.loadAd(mRequest);
 	}
 }
