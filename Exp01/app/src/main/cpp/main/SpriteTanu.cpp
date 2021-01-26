@@ -8,7 +8,11 @@ SpriteTanu *SpriteTanu::createSprite(const string &fileName, float x, float y) {
 	return nullptr;
 }
 
-SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y) {
+SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
+										   wanCnt(0), wanInterval(50),
+										   capCnt(0), capInterval(10),
+										   escCnt(0), escInterval(10),
+										   hiyoFlg(false) {
 	LOGD("Main", "SpriteTanu()\n");
 }
 
@@ -45,7 +49,7 @@ void SpriteTanu::update(float delay) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
-			this->startIdle();
+			this->startWander();
 		}
 	}
 	// Walk
@@ -59,15 +63,54 @@ void SpriteTanu::update(float delay) {
 			}
 		}
 	}
+	// Wander
+	if (state == StateTanu::WANDER) {
+		if (0 < wanCnt) {
+			wanCnt--;
+		} else {
+			// Next
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			int dWidth = UtilDx::getInstance()->getDispWidth();
+			int dHeight = UtilDx::getInstance()->getDispHeight();
+			int x = UtilMath::getInstance()->getRandom(gSize, dWidth - gSize);
+			int y = UtilMath::getInstance()->getRandom(gSize, dHeight - gSize);
+			this->startWalk(gSize * 5, x, y, false);
+		}
+	}
+	// Captured
+	if (state == StateTanu::CAPTURED) {
+		if (0 < capCnt) {
+			capCnt--;
+		} else {
+			this->startEscape();
+		}
+	}
+	// Escape
+	if (state == StateTanu::ESCAPE) {
+		if (0 < escCnt) {
+			escCnt--;
+		} else {
+			// Next
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			int dWidth = UtilDx::getInstance()->getDispWidth();
+			int dHeight = UtilDx::getInstance()->getDispHeight();
+			int x = dWidth / 2;
+			int y = dHeight;
+			this->startWalk(gSize * 10, x, y, false);
+		}
+	}
 	// Draw
 	this->draw();
 }
 
-void SpriteTanu::changeState(StateChara sta) {
+void SpriteTanu::changeState(int sta) {
 	// State
+	if (state == sta) return;
 	state = sta;
+
 	if (state == StateChara::STAY) {
 		//LOGD("Main", "Let's stay!!");
+		// Frames
 		this->pauseFrames();
 		return;
 	}
@@ -96,4 +139,53 @@ void SpriteTanu::changeState(StateChara sta) {
 		}
 		return;
 	}
+	if (state == StateTanu::WANDER) {
+		//LOGD("Main", "Let's wander!!");
+		// Frames
+		this->changeFrames("tanu_d", -1);
+		return;
+	}
+	if (state == StateTanu::CAPTURED) {
+		//LOGD("Main", "Let's captured!!");
+		// Frames
+		this->changeFrames("tanu_d", -1);
+		return;
+	}
+	if (state == StateTanu::ESCAPE) {
+		//LOGD("Main", "Let's escape!!");
+		// Frames
+		this->changeFrames("tanu_d", -1);
+		return;
+	}
+}
+
+void SpriteTanu::startWander() {
+	// Wander
+	wanCnt = UtilMath::getInstance()->getRandom(wanInterval / 2, wanInterval);
+	// Hiyo flg
+	this->setHiyoFlg(false);
+	// State
+	this->changeState(StateTanu::WANDER);
+}
+
+void SpriteTanu::startCapture() {
+	// Capture
+	capCnt = UtilMath::getInstance()->getRandom(capInterval / 2, capInterval);
+	// Hiyo flg
+	this->setHiyoFlg(true);
+	// State
+	this->changeState(StateTanu::CAPTURED);
+}
+
+void SpriteTanu::startEscape() {
+	// Escape
+	escCnt = UtilMath::getInstance()->getRandom(escInterval / 2, escInterval);
+	// Hiyo flg
+	this->setHiyoFlg(true);
+	// State
+	this->changeState(StateTanu::ESCAPE);
+}
+
+void SpriteTanu::setHiyoFlg(bool flg){
+	hiyoFlg = flg;
 }

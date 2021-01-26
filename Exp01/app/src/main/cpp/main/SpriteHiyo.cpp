@@ -81,3 +81,7 @@ void SpriteHiyo::setTarget(SpriteBase *tgt) {
 		footprint.y = getPosY();
 	}
 }
+
+void SpriteHiyo::clearTarget() {
+	target = nullptr;
+}

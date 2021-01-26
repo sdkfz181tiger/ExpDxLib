@@ -10,7 +10,7 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), bGrid(nullptr),
-												dPad(nullptr), player(nullptr) {
+												dPad(nullptr), player(nullptr), tanu(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -21,6 +21,7 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(bGrid);
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
+	DX_SAFE_DELETE(tanu);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
 	DX_SAFE_DELETE_VECTOR(hiyos);
@@ -60,6 +61,8 @@ bool SceneGame::init() {
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
+
+	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
 
 	// Eggs
 	for (int i = 0; i < 30; i++) {
@@ -103,28 +106,31 @@ void SceneGame::update(const float delay) {
 	background->update(delay);
 	bGrid->update(delay);
 
-	// Eggs
+	// Eggs x Player
 	auto itE = eggs.end();
 	while (itE-- != eggs.begin()) {
 		auto egg = static_cast<SpriteItem *>(*itE);
 		egg->update(delay);
-		if (player->containsPoint(egg->getPosX(), egg->getPosY())) {
-			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
-			eggs.erase(itE);
-			DX_SAFE_DELETE(egg);
-			this->chainHiyo(1);// Hiyos
-		}
+		if (!player->containsPoint(egg->getPosX(), egg->getPosY())) continue;
+		this->chainHiyo(1);// Chain
+		eggs.erase(itE);
+		DX_SAFE_DELETE(egg);
 	}
 
-	// Hiyos
+	// Hiyos x Tanu
 	auto itH = hiyos.end();
 	while (itH-- != hiyos.begin()) {
 		auto hiyo = static_cast<SpriteHiyo *>(*itH);
 		hiyo->update(delay);
+		if (!tanu->containsPoint(hiyo->getPosX(), hiyo->getPosY())) continue;
+		if (tanu->getHiyoFlg()) continue;
+		this->purgeHiyo();// Purge
+		tanu->startCapture();
 	}
 
-	// Player
+	// Player, Tanu
 	player->update(delay);
+	tanu->update(delay);
 
 	// Label
 	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
@@ -178,6 +184,7 @@ void SceneGame::onDpadReleased(DpadTag &tag) {
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	int spd = UtilDebug::getInstance()->getGridSize() * 6;
+	player->startStay();
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
@@ -188,6 +195,8 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 }
 
 void SceneGame::chainHiyo(int num) {
+
+	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 
 	// Chains x player
 	if (hiyos.size() == 0) {
@@ -207,4 +216,11 @@ void SceneGame::chainHiyo(int num) {
 		hiyo->setTarget(hiyos.at(last));
 		hiyos.push_back(hiyo);
 	}
+}
+
+void SceneGame::purgeHiyo() {
+	auto itH = hiyos.end() - 1;
+	auto hiyo = static_cast<SpriteHiyo *>(*itH);
+	hiyos.erase(itH);
+	DX_SAFE_DELETE(hiyo);
 }

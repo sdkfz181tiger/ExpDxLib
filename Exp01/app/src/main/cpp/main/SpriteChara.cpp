@@ -32,15 +32,18 @@ void SpriteChara::update(float delay) {
 	// Do something
 }
 
-void SpriteChara::setType(TypeChara typ) {
+void SpriteChara::setType(int typ) {
 	type = typ;
 }
 
-TypeChara SpriteChara::getType() const {
+int SpriteChara::getType() const {
 	return type;
 }
 
-void SpriteChara::changeState(StateChara sta) {
+void SpriteChara::changeState(int sta) {
+	// State
+	if (state == sta) return;
+	state = sta;
 	// Do something
 }
 

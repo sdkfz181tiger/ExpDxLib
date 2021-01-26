@@ -23,6 +23,8 @@ public:
 	void checkFootprints();
 
 	void setTarget(SpriteBase *tgt);
+
+	void clearTarget();
 };
 
 #endif // _SPRITEHIYO_H_

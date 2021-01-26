@@ -63,11 +63,14 @@ void SpriteKobo::update(float delay) {
 	this->draw();
 }
 
-void SpriteKobo::changeState(StateChara sta) {
+void SpriteKobo::changeState(int sta) {
 	// State
+	if (state == sta) return;
 	state = sta;
+
 	if (state == StateChara::STAY) {
 		//LOGD("Main", "Let's stay!!");
+		// Frames
 		this->pauseFrames();
 		return;
 	}

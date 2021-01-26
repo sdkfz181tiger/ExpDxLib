@@ -122,7 +122,7 @@ void ScenePreload::downloadImages() {
 		LOGD("Main", "Completed!!");
 		lMarker->setMsg("COMPLETED");
 		lMarker->progress(1);// Progress
-		this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+		this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
 		return;
 	}
 

@@ -16,7 +16,7 @@ public:
 
 	void update(const float delay) override;
 
-	void changeState(StateChara sta) override;
+	void changeState(int sta) override;
 };
 
 #endif // _SPRITEKOBO_H_

@@ -10,6 +10,7 @@ private:
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
 	SpriteKobo *player;
+	SpriteTanu *tanu;
 	vector<SpriteItem *> eggs;
 	vector<SpriteHiyo *> hiyos;
 
@@ -45,6 +46,8 @@ public:
 	void onDpadChanged(DpadTag &tag) override;
 
 	void chainHiyo(int num);
+
+	void purgeHiyo();
 };
 
 #endif // _SCENEGAME_H_

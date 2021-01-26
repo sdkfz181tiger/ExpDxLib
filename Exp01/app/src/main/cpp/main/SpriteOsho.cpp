@@ -63,11 +63,14 @@ void SpriteOsho::update(float delay) {
 	this->draw();
 }
 
-void SpriteOsho::changeState(StateChara sta) {
+void SpriteOsho::changeState(int sta) {
 	// State
+	if (state == sta) return;
 	state = sta;
+
 	if (state == StateChara::STAY) {
 		//LOGD("Main", "Let's stay!!");
+		// Frames
 		this->pauseFrames();
 		return;
 	}

@@ -67,11 +67,14 @@ void SpriteChick::update(float delay) {
 	this->draw();
 }
 
-void SpriteChick::changeState(StateChara sta) {
+void SpriteChick::changeState(int sta) {
 	// State
+	if (state == sta) return;
 	state = sta;
+
 	if (state == StateChara::STAY) {
 		//LOGD("Main", "Let's stay!!");
+		// Frames
 		this->pauseFrames();
 		return;
 	}

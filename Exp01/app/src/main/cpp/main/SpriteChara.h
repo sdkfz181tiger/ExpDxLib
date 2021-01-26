@@ -3,19 +3,29 @@
 
 #include "SpriteFrames.h"
 
-enum class TypeChara {
-	DEFAULT, CHI_M, CHI_F, HIYO, TANU, OSHO, KOBO
+class TypeChara {
+public:
+	const static int DEFAULT = 0;
+	const static int CHI_M = 1;
+	const static int CHI_F = 2;
+	const static int HIYO = 3;
+	const static int TANU = 4;
+	const static int OSHO = 5;
+	const static int KOBO = 6;
 };
 
-enum class StateChara {
-	DEFAULT, STAY, IDLE, WALK
+class StateChara {
+public:
+	const static int DEFAULT = 0;
+	const static int STAY = 1;
+	const static int IDLE = 2;
+	const static int WALK = 3;
 };
 
 class SpriteChara : public SpriteFrames {
 
 protected:
-	TypeChara type;
-	StateChara state;
+	int type, state;
 	int stayCnt, stayInterval;
 	int idleCnt, idleInterval;
 	Vec2 walkDst;
@@ -33,11 +43,11 @@ public:
 
 	virtual void update(const float delay) override;
 
-	void setType(TypeChara typ);
+	void setType(int typ);
 
-	TypeChara getType() const;
+	int getType() const;
 
-	virtual void changeState(StateChara sta);
+	virtual void changeState(int sta);
 
 	void startStay();
 
