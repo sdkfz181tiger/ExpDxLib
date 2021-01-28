@@ -10,9 +10,10 @@ private:
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
 	SpriteKobo *player;
+	SpriteChicken *chicken;
 	SpriteTanu *tanu;
 	vector<SpriteItem *> eggs;
-	vector<SpriteHiyo *> hiyos;
+	vector<SpriteChick *> chicks;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);
@@ -45,9 +46,11 @@ public:
 
 	void onDpadChanged(DpadTag &tag) override;
 
-	void chainHiyo(int num);
+	void putEgg(int num);
 
-	void purgeHiyo();
+	void chainChick(int num);
+
+	void purgeChick();
 };
 
 #endif // _SCENEGAME_H_

@@ -32,36 +32,36 @@ bool UtilGraph::init() {
 	// Create animation
 	this->createDivGraph("images/s_bone.png", "bone_f", 1, 5, 16, 16, 0, 4);
 	// Chicken_f
-	this->createDivGraph("images/s_chi_f.png", "chi_f_f", 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_b", 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_r", 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_l", 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_d", 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_i1", 9, 5, 16, 16, 25, 29);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_i2", 9, 5, 16, 16, 30, 34);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_i3", 9, 5, 16, 16, 35, 39);
-	this->createDivGraph("images/s_chi_f.png", "chi_f_i4", 9, 5, 16, 16, 40, 44);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_f", 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_b", 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_r", 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_l", 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_d", 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_i1", 9, 5, 16, 16, 25, 29);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_i2", 9, 5, 16, 16, 30, 34);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_i3", 9, 5, 16, 16, 35, 39);
+	this->createDivGraph("images/s_chicken_f.png", "chicken_f_i4", 9, 5, 16, 16, 40, 44);
 	// Chicken_m
-	this->createDivGraph("images/s_chi_m.png", "chi_m_f", 5, 5, 16, 16, 0, 4);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_b", 5, 5, 16, 16, 5, 9);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_r", 5, 5, 16, 16, 10, 14);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_l", 5, 5, 16, 16, 15, 19);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_d", 5, 5, 16, 16, 20, 24);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_i1", 9, 5, 16, 16, 25, 29);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_i2", 9, 5, 16, 16, 30, 34);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_i3", 9, 5, 16, 16, 35, 39);
-	this->createDivGraph("images/s_chi_m.png", "chi_m_i4", 9, 5, 16, 16, 40, 44);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_f", 5, 5, 16, 16, 0, 4);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_b", 5, 5, 16, 16, 5, 9);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_r", 5, 5, 16, 16, 10, 14);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_l", 5, 5, 16, 16, 15, 19);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_d", 5, 5, 16, 16, 20, 24);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_i1", 9, 5, 16, 16, 25, 29);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_i2", 9, 5, 16, 16, 30, 34);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_i3", 9, 5, 16, 16, 35, 39);
+	this->createDivGraph("images/s_chicken_m.png", "chicken_m_i4", 9, 5, 16, 16, 40, 44);
+	// Chick
+	this->createDivGraph("images/s_chick.png", "chick_f", 5, 5, 9, 9, 0, 4);
+	this->createDivGraph("images/s_chick.png", "chick_b", 5, 5, 9, 9, 5, 9);
+	this->createDivGraph("images/s_chick.png", "chick_r", 5, 5, 9, 9, 10, 14);
+	this->createDivGraph("images/s_chick.png", "chick_l", 5, 5, 9, 9, 15, 19);
+	this->createDivGraph("images/s_chick.png", "chick_d", 5, 5, 9, 9, 20, 24);
+	this->createDivGraph("images/s_chick.png", "chick_i1", 7, 5, 9, 9, 25, 29);
+	this->createDivGraph("images/s_chick.png", "chick_i2", 7, 5, 9, 9, 30, 34);
+	this->createDivGraph("images/s_chick.png", "chick_h", 8, 5, 9, 9, 35, 39);
 	// Egg
 	this->createDivGraph("images/s_egg.png", "egg_d", 2, 10, 5, 8, 0, 19);
-	// Hiyo
-	this->createDivGraph("images/s_hiyo.png", "hiyo_f", 5, 5, 9, 9, 0, 4);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_b", 5, 5, 9, 9, 5, 9);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_r", 5, 5, 9, 9, 10, 14);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_l", 5, 5, 9, 9, 15, 19);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_d", 5, 5, 9, 9, 20, 24);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_i1", 7, 5, 9, 9, 25, 29);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_i2", 7, 5, 9, 9, 30, 34);
-	this->createDivGraph("images/s_hiyo.png", "hiyo_h", 8, 5, 9, 9, 35, 39);
 	// Osho
 	this->createDivGraph("images/s_osho.png", "osho_f", 5, 5, 16, 16, 0, 4);
 	this->createDivGraph("images/s_osho.png", "osho_b", 5, 5, 16, 16, 5, 9);

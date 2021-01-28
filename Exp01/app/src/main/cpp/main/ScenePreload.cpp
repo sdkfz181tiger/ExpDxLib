@@ -11,7 +11,7 @@ ScenePreload *ScenePreload::createScene(int dWidth, int dHeight) {
 ScenePreload::ScenePreload(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 													  vCode(UtilJNI::getInstance()->getVersionCode()),
 													  vName(UtilJNI::getInstance()->getVersionName()),
-													  dUrl("https://sdkfz181tiger.github.io/shimejigames/chickader/"),
+													  dUrl("https://sdkfz181tiger.github.io/chickader/"),
 													  dPrefix(UtilJNI::getInstance()->getDebugFlg()
 															  ? "debug/" : "release/") {
 	LOGD("Main", "ScenePreload()\n");

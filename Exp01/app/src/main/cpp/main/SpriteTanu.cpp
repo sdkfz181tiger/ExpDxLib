@@ -10,9 +10,10 @@ SpriteTanu *SpriteTanu::createSprite(const string &fileName, float x, float y) {
 
 SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
 										   wanCnt(0), wanInterval(50),
-										   capCnt(0), capInterval(10),
-										   escCnt(0), escInterval(10),
-										   hiyoFlg(false) {
+										   capCnt(0), capInterval(5),
+										   escCnt(0), escInterval(5),
+										   relCnt(0), relInterval(5),
+										   chickFlg(false), chick(nullptr) {
 	LOGD("Main", "SpriteTanu()\n");
 }
 
@@ -29,6 +30,10 @@ bool SpriteTanu::init(const string &fileName) {
 	this->pushFrames("tanu_r");
 	this->pushFrames("tanu_l");
 	this->pushFrames("tanu_d");
+
+	// Chick
+	chick = SpriteChick::createSprite("images/c_chick.png", pos.x, pos.y);
+	chick->changeFrames("chick_d", -1);
 
 	this->startIdle();// Idle
 
@@ -59,7 +64,13 @@ void SpriteTanu::update(float delay) {
 			pos.y += vel.y * delay;
 			if (!walkFlg) {
 				walkLen -= this->getSpeed() * delay;
-				if (walkLen <= 0.0f) this->startStay();
+				if (walkLen <= 0.0f) {
+					if (!chickFlg) {
+						this->startStay();
+					} else {
+						this->startRelease();
+					}
+				}
 			}
 		}
 	}
@@ -95,12 +106,28 @@ void SpriteTanu::update(float delay) {
 			int dWidth = UtilDx::getInstance()->getDispWidth();
 			int dHeight = UtilDx::getInstance()->getDispHeight();
 			int x = dWidth / 2;
-			int y = dHeight;
+			int y = dHeight - gSize * 4;
 			this->startWalk(gSize * 10, x, y, false);
 		}
 	}
+	// Release
+	if (state == StateTanu::RELEASE) {
+		if (0 < relCnt) {
+			relCnt--;
+		} else {
+			this->startIdle();
+		}
+	}
+
 	// Draw
 	this->draw();
+
+	// Chick
+	if (chickFlg) {
+		chick->setPosX(pos.x);
+		chick->setPosY(pos.y);
+		chick->update(delay);
+	}
 }
 
 void SpriteTanu::changeState(int sta) {
@@ -157,13 +184,19 @@ void SpriteTanu::changeState(int sta) {
 		this->changeFrames("tanu_d", -1);
 		return;
 	}
+	if (state == StateTanu::RELEASE) {
+		//LOGD("Main", "Let's escape!!");
+		// Frames
+		this->changeFrames("tanu_d", -1);
+		return;
+	}
 }
 
 void SpriteTanu::startWander() {
 	// Wander
 	wanCnt = UtilMath::getInstance()->getRandom(wanInterval / 2, wanInterval);
-	// Hiyo flg
-	this->setHiyoFlg(false);
+	// Chick flg
+	this->setChickFlg(false);
 	// State
 	this->changeState(StateTanu::WANDER);
 }
@@ -171,8 +204,8 @@ void SpriteTanu::startWander() {
 void SpriteTanu::startCapture() {
 	// Capture
 	capCnt = UtilMath::getInstance()->getRandom(capInterval / 2, capInterval);
-	// Hiyo flg
-	this->setHiyoFlg(true);
+	// Chick flg
+	this->setChickFlg(true);
 	// State
 	this->changeState(StateTanu::CAPTURED);
 }
@@ -180,12 +213,21 @@ void SpriteTanu::startCapture() {
 void SpriteTanu::startEscape() {
 	// Escape
 	escCnt = UtilMath::getInstance()->getRandom(escInterval / 2, escInterval);
-	// Hiyo flg
-	this->setHiyoFlg(true);
+	// Chick flg
+	this->setChickFlg(true);
 	// State
 	this->changeState(StateTanu::ESCAPE);
 }
 
-void SpriteTanu::setHiyoFlg(bool flg){
-	hiyoFlg = flg;
+void SpriteTanu::startRelease() {
+	// Release
+	relCnt = UtilMath::getInstance()->getRandom(relInterval / 2, relInterval);
+	// Chick flg
+	this->setChickFlg(false);
+	// State
+	this->changeState(StateTanu::RELEASE);
+}
+
+void SpriteTanu::setChickFlg(bool flg) {
+	chickFlg = flg;
 }

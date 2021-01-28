@@ -21,10 +21,11 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(bGrid);
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
+	DX_SAFE_DELETE(chicken);
 	DX_SAFE_DELETE(tanu);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
-	DX_SAFE_DELETE_VECTOR(hiyos);
+	DX_SAFE_DELETE_VECTOR(chicks);
 }
 
 bool SceneGame::init() {
@@ -61,11 +62,11 @@ bool SceneGame::init() {
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
-
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, cY - gSize * 8);
 	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
 
 	// Eggs
-	for (int i = 0; i < 30; i++) {
+	for (int i = 0; i < 1; i++) {
 		int x = UtilMath::getInstance()->getRandom(0, dWidth);
 		int y = UtilMath::getInstance()->getRandom(0, dHeight);
 		auto egg = SpriteItem::createSprite("images/c_egg.png", x, y);
@@ -81,7 +82,7 @@ bool SceneGame::init() {
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	if (dHeight / 2 < y) dPad->setOnTouchBegan(id, x, y);
+	dPad->setOnTouchBegan(id, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -112,24 +113,25 @@ void SceneGame::update(const float delay) {
 		auto egg = static_cast<SpriteItem *>(*itE);
 		egg->update(delay);
 		if (!player->containsPoint(egg->getPosX(), egg->getPosY())) continue;
-		this->chainHiyo(1);// Chain
+		this->chainChick(1);// Chain
 		eggs.erase(itE);
 		DX_SAFE_DELETE(egg);
 	}
 
-	// Hiyos x Tanu
-	auto itH = hiyos.end();
-	while (itH-- != hiyos.begin()) {
-		auto hiyo = static_cast<SpriteHiyo *>(*itH);
-		hiyo->update(delay);
-		if (!tanu->containsPoint(hiyo->getPosX(), hiyo->getPosY())) continue;
-		if (tanu->getHiyoFlg()) continue;
-		this->purgeHiyo();// Purge
+	// Chicks x Tanu
+	auto itH = chicks.end();
+	while (itH-- != chicks.begin()) {
+		auto chick = static_cast<SpriteChick *>(*itH);
+		chick->update(delay);
+		if (!tanu->containsPoint(chick->getPosX(), chick->getPosY())) continue;
+		if (tanu->getChickFlg()) continue;
+		this->purgeChick();// Purge
 		tanu->startCapture();
 	}
 
-	// Player, Tanu
+	// Player, Chicken, Tanu
 	player->update(delay);
+	chicken->update(delay);
 	tanu->update(delay);
 
 	// Label
@@ -194,33 +196,37 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
 }
 
-void SceneGame::chainHiyo(int num) {
+void SceneGame::putEgg(int num) {
+
+}
+
+void SceneGame::chainChick(int num) {
 
 	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 
 	// Chains x player
-	if (hiyos.size() == 0) {
-		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png",
-											 player->getPosX(),
-											 player->getPosY());
-		hiyo->setTarget(player);
-		hiyos.push_back(hiyo);
+	if (chicks.size() == 0) {
+		auto chick = SpriteChick::createSprite("images/c_chick.png",
+											   player->getPosX(),
+											   player->getPosY());
+		chick->setTarget(player);
+		chicks.push_back(chick);
 		num--;// Decrement
 	}
-	// Chains x hiyo
+	// Chains x chick
 	for (int i = 0; i < num; i++) {
-		size_t last = hiyos.size() - 1;
-		auto hiyo = SpriteHiyo::createSprite("images/c_hiyo.png",
-											 hiyos.at(last)->getPosX(),
-											 hiyos.at(last)->getPosY());
-		hiyo->setTarget(hiyos.at(last));
-		hiyos.push_back(hiyo);
+		size_t last = chicks.size() - 1;
+		auto chick = SpriteChick::createSprite("images/c_chick.png",
+											   chicks.at(last)->getPosX(),
+											   chicks.at(last)->getPosY());
+		chick->setTarget(chicks.at(last));
+		chicks.push_back(chick);
 	}
 }
 
-void SceneGame::purgeHiyo() {
-	auto itH = hiyos.end() - 1;
-	auto hiyo = static_cast<SpriteHiyo *>(*itH);
-	hiyos.erase(itH);
-	DX_SAFE_DELETE(hiyo);
+void SceneGame::purgeChick() {
+	auto itH = chicks.end() - 1;
+	auto chick = static_cast<SpriteChick *>(*itH);
+	chicks.erase(itH);
+	DX_SAFE_DELETE(chick);
 }

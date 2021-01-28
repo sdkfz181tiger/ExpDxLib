@@ -50,12 +50,12 @@ bool SceneTitle::init() {
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX + gSize * 3, cY);
 	sprites.push_back(osho);
-	auto chick = SpriteChick::createSprite("images/c_chi_m.png", cX, cY);
+	auto chick = SpriteChicken::createSprite("images/c_chicken_m.png", cX, cY);
 	sprites.push_back(chick);
-	auto hiyo1 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 1, cY + gSize * 1.5f);
-	sprites.push_back(hiyo1);
-	auto hiyo2 = SpriteHiyo::createSprite("images/c_hiyo.png", cX + gSize * 2, cY + gSize * 1.5f);
-	sprites.push_back(hiyo2);
+	auto chick1 = SpriteChick::createSprite("images/c_chick.png", cX + gSize * 1, cY + gSize * 1.5f);
+	sprites.push_back(chick1);
+	auto chick2 = SpriteChick::createSprite("images/c_chick.png", cX + gSize * 2, cY + gSize * 1.5f);
+	sprites.push_back(chick2);
 	auto tanu = SpriteTanu::createSprite("images/c_tanu.png", cX - gSize * 3, cY);
 	sprites.push_back(tanu);
 

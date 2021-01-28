@@ -2,12 +2,14 @@
 #define _SPRITETANU_H_
 
 #include "SpriteChara.h"
+#include "SpriteChick.h"
 
 class StateTanu : public StateChara {
 public:
 	const static int WANDER = 101;
 	const static int CAPTURED = 102;
 	const static int ESCAPE = 103;
+	const static int RELEASE = 104;
 };
 
 class SpriteTanu : public SpriteChara {
@@ -16,7 +18,9 @@ private:
 	int wanCnt, wanInterval;
 	int capCnt, capInterval;
 	int escCnt, escInterval;
-	bool hiyoFlg;
+	int relCnt, relInterval;
+	bool chickFlg;
+	SpriteChick *chick;
 
 public:
 	static SpriteTanu *createSprite(const string &fileName, float x, float y);
@@ -37,9 +41,11 @@ public:
 
 	void startEscape();
 
-	void setHiyoFlg(bool flg);
+	void startRelease();
 
-	bool getHiyoFlg() { return hiyoFlg; }
+	void setChickFlg(bool flg);
+
+	bool getChickFlg() { return chickFlg; }
 };
 
 #endif // _SPRITETANU_H_

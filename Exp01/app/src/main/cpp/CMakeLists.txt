@@ -43,8 +43,8 @@ add_library( # Sets the name of the library.
         main/SpriteBase.cpp
         main/SpriteChara.cpp
         main/SpriteChick.cpp
+        main/SpriteChicken.cpp
         main/SpriteFrames.cpp
-        main/SpriteHiyo.cpp
         main/SpriteItem.cpp
         main/SpriteKobo.cpp
         main/SpriteOsho.cpp
