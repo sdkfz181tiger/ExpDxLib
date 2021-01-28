@@ -71,11 +71,11 @@ void SpriteBase::setDegree(int deg) {
 	moveDeg = deg;
 }
 
-bool SpriteBase::containsPoint(int x, int y) {
-	if (x < minX) return false;
-	if (maxX < x) return false;
-	if (y < minY) return false;
-	if (maxY < y) return false;
+bool SpriteBase::containsPos(const SpriteBase *tgt) {
+	if (tgt->getPosX() < minX) return false;
+	if (maxX < tgt->getPosX()) return false;
+	if (tgt->getPosY() < minY) return false;
+	if (maxY < tgt->getPosY()) return false;
 	return true;
 }
 

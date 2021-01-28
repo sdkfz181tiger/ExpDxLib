@@ -6,12 +6,6 @@
 class TypeChara {
 public:
 	const static int DEFAULT = 0;
-	const static int CHI_M = 1;
-	const static int CHI_F = 2;
-	const static int HIYO = 3;
-	const static int TANU = 4;
-	const static int OSHO = 5;
-	const static int KOBO = 6;
 };
 
 class StateChara {

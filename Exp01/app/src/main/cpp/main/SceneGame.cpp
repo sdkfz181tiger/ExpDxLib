@@ -62,17 +62,11 @@ bool SceneGame::init() {
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, cY - gSize * 8);
+	// Chicken
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, cY - gSize * 12);
+	chicken->setEggListener(this);
+	// Tanu
 	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
-
-	// Eggs
-	for (int i = 0; i < 1; i++) {
-		int x = UtilMath::getInstance()->getRandom(0, dWidth);
-		int y = UtilMath::getInstance()->getRandom(0, dHeight);
-		auto egg = SpriteItem::createSprite("images/c_egg.png", x, y);
-		egg->readyFrames("egg_d", -1);
-		eggs.push_back(egg);
-	}
 
 	UtilSound::getInstance()->stopBGM();// BGM
 
@@ -107,15 +101,26 @@ void SceneGame::update(const float delay) {
 	background->update(delay);
 	bGrid->update(delay);
 
-	// Eggs x Player
+	// Eggs x Player or Tanu
 	auto itE = eggs.end();
 	while (itE-- != eggs.begin()) {
-		auto egg = static_cast<SpriteItem *>(*itE);
+		auto egg = static_cast<SpriteEgg *>(*itE);
 		egg->update(delay);
-		if (!player->containsPoint(egg->getPosX(), egg->getPosY())) continue;
-		this->chainChick(1);// Chain
-		eggs.erase(itE);
-		DX_SAFE_DELETE(egg);
+		// x Player
+		if (player->containsPos(egg)) {
+			this->chainChick(1);// Chain
+			eggs.erase(itE);
+			DX_SAFE_DELETE(egg);
+			continue;
+		}
+		// x Tanu
+		if (tanu->containsPos(egg)) {
+			if (tanu->getItemFlg()) continue;
+			tanu->startCapture(true, false);
+			eggs.erase(itE);
+			DX_SAFE_DELETE(egg);
+			continue;
+		}
 	}
 
 	// Chicks x Tanu
@@ -123,10 +128,13 @@ void SceneGame::update(const float delay) {
 	while (itH-- != chicks.begin()) {
 		auto chick = static_cast<SpriteChick *>(*itH);
 		chick->update(delay);
-		if (!tanu->containsPoint(chick->getPosX(), chick->getPosY())) continue;
-		if (tanu->getChickFlg()) continue;
-		this->purgeChick();// Purge
-		tanu->startCapture();
+		// x Tanu
+		if (tanu->containsPos(chick)) {
+			if (tanu->getItemFlg()) continue;
+			tanu->startCapture(false, true);
+			this->purgeChick();// Purge
+			continue;
+		}
 	}
 
 	// Player, Chicken, Tanu
@@ -196,15 +204,21 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
 }
 
-void SceneGame::putEgg(int num) {
+void SceneGame::onEggLayed(int x, int y) {
 
+	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
+
+	// Egg
+	auto egg = SpriteEgg::createSprite("images/c_egg.png", x, y);
+	egg->readyFrames("egg_d", -1);
+	eggs.push_back(egg);
 }
 
 void SceneGame::chainChick(int num) {
 
 	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 
-	// Chains x player
+	// Chains x Player
 	if (chicks.size() == 0) {
 		auto chick = SpriteChick::createSprite("images/c_chick.png",
 											   player->getPosX(),
@@ -213,7 +227,7 @@ void SceneGame::chainChick(int num) {
 		chicks.push_back(chick);
 		num--;// Decrement
 	}
-	// Chains x chick
+	// Chains x Chick
 	for (int i = 0; i < num; i++) {
 		size_t last = chicks.size() - 1;
 		auto chick = SpriteChick::createSprite("images/c_chick.png",

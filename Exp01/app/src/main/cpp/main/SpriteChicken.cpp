@@ -8,7 +8,11 @@ SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, floa
 	return nullptr;
 }
 
-SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y) {
+SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y),
+												 goCnt(0), goInterval(10),
+												 layCnt(0), layInterval(30),
+												 nest(Vec2(x, y)),
+												 eggCnt(0), eggTotal(1) {
 	LOGD("Main", "SpriteChicken()\n");
 }
 
@@ -49,7 +53,7 @@ void SpriteChicken::update(float delay) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
-			this->startStay();
+			this->startGo();
 		}
 	}
 	// Walk
@@ -59,8 +63,40 @@ void SpriteChicken::update(float delay) {
 			pos.y += vel.y * delay;
 			if (!walkFlg) {
 				walkLen -= this->getSpeed() * delay;
-				if (walkLen <= 0.0f) this->startStay();
+				if (walkLen <= 0.0f) {
+					if (0 < eggCnt) {
+						this->startLay();
+					} else {
+						this->startStay();
+					}
+				}
 			}
+		}
+	}
+	// Go
+	if (state == StateChicken::GO) {
+		if (0 < goCnt) {
+			goCnt--;
+		} else {
+			// Next
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			int dWidth = UtilDx::getInstance()->getDispWidth();
+			int dHeight = UtilDx::getInstance()->getDispHeight();
+			int x = UtilMath::getInstance()->getRandom(gSize, dWidth - gSize);
+			int y = UtilMath::getInstance()->getRandom(gSize, dHeight - gSize);
+			this->startWalk(gSize * 20, x, y, false);
+		}
+	}
+	// Lay
+	if (state == StateChicken::LAY) {
+		if (0 < layCnt) {
+			layCnt--;
+		} else {
+			// Listener
+			if (eggListener) eggListener->onEggLayed(pos.x, pos.y);
+			// Next
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			this->startWalk(gSize * 20, nest.x, nest.y, false);
 		}
 	}
 	// Draw
@@ -81,7 +117,7 @@ void SpriteChicken::changeState(int sta) {
 	if (state == StateChara::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector <string> frames = {"chicken_f_i1", "chicken_f_i2", "chicken_f_i3", "chicken_f_i4"};
+		vector<string> frames = {"chicken_f_i1", "chicken_f_i2", "chicken_f_i3", "chicken_f_i4"};
 		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
 		this->changeFrames(frames.at(index), 2);
 		return;
@@ -103,4 +139,38 @@ void SpriteChicken::changeState(int sta) {
 		}
 		return;
 	}
+	if (state == StateChicken::GO) {
+		//LOGD("Main", "Let's go!!");
+		// Frames
+		this->changeFrames("chicken_f_d", 1);
+		return;
+	}
+	if (state == StateChicken::LAY) {
+		//LOGD("Main", "Let's lay!!");
+		// Frames
+		this->changeFrames("chicken_f_d", 1);
+		return;
+	}
+}
+
+void SpriteChicken::setEggListener(EggListener *listener) {
+	eggListener = listener;
+}
+
+void SpriteChicken::startGo() {
+	// Go
+	goCnt = UtilMath::getInstance()->getRandom(goInterval / 2, goInterval);
+	// Egg
+	eggCnt = eggTotal;
+	// State
+	this->changeState(StateChicken::GO);
+}
+
+void SpriteChicken::startLay() {
+	// Capture
+	layCnt = UtilMath::getInstance()->getRandom(layInterval / 2, layInterval);
+	// Egg
+	eggCnt--;
+	// State
+	this->changeState(StateChicken::LAY);
 }

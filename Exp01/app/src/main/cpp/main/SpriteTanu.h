@@ -3,6 +3,7 @@
 
 #include "SpriteChara.h"
 #include "SpriteChick.h"
+#include "SpriteEgg.h"
 
 class StateTanu : public StateChara {
 public:
@@ -19,7 +20,8 @@ private:
 	int capCnt, capInterval;
 	int escCnt, escInterval;
 	int relCnt, relInterval;
-	bool chickFlg;
+	bool eggFlg, chickFlg;
+	SpriteEgg *egg;
 	SpriteChick *chick;
 
 public:
@@ -37,15 +39,13 @@ public:
 
 	void startWander();
 
-	void startCapture();
+	void startCapture(bool egg, bool chick);
 
 	void startEscape();
 
 	void startRelease();
 
-	void setChickFlg(bool flg);
-
-	bool getChickFlg() { return chickFlg; }
+	bool getItemFlg();
 };
 
 #endif // _SPRITETANU_H_

@@ -44,6 +44,7 @@ add_library( # Sets the name of the library.
         main/SpriteChara.cpp
         main/SpriteChick.cpp
         main/SpriteChicken.cpp
+        main/SpriteEgg.cpp
         main/SpriteFrames.cpp
         main/SpriteItem.cpp
         main/SpriteKobo.cpp

@@ -13,6 +13,7 @@ SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
 										   capCnt(0), capInterval(5),
 										   escCnt(0), escInterval(5),
 										   relCnt(0), relInterval(5),
+										   eggFlg(false), egg(nullptr),
 										   chickFlg(false), chick(nullptr) {
 	LOGD("Main", "SpriteTanu()\n");
 }
@@ -30,6 +31,10 @@ bool SpriteTanu::init(const string &fileName) {
 	this->pushFrames("tanu_r");
 	this->pushFrames("tanu_l");
 	this->pushFrames("tanu_d");
+
+	// Egg
+	egg = SpriteEgg::createSprite("images/c_egg.png", pos.x, pos.y);
+	egg->changeFrames("egg_d", -1);
 
 	// Chick
 	chick = SpriteChick::createSprite("images/c_chick.png", pos.x, pos.y);
@@ -65,7 +70,7 @@ void SpriteTanu::update(float delay) {
 			if (!walkFlg) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
-					if (!chickFlg) {
+					if (!this->getItemFlg()) {
 						this->startStay();
 					} else {
 						this->startRelease();
@@ -121,6 +126,13 @@ void SpriteTanu::update(float delay) {
 
 	// Draw
 	this->draw();
+
+	// Egg
+	if (eggFlg) {
+		egg->setPosX(pos.x);
+		egg->setPosY(pos.y);
+		egg->update(delay);
+	}
 
 	// Chick
 	if (chickFlg) {
@@ -195,17 +207,16 @@ void SpriteTanu::changeState(int sta) {
 void SpriteTanu::startWander() {
 	// Wander
 	wanCnt = UtilMath::getInstance()->getRandom(wanInterval / 2, wanInterval);
-	// Chick flg
-	this->setChickFlg(false);
 	// State
 	this->changeState(StateTanu::WANDER);
 }
 
-void SpriteTanu::startCapture() {
+void SpriteTanu::startCapture(bool egg, bool chick) {
 	// Capture
 	capCnt = UtilMath::getInstance()->getRandom(capInterval / 2, capInterval);
-	// Chick flg
-	this->setChickFlg(true);
+	// Flgs
+	eggFlg = egg;
+	chickFlg = chick;
 	// State
 	this->changeState(StateTanu::CAPTURED);
 }
@@ -213,8 +224,6 @@ void SpriteTanu::startCapture() {
 void SpriteTanu::startEscape() {
 	// Escape
 	escCnt = UtilMath::getInstance()->getRandom(escInterval / 2, escInterval);
-	// Chick flg
-	this->setChickFlg(true);
 	// State
 	this->changeState(StateTanu::ESCAPE);
 }
@@ -222,12 +231,13 @@ void SpriteTanu::startEscape() {
 void SpriteTanu::startRelease() {
 	// Release
 	relCnt = UtilMath::getInstance()->getRandom(relInterval / 2, relInterval);
-	// Chick flg
-	this->setChickFlg(false);
+	// Flgs
+	eggFlg = false;
+	chickFlg = false;
 	// State
 	this->changeState(StateTanu::RELEASE);
 }
 
-void SpriteTanu::setChickFlg(bool flg) {
-	chickFlg = flg;
+bool SpriteTanu::getItemFlg() {
+	return chickFlg || eggFlg;
 }

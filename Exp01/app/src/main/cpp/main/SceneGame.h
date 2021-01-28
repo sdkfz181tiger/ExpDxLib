@@ -3,7 +3,7 @@
 
 #include "SceneBase.h"
 
-class SceneGame : public SceneBase, BtnListener, DpadListener {
+class SceneGame : public SceneBase, BtnListener, DpadListener, EggListener {
 
 private:
 	SpriteBase *background;
@@ -12,7 +12,7 @@ private:
 	SpriteKobo *player;
 	SpriteChicken *chicken;
 	SpriteTanu *tanu;
-	vector<SpriteItem *> eggs;
+	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
 
 public:
@@ -46,7 +46,7 @@ public:
 
 	void onDpadChanged(DpadTag &tag) override;
 
-	void putEgg(int num);
+	void onEggLayed(int x, int y) override;
 
 	void chainChick(int num);
 

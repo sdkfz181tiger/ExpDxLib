@@ -53,7 +53,7 @@ public:
 
 	int getDegree() { return moveDeg; }
 
-	bool containsPoint(int x, int y);
+	bool containsPos(const SpriteBase *tgt);
 
 	virtual void update(const float delay);
 

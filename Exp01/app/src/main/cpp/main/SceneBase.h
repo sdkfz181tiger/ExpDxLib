@@ -9,6 +9,7 @@
 #include "SpriteBase.h"
 #include "SpriteChick.h"
 #include "SpriteChicken.h"
+#include "SpriteEgg.h"
 #include "SpriteFrames.h"
 #include "SpriteItem.h"
 #include "SpriteKobo.h"
