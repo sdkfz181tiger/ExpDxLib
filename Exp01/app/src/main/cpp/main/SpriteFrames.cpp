@@ -21,9 +21,6 @@ SpriteFrames::~SpriteFrames() {
 
 bool SpriteFrames::init(const string &fileName) {
 	if (!SpriteBase::init(fileName)) return false;
-	// Frames
-	//this->pushFrames("bone");// Push
-	//this->changeFrames("bone", -1);// Change
 	return true;
 }
 

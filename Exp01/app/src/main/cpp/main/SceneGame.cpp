@@ -210,7 +210,6 @@ void SceneGame::onEggLayed(int x, int y) {
 
 	// Egg
 	auto egg = SpriteEgg::createSprite("images/c_egg.png", x, y);
-	egg->readyFrames("egg_d", -1);
 	eggs.push_back(egg);
 }
 

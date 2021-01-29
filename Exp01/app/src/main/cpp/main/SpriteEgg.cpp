@@ -18,7 +18,9 @@ SpriteEgg::~SpriteEgg() {
 
 bool SpriteEgg::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
+	// Frames
+	this->pushFrames("egg_hop");
+	this->changeFrames("egg_hop", -1);
 	return true;
 }
 

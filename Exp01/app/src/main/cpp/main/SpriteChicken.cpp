@@ -9,7 +9,7 @@ SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, floa
 }
 
 SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y),
-												 goCnt(0), goInterval(10),
+												 goCnt(0), goInterval(20),
 												 layCnt(0), layInterval(30),
 												 nest(Vec2(x, y)),
 												 eggCnt(0), eggTotal(1) {
@@ -28,11 +28,13 @@ bool SpriteChicken::init(const string &fileName) {
 	this->pushFrames("chicken_f_b");
 	this->pushFrames("chicken_f_r");
 	this->pushFrames("chicken_f_l");
-	this->pushFrames("chicken_f_d");
+	this->pushFrames("chicken_f_roll");
 	this->pushFrames("chicken_f_i1");
 	this->pushFrames("chicken_f_i2");
 	this->pushFrames("chicken_f_i3");
 	this->pushFrames("chicken_f_i4");
+	this->pushFrames("chicken_f_fly");
+	this->pushFrames("chicken_f_lay");
 
 	this->startIdle();// Idle
 
@@ -80,10 +82,12 @@ void SpriteChicken::update(float delay) {
 		} else {
 			// Next
 			int gSize = UtilDebug::getInstance()->getGridSize();
-			int dWidth = UtilDx::getInstance()->getDispWidth();
-			int dHeight = UtilDx::getInstance()->getDispHeight();
-			int x = UtilMath::getInstance()->getRandom(gSize, dWidth - gSize);
-			int y = UtilMath::getInstance()->getRandom(gSize, dHeight - gSize);
+			int minX = gSize * 2;
+			int maxX = UtilDx::getInstance()->getDispWidth() - gSize * 2;
+			int minY = gSize * 10;
+			int maxY = UtilDx::getInstance()->getDispHeight() - gSize * 10;
+			int x = UtilMath::getInstance()->getRandom(minX, maxX);
+			int y = UtilMath::getInstance()->getRandom(minY, maxY);
 			this->startWalk(gSize * 20, x, y, false);
 		}
 	}
@@ -142,13 +146,13 @@ void SpriteChicken::changeState(int sta) {
 	if (state == StateChicken::GO) {
 		//LOGD("Main", "Let's go!!");
 		// Frames
-		this->changeFrames("chicken_f_d", 1);
+		this->changeFrames("chicken_f_fly", 1);
 		return;
 	}
 	if (state == StateChicken::LAY) {
 		//LOGD("Main", "Let's lay!!");
 		// Frames
-		this->changeFrames("chicken_f_d", 1);
+		this->changeFrames("chicken_f_lay", 1);
 		return;
 	}
 }

@@ -24,7 +24,7 @@ bool SpriteKobo::init(const string &fileName) {
 	this->pushFrames("kobo_b");
 	this->pushFrames("kobo_r");
 	this->pushFrames("kobo_l");
-	this->pushFrames("kobo_d");
+	this->pushFrames("kobo_roll");
 
 	this->startIdle();// Idle
 

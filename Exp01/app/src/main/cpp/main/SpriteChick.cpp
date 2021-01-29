@@ -26,7 +26,7 @@ bool SpriteChick::init(const string &fileName) {
 	this->pushFrames("chick_b");
 	this->pushFrames("chick_r");
 	this->pushFrames("chick_l");
-	this->pushFrames("chick_d");
+	this->pushFrames("chick_roll");
 	this->pushFrames("chick_i1");
 	this->pushFrames("chick_i2");
 

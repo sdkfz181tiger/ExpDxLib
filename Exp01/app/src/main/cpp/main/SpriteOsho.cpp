@@ -24,7 +24,7 @@ bool SpriteOsho::init(const string &fileName) {
 	this->pushFrames("osho_b");
 	this->pushFrames("osho_r");
 	this->pushFrames("osho_l");
-	this->pushFrames("osho_d");
+	this->pushFrames("osho_roll");
 
 	this->startIdle();// Idle
 
