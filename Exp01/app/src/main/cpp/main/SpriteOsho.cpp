@@ -18,16 +18,7 @@ SpriteOsho::~SpriteOsho() {
 
 bool SpriteOsho::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
-	// Frames
-	this->pushFrames("osho_f");
-	this->pushFrames("osho_b");
-	this->pushFrames("osho_r");
-	this->pushFrames("osho_l");
-	this->pushFrames("osho_roll");
-
 	this->startIdle();// Idle
-
 	return true;
 }
 

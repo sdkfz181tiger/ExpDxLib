@@ -22,22 +22,7 @@ SpriteChicken::~SpriteChicken() {
 
 bool SpriteChicken::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
-	// Frames
-	this->pushFrames("chicken_f_f");
-	this->pushFrames("chicken_f_b");
-	this->pushFrames("chicken_f_r");
-	this->pushFrames("chicken_f_l");
-	this->pushFrames("chicken_f_roll");
-	this->pushFrames("chicken_f_i1");
-	this->pushFrames("chicken_f_i2");
-	this->pushFrames("chicken_f_i3");
-	this->pushFrames("chicken_f_i4");
-	this->pushFrames("chicken_f_fly");
-	this->pushFrames("chicken_f_lay");
-
 	this->startIdle();// Idle
-
 	return true;
 }
 

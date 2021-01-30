@@ -6,7 +6,6 @@
 class SpriteFrames : public SpriteBase {
 
 private:
-	map<string, vector<int>> frameMap;
 	vector<int> frames;
 	int frameCnt, frameInterval, frameIndex, frameLoop;
 	bool framePause;
@@ -19,10 +18,6 @@ public:
 	virtual ~SpriteFrames();
 
 	virtual bool init(const string &fileName) override;
-
-	void readyFrames(const string &frameName, int loop);
-
-	void pushFrames(const string &frameName);
 
 	void changeFrames(const string &frameName, int loop);
 

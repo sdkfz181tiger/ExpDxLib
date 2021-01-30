@@ -20,18 +20,7 @@ SpriteChick::~SpriteChick() {
 
 bool SpriteChick::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
-	// Frames
-	this->pushFrames("chick_f");
-	this->pushFrames("chick_b");
-	this->pushFrames("chick_r");
-	this->pushFrames("chick_l");
-	this->pushFrames("chick_roll");
-	this->pushFrames("chick_i1");
-	this->pushFrames("chick_i2");
-
-	this->startIdle();// Idle
-
+	this->changeFrames("chick_roll", -1);
 	return true;
 }
 

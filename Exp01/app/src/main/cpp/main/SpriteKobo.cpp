@@ -18,16 +18,7 @@ SpriteKobo::~SpriteKobo() {
 
 bool SpriteKobo::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
-	// Frames
-	this->pushFrames("kobo_f");
-	this->pushFrames("kobo_b");
-	this->pushFrames("kobo_r");
-	this->pushFrames("kobo_l");
-	this->pushFrames("kobo_roll");
-
 	this->startIdle();// Idle
-
 	return true;
 }
 

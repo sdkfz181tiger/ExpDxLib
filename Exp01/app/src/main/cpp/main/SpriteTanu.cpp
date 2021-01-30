@@ -24,22 +24,9 @@ SpriteTanu::~SpriteTanu() {
 
 bool SpriteTanu::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-
-	// Frames
-	this->pushFrames("tanu_f");
-	this->pushFrames("tanu_b");
-	this->pushFrames("tanu_r");
-	this->pushFrames("tanu_l");
-	this->pushFrames("tanu_roll");
-	this->pushFrames("tanu_grab");
-	this->pushFrames("tanu_eat");
-
-	// Egg, Chick
-	egg = SpriteEgg::createSprite("images/c_egg.png", pos.x, pos.y);
-	chick = SpriteChick::createSprite("images/c_chick.png", pos.x, pos.y);
-
+	egg = SpriteEgg::createSprite("images/c_egg.png", pos.x, pos.y);// Egg
+	chick = SpriteChick::createSprite("images/c_chick.png", pos.x, pos.y);// Chick
 	this->startIdle();// Idle
-
 	return true;
 }
 

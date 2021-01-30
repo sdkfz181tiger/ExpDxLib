@@ -24,18 +24,9 @@ bool SpriteFrames::init(const string &fileName) {
 	return true;
 }
 
-void SpriteFrames::readyFrames(const string &frameName, int loop) {
-	this->pushFrames(frameName);
-	this->changeFrames(frameName, loop);
-}
-
-void SpriteFrames::pushFrames(const string &frameName) {
-	frameMap.insert(make_pair(frameName, UtilGraph::getInstance()->getDivGraph(frameName)));
-}
-
 void SpriteFrames::changeFrames(const string &frameName, int loop) {
-	if (frameMap.count(frameName) <= 0) return;
-	frames = frameMap.find(frameName)->second;
+	// Frames
+	frames = UtilGraph::getInstance()->getDivGraph(frameName);
 	frameCnt = 0;
 	frameIndex = 0;
 	frameLoop = loop;
