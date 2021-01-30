@@ -36,7 +36,7 @@ void SpriteOsho::update(float delay) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
-			this->startIdle();
+			this->startStay();
 		}
 	}
 	// Walk

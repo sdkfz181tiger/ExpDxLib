@@ -10,6 +10,7 @@ private:
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
 	SpriteKobo *player;
+	SpriteOsho *osho;
 	SpriteChicken *chicken;
 	SpriteTanu *tanu;
 	vector<SpriteEgg *> eggs;

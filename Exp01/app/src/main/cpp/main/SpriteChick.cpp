@@ -20,7 +20,7 @@ SpriteChick::~SpriteChick() {
 
 bool SpriteChick::init(const string &fileName) {
 	if (!SpriteFrames::init(fileName)) return false;
-	this->changeFrames("chick_roll", -1);
+	this->changeFrames("chick_joy", -1);
 	return true;
 }
 
@@ -53,14 +53,12 @@ void SpriteChick::checkFootprints() {
 			}
 		}
 		setDegree(deg);
-		resumeFrames();
 
 		pos.x = footprints.back().x;
 		pos.y = footprints.back().y;
 		footprints.pop_back();
 		return;
 	}
-	this->pauseFrames();
 }
 
 void SpriteChick::setTarget(SpriteBase *tgt) {

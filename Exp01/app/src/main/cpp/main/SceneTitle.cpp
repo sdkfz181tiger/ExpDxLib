@@ -48,16 +48,8 @@ bool SceneTitle::init() {
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
 
 	// Characters
-	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX + gSize * 3, cY);
+	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
 	sprites.push_back(osho);
-	auto chick = SpriteChicken::createSprite("images/c_chicken_m.png", cX, cY);
-	sprites.push_back(chick);
-	auto chick1 = SpriteChick::createSprite("images/c_chick.png", cX + gSize * 1, cY + gSize * 1.5f);
-	sprites.push_back(chick1);
-	auto chick2 = SpriteChick::createSprite("images/c_chick.png", cX + gSize * 2, cY + gSize * 1.5f);
-	sprites.push_back(chick2);
-	auto tanu = SpriteTanu::createSprite("images/c_tanu.png", cX - gSize * 3, cY);
-	sprites.push_back(tanu);
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();

@@ -62,8 +62,9 @@ bool SceneGame::init() {
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
+	osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY - gSize * 12);
 	// Chicken
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, cY - gSize * 12);
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX + gSize * 3, cY - gSize * 12);
 	chicken->setEggListener(this);
 	// Tanu
 	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
@@ -111,6 +112,7 @@ void SceneGame::update(const float delay) {
 			this->chainChick(1);// Chain
 			eggs.erase(itE);
 			DX_SAFE_DELETE(egg);
+			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 			continue;
 		}
 		// x Tanu
@@ -119,6 +121,7 @@ void SceneGame::update(const float delay) {
 			tanu->startCapture(true, false);
 			eggs.erase(itE);
 			DX_SAFE_DELETE(egg);
+			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
 			continue;
 		}
 	}
@@ -133,17 +136,19 @@ void SceneGame::update(const float delay) {
 			if (tanu->getItemFlg()) continue;
 			tanu->startCapture(false, true);
 			this->purgeChick();// Purge
+			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
 			continue;
 		}
 	}
 
-	// Player, Chicken, Tanu
+	// Player, Osho, Chicken, Tanu
 	player->update(delay);
+	osho->update(delay);
 	chicken->update(delay);
 	tanu->update(delay);
 
 	// Label
-	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
+	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 15,
 									  2, UtilAlign::CENTER);
 
 	// Buttons, Dpad
@@ -199,14 +204,11 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
 	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
-
-	//UtilSound::getInstance()->stopBGM();// BGM
-	//UtilSound::getInstance()->playBGM("sounds/bgm_walk_01.wav", true, true);
 }
 
 void SceneGame::onEggLayed(int x, int y) {
 
-	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
+	UtilSound::getInstance()->playSE("sounds/se_egg_01.wav");
 
 	// Egg
 	auto egg = SpriteEgg::createSprite("images/c_egg.png", x, y);
@@ -214,8 +216,6 @@ void SceneGame::onEggLayed(int x, int y) {
 }
 
 void SceneGame::chainChick(int num) {
-
-	UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 
 	// Chains x Player
 	if (chicks.size() == 0) {

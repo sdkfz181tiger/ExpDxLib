@@ -32,35 +32,17 @@ bool UtilSound::init() {
 	// Mute
 	muteFlg = UtilLocalSave::getInstance()->getBool("mute_flg");
 
-	const vector<string> fileSEs = {
-			"sounds/se_coin_01.wav",
-			"sounds/se_coin_02.wav",
-			"sounds/se_coin_03.wav",
-			"sounds/se_coin_04.wav",
-			"sounds/se_get_01.wav",
-			"sounds/se_jump_01.wav"
-	};
+	// JSON
+	const string fullPath = UtilJNI::getInstance()->getFilePath() + "index.json";
+	const json jObj = UtilJson::getInstance()->loadJson(fullPath.c_str());
 
-	const vector<string> fileBGMs = {
-			"sounds/bgm_game.wav",
-			"sounds/bgm_result_ng.wav",
-			"sounds/bgm_result_ok.wav",
-			"sounds/bgm_title.wav",
-			"sounds/bgm_walk_01.wav",
-			"sounds/bgm_walk_02.wav"
-	};
-
-	auto itS = fileSEs.end();
-	while (itS-- != fileSEs.begin()) {
-		const string &fileName = static_cast<string>(*itS);
+	for (string fileName : jObj["ses"]) {
 		int handle = LoadSoundMem(this->getLocalPath(fileName).c_str());
 		if (handle < 0) continue;
 		soundSEs.insert(make_pair(fileName, handle));
 	}
 
-	auto itB = fileBGMs.end();
-	while (itB-- != fileBGMs.begin()) {
-		const string &fileName = static_cast<string>(*itB);
+	for (string fileName : jObj["bgms"]) {
 		int handle = LoadSoundMem(this->getLocalPath(fileName).c_str());
 		if (handle < 0) continue;
 		soundBGMs.insert(make_pair(fileName, handle));

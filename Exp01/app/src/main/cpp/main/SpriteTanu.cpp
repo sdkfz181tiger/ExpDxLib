@@ -9,10 +9,10 @@ SpriteTanu *SpriteTanu::createSprite(const string &fileName, float x, float y) {
 }
 
 SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
-										   wanCnt(0), wanInterval(50),
+										   wanCnt(0), wanInterval(10),
 										   capCnt(0), capInterval(10),
 										   escCnt(0), escInterval(10),
-										   relCnt(0), relInterval(30),
+										   relCnt(0), relInterval(20),
 										   eggFlg(false), egg(nullptr),
 										   chickFlg(false), chick(nullptr) {
 	LOGD("Main", "SpriteTanu()\n");
@@ -184,7 +184,7 @@ void SpriteTanu::changeState(int sta) {
 		return;
 	}
 	if (state == StateTanu::RELEASE) {
-		//LOGD("Main", "Let's escape!!");
+		//LOGD("Main", "Let's release!!");
 		// Frames
 		this->changeFrames("tanu_eat", -1);
 		return;
