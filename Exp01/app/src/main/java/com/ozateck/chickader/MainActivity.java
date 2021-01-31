@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 
@@ -27,6 +28,7 @@ public class MainActivity extends NativeActivity {
 	private static String versionCode = "";
 	private static String versionName = "";
 	private static String filePath = "";
+	private static int sWidth, sHeight, adHeight;
 	private static boolean debugFlg = false;
 
 	// Used to load the 'native-lib' library on application startup.
@@ -39,11 +41,20 @@ public class MainActivity extends NativeActivity {
 		super.onCreate(savedInstanceState);
 
 		MainActivity.nativeOnCreate();// Native
-		// Activity, Version, filePath
+		// Activity
 		activity = this;
+		// Versions
 		versionCode = getVersionCode(this, this.getPackageManager());
 		versionName = getVersionName(this, this.getPackageManager());
+		// FilePath
 		filePath = this.getFilesDir().getPath() + File.separator;
+		// Screen width and height
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		sWidth = wm.getCurrentWindowMetrics().getBounds().width();
+		sHeight = wm.getCurrentWindowMetrics().getBounds().height();
+		// AdHeight
+		adHeight = 0;
+		// Debug
 		debugFlg = BuildConfig.DEBUG;
 	}
 
@@ -131,6 +142,18 @@ public class MainActivity extends NativeActivity {
 		return filePath;
 	}
 
+	public static int getScreenWidth() {
+		return sWidth;
+	}
+
+	public static int getScreenHeight() {
+		return sHeight;
+	}
+
+	public static int getAdHeight() {
+		return adHeight;
+	}
+
 	public static boolean getDebugFlg() {
 		return debugFlg;
 	}
@@ -178,6 +201,7 @@ public class MainActivity extends NativeActivity {
 				pWindow.setHeight(mBanner.getAdSize().getHeightInPixels(activity));
 				pWindow.showAtLocation(fLayout, Gravity.TOP, 0, 0);
 				pWindow.update();
+				adHeight = mBanner.getAdSize().getHeightInPixels(activity);// Height
 			}
 
 			@Override

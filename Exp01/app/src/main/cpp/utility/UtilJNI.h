@@ -31,6 +31,8 @@ public:
 
 	string callJNIStr(const char *methodName);
 
+	int callJNIInt(const char *methodName);
+
 	bool callJNIBool(const char *methodName);
 
 	void connectAdMob();
@@ -45,6 +47,12 @@ public:
 	string getVersionName();
 
 	string getFilePath();
+
+	int getScreenWidth();
+
+	int getScreenHeight();
+
+	int getAdHeight();
 
 	bool getDebugFlg();
 };

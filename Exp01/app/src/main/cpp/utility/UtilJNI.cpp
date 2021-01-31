@@ -170,6 +170,16 @@ string UtilJNI::callJNIStr(const char *methodName) {
 	return str;
 }
 
+int UtilJNI::callJNIInt(const char *methodName) {
+	//LOGD("JNI", "UtilJNI::callJNIInt(%p), %ld\n", javaVM, pthread_self());
+	JNIEnv *env = Android_JNI_GetEnv();
+	if (env == nullptr) return false;
+	const char *sig = "()I";
+	const jmethodID mID = env->GetStaticMethodID(activity, methodName, sig);
+	const jint jnum = (jint) env->CallStaticIntMethod(activity, mID);
+	return jnum;
+}
+
 bool UtilJNI::callJNIBool(const char *methodName) {
 	//LOGD("JNI", "UtilJNI::callJNIBool(%p), %ld\n", javaVM, pthread_self());
 	JNIEnv *env = Android_JNI_GetEnv();
@@ -205,6 +215,18 @@ string UtilJNI::getVersionName() {
 
 string UtilJNI::getFilePath() {
 	return this->callJNIStr("getFilePath");
+}
+
+int UtilJNI::getScreenWidth() {
+	return this->callJNIInt("getScreenWidth");
+}
+
+int UtilJNI::getScreenHeight() {
+	return this->callJNIInt("getScreenHeight");
+}
+
+int UtilJNI::getAdHeight() {
+	return this->callJNIInt("getAdHeight");
 }
 
 bool UtilJNI::getDebugFlg() {

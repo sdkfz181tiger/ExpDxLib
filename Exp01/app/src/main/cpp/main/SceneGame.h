@@ -9,6 +9,7 @@ private:
 	SpriteBase *background;
 	BoardGrid *bGrid;
 	CtlDpad *dPad;
+	ScoreBar *sBar;
 	SpriteKobo *player;
 	SpriteOsho *osho;
 	SpriteChicken *chicken;

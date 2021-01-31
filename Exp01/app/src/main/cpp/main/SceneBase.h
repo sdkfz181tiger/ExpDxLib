@@ -6,6 +6,7 @@
 #include "BtnBase.h"
 #include "BtnToggle.h"
 #include "CtlDpad.h"
+#include "ScoreBar.h"
 #include "SpriteBase.h"
 #include "SpriteChick.h"
 #include "SpriteChicken.h"

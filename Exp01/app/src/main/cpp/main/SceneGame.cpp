@@ -10,7 +10,9 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), bGrid(nullptr),
-												dPad(nullptr), player(nullptr), tanu(nullptr) {
+												dPad(nullptr), sBar(nullptr),
+												player(nullptr), osho(nullptr),
+												chicken(nullptr), tanu(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -20,6 +22,7 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(background);
 	DX_SAFE_DELETE(bGrid);
 	DX_SAFE_DELETE(dPad);
+	DX_SAFE_DELETE(sBar);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
 	DX_SAFE_DELETE(tanu);
@@ -36,17 +39,17 @@ bool SceneGame::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-										  dWidth - gSize * 1, gSize * 1);
+										  dWidth - gSize * 1, gSize * 6);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 	btns.push_back(btnQuit);
 
 	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "R",
-										  gSize * 1, gSize * 1);
+										  gSize * 1, gSize * 6);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
-												  dWidth - gSize * 3, gSize * 1);
+												  dWidth - gSize * 3, gSize * 6);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 	btns.push_back(btnSound);
 
@@ -60,11 +63,15 @@ bool SceneGame::init() {
 	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
 
+	// ScoreBar
+	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
 	osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY - gSize * 12);
 	// Chicken
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX + gSize * 3, cY - gSize * 12);
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX + gSize * 3,
+										  cY - gSize * 12);
 	chicken->setEggListener(this);
 	// Tanu
 	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
@@ -77,7 +84,7 @@ bool SceneGame::init() {
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	dPad->setOnTouchBegan(id, x, y);
+	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -148,12 +155,13 @@ void SceneGame::update(const float delay) {
 	tanu->update(delay);
 
 	// Label
-	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 15,
+	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
 									  2, UtilAlign::CENTER);
 
-	// Buttons, Dpad
-	for (auto btn : btns) btn->update(delay);
+	// UI
 	if (dPad) dPad->update(delay);
+	if (sBar) sBar->update(delay);
+	for (auto btn : btns) btn->update(delay);
 
 	this->replaceSceneTick(delay);// NextScene
 }

@@ -40,6 +40,7 @@ add_library( # Sets the name of the library.
         main/ScenePreload.cpp
         main/SceneResult.cpp
         main/SceneTitle.cpp
+        main/ScoreBar.cpp
         main/SpriteBase.cpp
         main/SpriteChara.cpp
         main/SpriteChick.cpp
