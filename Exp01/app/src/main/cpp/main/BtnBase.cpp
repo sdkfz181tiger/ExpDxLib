@@ -3,17 +3,16 @@
 #include <utility>
 
 BtnBase *BtnBase::createBtn(const string &fileName,
-							const string &title,
 							float x, float y) {
 	// New
-	BtnBase *sprite = new BtnBase(title, x, y);
+	BtnBase *sprite = new BtnBase(x, y);
 	if (sprite && sprite->init(fileName.c_str())) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-BtnBase::BtnBase(const string &title, float x, float y) :
-		title(move(title)), pos(Vec2(x, y)),
+BtnBase::BtnBase(float x, float y) :
+		pos(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
 		touchFlg(false), touchID(-1),
@@ -34,7 +33,7 @@ bool BtnBase::init(const char *fileName) {
 	return true;
 }
 
-void BtnBase::offsetPos(int x, int y){
+void BtnBase::offsetPos(int x, int y) {
 	pos.x += x;
 	pos.y += y;
 }
@@ -91,9 +90,6 @@ void BtnBase::update(const float delay) {
 	maxY = pos.y + height * 0.5f;
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
-	// Text
-	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y,
-									  scale, UtilAlign::CENTER);
 }
 
 void BtnBase::addBtnListener(BtnListener *listener, BtnTag tag) {

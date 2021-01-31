@@ -1,16 +1,17 @@
 #include "BtnToggle.h"
 
-BtnToggle *BtnToggle::createToggle(const string &fileName,
-								   const string &title,
+BtnToggle *BtnToggle::createToggle(const string &fileNameOn,
+								   const string &fileNameOff,
 								   float x, float y) {
 	// New
-	BtnToggle *sprite = new BtnToggle(title, x, y);
-	if (sprite && sprite->init(fileName.c_str())) return sprite;
+	BtnToggle *sprite = new BtnToggle(x, y);
+	if (sprite && sprite->init(fileNameOn.c_str(), fileNameOff.c_str())) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-BtnToggle::BtnToggle(const string &title, float x, float y) : BtnBase(title, x, y) {
+BtnToggle::BtnToggle(float x, float y) : BtnBase(x, y),
+										 graphOn(-1), graphOff(-1) {
 	LOGD("Main", "BtnToggle()\n");
 }
 
@@ -18,13 +19,14 @@ BtnToggle::~BtnToggle() {
 	LOGD("Main", "~BtnToggle()\n");
 }
 
-bool BtnToggle::init(const char *fileName) {
+bool BtnToggle::init(const char *fileNameOn, const char *fileNameOff) {
 	// Load graph
-	graph = UtilGraph::getInstance()->getGraph(fileName);
-	if (graph == -1) return false;
+	graphOn = UtilGraph::getInstance()->getGraph(fileNameOn);// On
+	graphOff = UtilGraph::getInstance()->getGraph(fileNameOff);// Off
+	graph = (UtilSound::getInstance()->isMute()) ? graphOff : graphOn;// Graph
+	if (graphOn == -1 || graphOff == -1) return false;
 	GetGraphSize(graph, &width, &height);
 	this->setScale(UtilDx::getInstance()->getDefScale());
-	title = (UtilSound::getInstance()->isMute()) ? "X" : "O";
 	return true;
 }
 
@@ -39,6 +41,16 @@ bool BtnToggle::setOnTouchMoved(int id, int x, int y) {
 bool BtnToggle::setOnTouchEnded(int id, int x, int y) {
 	if (!BtnBase::setOnTouchEnded(id, x, y)) return false;
 	UtilSound::getInstance()->toggleMute();// Sound
-	title = (UtilSound::getInstance()->isMute()) ? "X" : "O";
+	graph = (UtilSound::getInstance()->isMute()) ? graphOff : graphOn;// Graph
 	return true;
+}
+
+void BtnToggle::update(const float delay) {
+	// Rect
+	minX = pos.x - width * 0.5f;
+	maxX = pos.x + width * 0.5f;
+	minY = pos.y - height * 0.5f;
+	maxY = pos.y + height * 0.5f;
+	// Draw
+	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
 }

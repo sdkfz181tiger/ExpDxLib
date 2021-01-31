@@ -72,7 +72,7 @@ JNIEnv *Android_JNI_GetEnv(void) {
 	return env;
 }
 
-UtilJNI::UtilJNI() : callback(nullptr) {
+UtilJNI::UtilJNI() : callbackGitHub(nullptr) {
 	LOGD("JNI", "UtilJNI()\n");
 }
 
@@ -197,12 +197,12 @@ void UtilJNI::connectAdMob() {
 void UtilJNI::connectGitHub(const char *url, const char *fileName,
 							function<void(CallbackType, const char *)> func) {
 	this->callJNIVoid("connectGitHub", url, fileName);
-	callback = func;// Callback
+	callbackGitHub = func;// Callback
 }
 
 void UtilJNI::callbackClient(CallbackType type, const char *fileName) {
-	if (!callback) return;
-	callback(type, fileName);
+	if (!callbackGitHub) return;
+	callbackGitHub(type, fileName);
 }
 
 string UtilJNI::getVersionCode() {

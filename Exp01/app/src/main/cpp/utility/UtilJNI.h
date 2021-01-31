@@ -10,7 +10,7 @@ enum class CallbackType {
 class UtilJNI {
 
 private:
-	function<void(CallbackType, const char *)> callback;
+	function<void(CallbackType, const char *)> callbackGitHub;
 
 public:
 	UtilJNI();

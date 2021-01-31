@@ -11,7 +11,7 @@ ScoreBar *ScoreBar::create(float x, float y, int w, int h) {
 ScoreBar::ScoreBar(float x, float y, int w, int h) :
 		pos(Vec2(x, y)), center(Vec2(x + w / 2, y + h / 2)),
 		width(w), height(h), gSize(UtilDebug::getInstance()->getGridSize()),
-		waitCnt(0), waitInterval(16), offsetY(0),
+		waitCnt(0), waitInterval(8), offsetY(0),
 		black(GetColor(0, 0, 0)) {
 	LOGD("Main", "ScoreBar()\n");
 }

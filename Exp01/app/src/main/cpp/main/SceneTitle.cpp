@@ -29,23 +29,29 @@ bool SceneTitle::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-										  dWidth - gSize * 1, gSize * 1);
-	btnQuit->addBtnListener(this, BtnTag::QUIT);
-	btns.push_back(btnQuit);
-
-	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "G",
-										  gSize * 1, gSize * 1);
-	btnTest->addBtnListener(this, BtnTag::GAME);
-	btns.push_back(btnTest);
-
-	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
-												  dWidth - gSize * 3, gSize * 1);
-	btnSound->addBtnListener(this, BtnTag::SOUND);
-	btns.push_back(btnSound);
-
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
+
+	// Quit, Sound
+	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
+										  dWidth - gSize * 1, gSize);
+	btnQuit->addBtnListener(this, BtnTag::QUIT);
+
+	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
+												  "images/c_sound_off.png",
+												  dWidth - gSize * 3, gSize);
+	btnSound->addBtnListener(this, BtnTag::SOUND);
+
+	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png",
+										  cX, gSize * 1);
+	btnTest->addBtnListener(this, BtnTag::GAME);
+
+	// ScoreBar
+	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+	sBar->pushBtnBase(btnQuit);
+	sBar->pushBtnBase(btnSound);
+	sBar->pushBtnBase(btnTest);
+	sBar->offsetAdHeight();
 
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
@@ -60,16 +66,19 @@ bool SceneTitle::init() {
 
 void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
+	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 }
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
+	if (sBar) sBar->setOnTouchMoved(id, x, y);
 	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
 }
 
 void SceneTitle::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
+	if (sBar) sBar->setOnTouchEnded(id, x, y);
 	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
 }
 
@@ -89,6 +98,9 @@ void SceneTitle::update(const float delay) {
 									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
 									  2, UtilAlign::CENTER);
+
+	// ScoreBar, Buttons
+	if (sBar) sBar->update(delay);
 	for (auto btn : btns) btn->update(delay);
 
 	this->replaceSceneTick(delay);// NextScene

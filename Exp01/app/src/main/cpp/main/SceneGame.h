@@ -8,8 +8,8 @@ class SceneGame : public SceneBase, BtnListener, DpadListener, EggListener {
 private:
 	SpriteBase *background;
 	BoardGrid *bGrid;
-	CtlDpad *dPad;
 	ScoreBar *sBar;
+	CtlDpad *dPad;
 	SpriteKobo *player;
 	SpriteOsho *osho;
 	SpriteChicken *chicken;

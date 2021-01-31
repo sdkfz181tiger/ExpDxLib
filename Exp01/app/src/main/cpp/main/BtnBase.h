@@ -22,7 +22,6 @@ public:
 class BtnBase {
 
 protected:
-	string title;
 	Vec2 pos;
 	int graph, width, height, scale;
 	int minX, maxX, minY, maxY;
@@ -35,10 +34,9 @@ protected:
 
 public:
 	static BtnBase *createBtn(const string &fileName,
-							  const string &title,
 							  float x, float y);
 
-	BtnBase(const string &title, float x, float y);
+	BtnBase(float x, float y);
 
 	virtual ~BtnBase();
 
@@ -56,7 +54,7 @@ public:
 
 	virtual bool setOnTouchEnded(int id, int x, int y);
 
-	void update(const float delay);
+	virtual void update(const float delay);
 
 	void addBtnListener(BtnListener *listener, BtnTag tag);
 };
