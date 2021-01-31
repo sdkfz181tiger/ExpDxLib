@@ -44,6 +44,8 @@ public:
 
 	virtual bool init(const char *fileName);
 
+	void offsetPos(int x, int y);
+
 	void setScale(int scale);
 
 	bool containsPoint(int x, int y);

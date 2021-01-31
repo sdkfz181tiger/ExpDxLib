@@ -34,6 +34,11 @@ bool BtnBase::init(const char *fileName) {
 	return true;
 }
 
+void BtnBase::offsetPos(int x, int y){
+	pos.x += x;
+	pos.y += y;
+}
+
 void BtnBase::setScale(int scale) {
 	this->scale = scale;
 	this->width *= scale;

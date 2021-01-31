@@ -38,20 +38,10 @@ bool SceneGame::init() {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
-										  dWidth - gSize * 1, gSize * 6);
-	btnQuit->addBtnListener(this, BtnTag::QUIT);
-	btns.push_back(btnQuit);
-
 	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png", "R",
 										  gSize * 1, gSize * 6);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 	btns.push_back(btnTest);
-
-	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
-												  dWidth - gSize * 3, gSize * 6);
-	btnSound->addBtnListener(this, BtnTag::SOUND);
-	btns.push_back(btnSound);
 
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY - gSize * 18);
@@ -63,8 +53,18 @@ bool SceneGame::init() {
 	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
 	dPad->addDpadListener(this);
 
-	// ScoreBar
+	// ScoreBar, Quit, Sound
 	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+
+	BtnBase *btnQuit = BtnBase::createBtn("images/box_12x12.png", "X",
+										  dWidth - gSize * 1, gSize);
+	btnQuit->addBtnListener(this, BtnTag::QUIT);
+	sBar->pushBtnBase(btnQuit);
+
+	BtnToggle *btnSound = BtnToggle::createToggle("images/box_12x12.png", "S",
+												  dWidth - gSize * 3, gSize);
+	btnSound->addBtnListener(this, BtnTag::SOUND);
+	sBar->pushBtnBase(btnSound);
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
@@ -83,20 +83,23 @@ bool SceneGame::init() {
 
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
-	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
+	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
+	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
-	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
 	if (dPad) dPad->setOnTouchMoved(id, x, y);
+	if (sBar) sBar->setOnTouchMoved(id, x, y);
+	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
 }
 
 void SceneGame::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
-	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
 	if (dPad) dPad->setOnTouchEnded(id, x, y);
+	if (sBar) sBar->setOnTouchEnded(id, x, y);
+	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
 }
 
 void SceneGame::update(const float delay) {
@@ -158,7 +161,7 @@ void SceneGame::update(const float delay) {
 	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
 									  2, UtilAlign::CENTER);
 
-	// UI
+	// Dpad, ScoreBar, Buttons
 	if (dPad) dPad->update(delay);
 	if (sBar) sBar->update(delay);
 	for (auto btn : btns) btn->update(delay);

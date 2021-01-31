@@ -2,6 +2,7 @@
 #define _SCOREBAR_H_
 
 #include "Utility.h"
+#include "BtnBase.h"
 #include "TimerCpp.h"
 
 class ScoreBar {
@@ -9,9 +10,12 @@ class ScoreBar {
 protected:
 	Vec2 pos, center;
 	int width, height, gSize;
-	bool waitFlg;
 	int waitCnt, waitInterval;
+	int offsetY;
 	unsigned int black;
+
+private:
+	vector<BtnBase *> btns;
 
 public:
 	static ScoreBar *create(float x, float y, int w, int h);
@@ -22,7 +26,15 @@ public:
 
 	bool init();
 
-	bool offsetAdHeight();
+	void setOnTouchBegan(int id, int x, int y);
+
+	void setOnTouchMoved(int id, int x, int y);
+
+	void setOnTouchEnded(int id, int x, int y);
+
+	void pushBtnBase(BtnBase *btn);
+
+	void offsetAdHeight();
 
 	void update(const float delay);
 };
