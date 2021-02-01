@@ -40,7 +40,7 @@ add_library( # Sets the name of the library.
         main/ScenePreload.cpp
         main/SceneResult.cpp
         main/SceneTitle.cpp
-        main/ScoreBar.cpp
+        main/ScoreHopper.cpp
         main/SpriteBase.cpp
         main/SpriteChara.cpp
         main/SpriteChick.cpp
@@ -51,6 +51,7 @@ add_library( # Sets the name of the library.
         main/SpriteKobo.cpp
         main/SpriteOsho.cpp
         main/SpriteTanu.cpp
+        main/StatusBar.cpp
         main/TimerCpp.cpp
         utility/Utility.h
         utility/UtilJNI.cpp

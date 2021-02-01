@@ -30,7 +30,7 @@ bool SceneTitle::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Background
-	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 10);
+	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 14);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -46,8 +46,8 @@ bool SceneTitle::init() {
 										  cX, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::GAME);
 
-	// ScoreBar
-	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+	// StatusBar
+	sBar = StatusBar::create(0, 0, dWidth, gSize * 2);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
 	sBar->pushBtnBase(btnTest);
@@ -99,7 +99,7 @@ void SceneTitle::update(const float delay) {
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,
 									  2, UtilAlign::CENTER);
 
-	// ScoreBar, Buttons
+	// StatusBar, Buttons
 	if (sBar) sBar->update(delay);
 	for (auto btn : btns) btn->update(delay);
 

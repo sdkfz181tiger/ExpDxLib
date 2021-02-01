@@ -150,6 +150,10 @@ void SpriteTanu::changeState(int sta) {
 	}
 	if (state == StateChara::WALK) {
 		//LOGD("Main", "Let's walk!!");
+		if (this->getItemFlg()) {
+			this->changeFrames("tanu_grab", -1);
+			return;
+		}
 		// Frames
 		int deg = this->getDegree();
 		if (deg < 45) {

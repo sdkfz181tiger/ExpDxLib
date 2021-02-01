@@ -1,11 +1,11 @@
-#ifndef _SCOREBAR_H_
-#define _SCOREBAR_H_
+#ifndef _STATUSBAR_H_
+#define _STATUSBAR_H_
 
 #include "Utility.h"
 #include "BtnBase.h"
 #include "TimerCpp.h"
 
-class ScoreBar {
+class StatusBar {
 
 protected:
 	Vec2 pos, center;
@@ -18,11 +18,11 @@ private:
 	vector<BtnBase *> btns;
 
 public:
-	static ScoreBar *create(float x, float y, int w, int h);
+	static StatusBar *create(float x, float y, int w, int h);
 
-	ScoreBar(float x, float y, int w, int h);
+	StatusBar(float x, float y, int w, int h);
 
-	virtual ~ScoreBar();
+	virtual ~StatusBar();
 
 	bool init();
 
@@ -39,4 +39,4 @@ public:
 	void update(const float delay);
 };
 
-#endif // _SCOREBAR_H_
+#endif // _STATUSBAR_H_

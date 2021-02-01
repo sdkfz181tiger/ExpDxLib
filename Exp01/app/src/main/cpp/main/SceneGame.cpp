@@ -12,7 +12,8 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), bGrid(nullptr),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), osho(nullptr),
-												chicken(nullptr), tanu(nullptr) {
+												chicken(nullptr),
+												tanuA(nullptr), tanuB(nullptr) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -25,7 +26,8 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
-	DX_SAFE_DELETE(tanu);
+	DX_SAFE_DELETE(tanuA);
+	DX_SAFE_DELETE(tanuB);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
 	DX_SAFE_DELETE_VECTOR(chicks);
@@ -39,10 +41,11 @@ bool SceneGame::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Background
-	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY - gSize * 18);
+	background = SpriteBase::createSprite("images/c_temple_135x480.png",
+										  cX, cY - gSize * 14);
 
 	// BoardGrid
-	bGrid = BoardGrid::createBoard(cX, cY, gSize * 2, 9, 9);
+	bGrid = BoardGrid::createBoard(cX, cY + gSize * 2, gSize * 2, 9, 9);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -58,26 +61,32 @@ bool SceneGame::init() {
 										  cX, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 
-	// ScoreBar
-	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+	// StatusBar
+	sBar = StatusBar::create(0, 0, dWidth, gSize * 2);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
 	sBar->pushBtnBase(btnTest);
 	sBar->offsetAdHeight();
 
 	// Dpad
-	dPad = CtlDpad::createDpad(cX, cY + gSize * 10);
+	dPad = CtlDpad::createDpad(cX, cY + gSize * 14);
 	dPad->addDpadListener(this);
 
 	// Player
-	player = SpriteKobo::createSprite("images/c_kobo.png", cX + gSize * 1, cY - gSize * 2);
-	osho = SpriteOsho::createSprite("images/c_osho.png", cX - gSize * 3, cY - gSize * 12);
+	player = SpriteKobo::createSprite("images/c_kobo.png",
+									  cX + gSize * 1, cY - gSize * 2);
+	// Osho
+	osho = SpriteOsho::createSprite("images/c_osho.png",
+									cX - gSize * 3, cY - gSize * 9);
 	// Chicken
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX + gSize * 3,
-										  cY - gSize * 12);
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
+										  cX + gSize * 3, cY - gSize * 9);
 	chicken->setEggListener(this);
 	// Tanu
-	tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY + gSize * 4);
+	tanuA = SpriteTanu::createSprite("images/c_tanu.png",
+									 cX - gSize * 2, cY + gSize * 4);
+	tanuB = SpriteTanu::createSprite("images/c_tanu.png",
+									 cX + gSize * 2, cY + gSize * 4);
 
 	UtilSound::getInstance()->stopBGM();// BGM
 
@@ -122,16 +131,25 @@ void SceneGame::update(const float delay) {
 		egg->update(delay);
 		// x Player
 		if (player->containsPos(egg)) {
-			this->chainChick(1);// Chain
+			this->chainChick(1, egg->getPosX(), egg->getPosY());// Chain
 			eggs.erase(itE);
 			DX_SAFE_DELETE(egg);
 			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 			continue;
 		}
-		// x Tanu
-		if (tanu->containsPos(egg)) {
-			if (tanu->getItemFlg()) continue;
-			tanu->startCapture(true, false);
+		// x TanuA
+		if (tanuA->containsPos(egg)) {
+			if (tanuA->getItemFlg()) continue;
+			tanuA->startCapture(true, false);
+			eggs.erase(itE);
+			DX_SAFE_DELETE(egg);
+			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
+			continue;
+		}
+		// x TanuB
+		if (tanuB->containsPos(egg)) {
+			if (tanuB->getItemFlg()) continue;
+			tanuB->startCapture(true, false);
 			eggs.erase(itE);
 			DX_SAFE_DELETE(egg);
 			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
@@ -144,10 +162,18 @@ void SceneGame::update(const float delay) {
 	while (itH-- != chicks.begin()) {
 		auto chick = static_cast<SpriteChick *>(*itH);
 		chick->update(delay);
-		// x Tanu
-		if (tanu->containsPos(chick)) {
-			if (tanu->getItemFlg()) continue;
-			tanu->startCapture(false, true);
+		// x TanuA
+		if (tanuA->containsPos(chick)) {
+			if (tanuA->getItemFlg()) continue;
+			tanuA->startCapture(false, true);
+			this->purgeChick();// Purge
+			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
+			continue;
+		}
+		// x TanuB
+		if (tanuB->containsPos(chick)) {
+			if (tanuB->getItemFlg()) continue;
+			tanuB->startCapture(false, true);
 			this->purgeChick();// Purge
 			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
 			continue;
@@ -158,13 +184,24 @@ void SceneGame::update(const float delay) {
 	player->update(delay);
 	osho->update(delay);
 	chicken->update(delay);
-	tanu->update(delay);
+	tanuA->update(delay);
+	tanuB->update(delay);
 
 	// Label
 	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
 									  2, UtilAlign::CENTER);
 
-	// ScoreBar, Dpad, Buttons
+	// Hopper
+	auto itS = hoppers.end();
+	while (itS-- != hoppers.begin()) {
+		auto hopper = static_cast<ScoreHopper *>(*itS);
+		hopper->update(delay);
+		if (hopper->isWaiting()) continue;
+		hoppers.erase(itS);
+		DX_SAFE_DELETE(hopper);
+	}
+
+	// StatusBar, Dpad, Buttons
 	if (sBar) sBar->update(delay);
 	if (dPad) dPad->update(delay);
 	for (auto btn : btns) btn->update(delay);
@@ -229,7 +266,7 @@ void SceneGame::onEggLayed(int x, int y) {
 	eggs.push_back(egg);
 }
 
-void SceneGame::chainChick(int num) {
+void SceneGame::chainChick(int num, int x, int y) {
 
 	// Chains x Player
 	if (chicks.size() == 0) {
@@ -249,6 +286,10 @@ void SceneGame::chainChick(int num) {
 		chick->setTarget(chicks.at(last));
 		chicks.push_back(chick);
 	}
+
+	// Hopper
+	ScoreHopper *hopper = ScoreHopper::createHopper(x, y, 10);
+	hoppers.push_back(hopper);
 }
 
 void SceneGame::purgeChick() {

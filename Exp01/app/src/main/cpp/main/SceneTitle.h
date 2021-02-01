@@ -7,7 +7,7 @@ class SceneTitle : public SceneBase, BtnListener {
 
 private:
 	SpriteBase *background;
-	ScoreBar *sBar;
+	StatusBar *sBar;
 	string vCode, vName;
 	vector<SpriteBase *> sprites;
 

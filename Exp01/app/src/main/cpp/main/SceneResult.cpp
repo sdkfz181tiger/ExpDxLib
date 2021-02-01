@@ -44,8 +44,8 @@ bool SceneResult::init() {
 										  cX, gSize * 1);
 	btnTest->addBtnListener(this, BtnTag::TITLE);
 
-	// ScoreBar
-	sBar = ScoreBar::create(0, 0, dWidth, gSize * 2);
+	// StatusBar
+	sBar = StatusBar::create(0, 0, dWidth, gSize * 2);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
 	sBar->pushBtnBase(btnTest);
@@ -87,7 +87,7 @@ void SceneResult::update(const float delay) {
 	UtilLabel::getInstance()->drawStr("=RESULT=", cX, 120,
 									  2, UtilAlign::CENTER);
 
-	// ScoreBar, Buttons
+	// StatusBar, Buttons
 	if (sBar) sBar->update(delay);
 	for (auto btn : btns) btn->update(delay);
 

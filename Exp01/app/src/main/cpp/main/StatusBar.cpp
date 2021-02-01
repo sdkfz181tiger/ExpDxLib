@@ -1,47 +1,47 @@
-#include "ScoreBar.h"
+#include "StatusBar.h"
 
-ScoreBar *ScoreBar::create(float x, float y, int w, int h) {
+StatusBar *StatusBar::create(float x, float y, int w, int h) {
 	// New
-	ScoreBar *sprite = new ScoreBar(x, y, w, h);
+	StatusBar *sprite = new StatusBar(x, y, w, h);
 	if (sprite && sprite->init()) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-ScoreBar::ScoreBar(float x, float y, int w, int h) :
+StatusBar::StatusBar(float x, float y, int w, int h) :
 		pos(Vec2(x, y)), center(Vec2(x + w / 2, y + h / 2)),
 		width(w), height(h), gSize(UtilDebug::getInstance()->getGridSize()),
 		waitCnt(0), waitInterval(8), offsetY(0),
 		black(GetColor(0, 0, 0)) {
-	LOGD("Main", "ScoreBar()\n");
+	LOGD("Main", "StatusBar()\n");
 }
 
-ScoreBar::~ScoreBar() {
-	LOGD("Main", "~ScoreBar()\n");
+StatusBar::~StatusBar() {
+	LOGD("Main", "~StatusBar()\n");
 	DX_SAFE_DELETE_VECTOR(btns);
 }
 
-bool ScoreBar::init() {
+bool StatusBar::init() {
 	return true;
 }
 
-void ScoreBar::setOnTouchBegan(int id, int x, int y) {
+void StatusBar::setOnTouchBegan(int id, int x, int y) {
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);// Buttons
 }
 
-void ScoreBar::setOnTouchMoved(int id, int x, int y) {
+void StatusBar::setOnTouchMoved(int id, int x, int y) {
 	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);// Buttons
 }
 
-void ScoreBar::setOnTouchEnded(int id, int x, int y) {
+void StatusBar::setOnTouchEnded(int id, int x, int y) {
 	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);// Buttons
 }
 
-void ScoreBar::pushBtnBase(BtnBase *btn) {
+void StatusBar::pushBtnBase(BtnBase *btn) {
 	btns.push_back(btn);
 }
 
-void ScoreBar::offsetAdHeight() {
+void StatusBar::offsetAdHeight() {
 	// AdMob
 	const int adHeight = UtilJNI::getInstance()->getAdHeight();
 	const int sHeight = UtilJNI::getInstance()->getScreenHeight();
@@ -51,7 +51,7 @@ void ScoreBar::offsetAdHeight() {
 	for (auto btn : btns) btn->offsetPos(0, offsetY);
 }
 
-void ScoreBar::update(const float delay) {
+void StatusBar::update(const float delay) {
 
 	if (offsetY <= 0) {
 		if (waitCnt < waitInterval) {

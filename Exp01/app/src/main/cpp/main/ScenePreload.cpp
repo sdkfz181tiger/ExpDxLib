@@ -104,7 +104,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	LOGD("Main", "Starting game!!");
 	lMarker->setMsg("STARTING");// Message
-	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+	this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -122,7 +122,7 @@ void ScenePreload::downloadImages() {
 		LOGD("Main", "Completed!!");
 		lMarker->setMsg("COMPLETED");
 		lMarker->progress(1);// Progress
-		this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
+		this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
 		return;
 	}
 
@@ -137,7 +137,7 @@ void ScenePreload::downloadImages() {
 		if (type == CallbackType::PROGRESS) {
 			LOGD("Main", "Progress: %d, %s", type, fileName);
 			int rdm = UtilMath::getInstance()->getRandom(0, 10);
-			const string msg = (rdm % 2 == 0) ? "L A I G " : " O D N ";
+			const string msg = (rdm % 2 == 0) ? "-+-+-+-+-" : "+-+-+-+-+";
 			lMarker->setMsg(msg.c_str());
 			return;
 		}

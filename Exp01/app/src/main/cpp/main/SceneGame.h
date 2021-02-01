@@ -8,14 +8,15 @@ class SceneGame : public SceneBase, BtnListener, DpadListener, EggListener {
 private:
 	SpriteBase *background;
 	BoardGrid *bGrid;
-	ScoreBar *sBar;
+	StatusBar *sBar;
 	CtlDpad *dPad;
 	SpriteKobo *player;
 	SpriteOsho *osho;
 	SpriteChicken *chicken;
-	SpriteTanu *tanu;
+	SpriteTanu *tanuA, *tanuB;
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
+	vector<ScoreHopper *> hoppers;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);
@@ -50,7 +51,7 @@ public:
 
 	void onEggLayed(int x, int y) override;
 
-	void chainChick(int num);
+	void chainChick(int num, int x, int y);
 
 	void purgeChick();
 };

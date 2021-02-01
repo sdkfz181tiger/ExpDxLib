@@ -7,7 +7,7 @@ class SceneResult : public SceneBase, BtnListener {
 
 private:
 	SpriteBase *background;
-	ScoreBar *sBar;
+	StatusBar *sBar;
 
 public:
 	static SceneResult *createScene(int dWidth, int dHeight);
