@@ -10,8 +10,9 @@ BoardGrid *BoardGrid::createBoard(float x, float y,
 }
 
 BoardGrid::BoardGrid(float x, float y) :
-		pos(Vec2(x, y)),
+		center(Vec2(x, y)),
 		gSize(0), gRows(0), gCols(0),
+		minX(0), maxX(0), minY(0), maxY(0),
 		cBlack(GetColor(0, 0, 0)),
 		cWhite(GetColor(255, 255, 255)),
 		cRed(GetColor(225, 65, 100)),
@@ -28,40 +29,40 @@ bool BoardGrid::init(int size, int rows, int cols) {
 	gSize = size;
 	gRows = rows;
 	gCols = cols;
+
+	int width = size * cols;
+	int height = size * rows;
+	minX = center.x - width / 2;
+	maxX = minX + width;
+	minY = center.y - height / 2;
+	maxY = minY + height;
+
+	for (int r = 0; r < gRows; r++) {
+		for (int c = 0; c < gCols; c++) {
+			int x = minX + c * gSize + gSize / 2;
+			int y = minY + r * gSize + gSize / 2;
+			positions.emplace_back(x, y);
+		}
+	}
+
 	return true;
 }
 
 void BoardGrid::update(const float delay) {
 	// Draw
-	this->draw();
+	DrawBox(minX, minY, maxX, maxY, cGreen, true);
+	// Test
+	for (auto pos:positions) {
+		DrawBox(pos.x, pos.y, pos.x + 5, pos.y + 5,
+				cWhite, true);
+	}
 }
 
-void BoardGrid::draw() {
+Vec2 &BoardGrid::getPos(int r, int c) {
+	return positions.at(r * gCols + c);
+}
 
-	int width = gSize * gCols;
-	int height = gSize * gRows;
-	int minX = pos.x - width / 2;
-	int minY = pos.y - height / 2;
-	int maxX = pos.x + width / 2;
-	int maxY = pos.y + height / 2;
-
-	DrawBox(minX, minY, maxX, maxY, cBlack, true);
-	/*
-	for (int r = 0; r < gRows; r++) {
-		for (int c = 0; c < gCols; c++) {
-			int i = c + r * gCols;
-			if (i % 2 != 0) continue;
-			int x = minX + c * gSize;
-			int y = minY + r * gSize;
-			DrawBox(x, y, x + gSize, y + gSize, cGreen, true);
-		}
-	}
-	 */
-	/*
-	for (int r = 1; r < gRows; r++)
-		DrawLine(minX, minY + r * gSize, maxX, minY + r * gSize, cWhite);
-	for (int c = 1; c < gCols; c++)
-		DrawLine(minX + c * gSize, minY, minX + c * gSize, maxY, cWhite);
-	DrawBox(minX, minY, maxX, maxY, cWhite, false);
-	 */
+Vec2 &BoardGrid::getRdmPos() {
+	int i = UtilMath::getInstance()->getRandom(0, gRows * gCols - 1);
+	return positions.at(i);
 }

@@ -20,7 +20,7 @@ private:
 	int goCnt, goInterval;
 	int layCnt, layInterval;
 
-	Vec2 nest;
+	Vec2 next, nest;
 	int eggCnt, eggTotal;
 	EggListener *eggListener;
 
@@ -36,6 +36,8 @@ public:
 	void update(const float delay) override;
 
 	void changeState(int sta) override;
+
+	void setNext(int x, int y);
 
 	void setEggListener(EggListener *listener);
 

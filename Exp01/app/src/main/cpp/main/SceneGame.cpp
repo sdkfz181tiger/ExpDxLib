@@ -81,6 +81,7 @@ bool SceneGame::init() {
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
 										  cX + gSize * 3, cY - gSize * 9);
+	chicken->setNext(cX, cY);
 	chicken->setEggListener(this);
 	// Tanu
 	tanuA = SpriteTanu::createSprite("images/c_tanu.png",
@@ -264,6 +265,10 @@ void SceneGame::onEggLayed(int x, int y) {
 	// Egg
 	auto egg = SpriteEgg::createSprite("images/c_egg.png", x, y);
 	eggs.push_back(egg);
+
+	// Chicken
+	Vec2 next = bGrid->getRdmPos();
+	chicken->setNext(next.x, next.y);
 }
 
 void SceneGame::chainChick(int num, int x, int y) {

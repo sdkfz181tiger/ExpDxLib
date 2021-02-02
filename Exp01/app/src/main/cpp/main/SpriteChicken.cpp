@@ -11,8 +11,10 @@ SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, floa
 SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y),
 												 goCnt(0), goInterval(20),
 												 layCnt(0), layInterval(40),
+												 next(Vec2(0, 0)),
 												 nest(Vec2(x, y)),
-												 eggCnt(0), eggTotal(1) {
+												 eggCnt(0), eggTotal(1),
+												 eggListener(nullptr) {
 	LOGD("Main", "SpriteChicken()\n");
 }
 
@@ -52,8 +54,12 @@ void SpriteChicken::update(float delay) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
 					if (0 < eggCnt) {
+						pos.x = next.x;
+						pos.y = next.y;
 						this->startLay();
 					} else {
+						pos.x = nest.x;
+						pos.y = nest.y;
 						this->startStay();
 					}
 				}
@@ -67,13 +73,7 @@ void SpriteChicken::update(float delay) {
 		} else {
 			// Next
 			int gSize = UtilDebug::getInstance()->getGridSize();
-			int minX = gSize * 2;
-			int maxX = UtilDx::getInstance()->getDispWidth() - gSize * 2;
-			int minY = gSize * 10;
-			int maxY = UtilDx::getInstance()->getDispHeight() - gSize * 10;
-			int x = UtilMath::getInstance()->getRandom(minX, maxX);
-			int y = UtilMath::getInstance()->getRandom(minY, maxY);
-			this->startWalk(gSize * 20, x, y, false);
+			this->startWalk(gSize * 20, next.x, next.y, false);
 		}
 	}
 	// Lay
@@ -83,7 +83,7 @@ void SpriteChicken::update(float delay) {
 		} else {
 			// Listener
 			if (eggListener) eggListener->onEggLayed(pos.x, pos.y);
-			// Next
+			// Nest
 			int gSize = UtilDebug::getInstance()->getGridSize();
 			this->startWalk(gSize * 20, nest.x, nest.y, false);
 		}
@@ -140,6 +140,11 @@ void SpriteChicken::changeState(int sta) {
 		this->changeFrames("chicken_f_lay", 1);
 		return;
 	}
+}
+
+void SpriteChicken::setNext(int x, int y) {
+	next.x = x;
+	next.y = y;
 }
 
 void SpriteChicken::setEggListener(EggListener *listener) {

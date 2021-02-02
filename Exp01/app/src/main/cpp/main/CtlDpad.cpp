@@ -93,6 +93,9 @@ void CtlDpad::setOnTouchEnded(int id, int x, int y) {
 void CtlDpad::calcDirection(int x, int y) {
 	dpad.x = x;
 	dpad.y = y;
+	// Distance
+	if(UtilMath::getInstance()->calcDistance2D(pos, dpad) < width / 20) return;
+	// Direction
 	dpadDir = UtilMath::getInstance()->calcDeg2D(pos, dpad);
 	if (dpadDir < 45) {
 		if (dpadTag == DpadTag::RIGHT) return;

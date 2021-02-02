@@ -6,9 +6,13 @@
 class BoardGrid {
 
 protected:
-	Vec2 pos;
+	Vec2 center;
 	int gSize, gRows, gCols;
+	int minX, maxX, minY, maxY;
 	unsigned int cBlack, cWhite, cRed, cGreen, cBlue;
+
+private:
+	vector<Vec2> positions;
 
 public:
 	static BoardGrid *createBoard(float x, float y,
@@ -18,11 +22,13 @@ public:
 
 	virtual ~BoardGrid();
 
-	virtual bool init(int size, int rows, int cols);
+	bool init(int size, int rows, int cols);
 
-	virtual void update(const float delay);
+	void update(const float delay);
 
-	virtual void draw();
+	Vec2 &getPos(int r, int c);
+
+	Vec2 &getRdmPos();
 };
 
 #endif // _BOARDGRID_H_
