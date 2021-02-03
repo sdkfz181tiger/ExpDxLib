@@ -31,6 +31,8 @@ public class MainActivity extends NativeActivity {
 	private static int sWidth, sHeight, adHeight;
 	private static boolean debugFlg = false;
 
+	private static PopupWindow pWindow;
+
 	// Used to load the 'native-lib' library on application startup.
 	static {
 		System.loadLibrary("native-lib");
@@ -84,6 +86,7 @@ public class MainActivity extends NativeActivity {
 
 	@Override
 	protected void onDestroy() {
+		pWindow.dismiss();// PopupWindow
 		MainActivity.nativeOnDestroy();// Native
 		super.onDestroy();
 	}
@@ -181,9 +184,16 @@ public class MainActivity extends NativeActivity {
 	public static void showBanner() {
 		if (activity == null) return;
 
-		// Banner
 		final int WC = FrameLayout.LayoutParams.WRAP_CONTENT;
-		AdView mBanner = new AdView(activity);
+
+		// PopupWindow
+		pWindow = new PopupWindow(activity);
+		// FrameLayout
+		final FrameLayout fLayout = new FrameLayout(activity);
+		fLayout.setLayoutParams(new FrameLayout.LayoutParams(WC, WC));
+
+		// Banner
+		final AdView mBanner = new AdView(activity);
 		mBanner.setLayoutParams(new FrameLayout.LayoutParams(WC, WC));
 		mBanner.setAdSize(AdSize.SMART_BANNER);
 		mBanner.setAdUnitId(activity.getResources().getString(R.string.admob_ad_unit_id_banner));
@@ -191,22 +201,22 @@ public class MainActivity extends NativeActivity {
 			@Override
 			public void onAdLoaded() {
 				CustomLog.d(TAG, "Banner:onAdLoaded()");
-				// FrameLayout
-				FrameLayout fLayout = new FrameLayout(activity);
-				fLayout.setLayoutParams(new FrameLayout.LayoutParams(WC, WC));
-				// PopupWindow
-				PopupWindow pWindow = new PopupWindow(activity);
 				pWindow.setContentView(mBanner);
 				pWindow.setWidth(mBanner.getAdSize().getWidthInPixels(activity));
 				pWindow.setHeight(mBanner.getAdSize().getHeightInPixels(activity));
-				pWindow.showAtLocation(fLayout, Gravity.TOP, 0, 0);
-				pWindow.update();
+				pWindow.showAtLocation(fLayout, Gravity.TOP, 0, 0);// Show
+				pWindow.update();// Update
 				adHeight = mBanner.getAdSize().getHeightInPixels(activity);// Height
 			}
 
 			@Override
 			public void onAdFailedToLoad(LoadAdError adError) {
 				CustomLog.w(TAG, "Banner:onAdFailedToLoad():" + adError.getMessage());
+			}
+
+			@Override
+			public void onAdClosed() {
+				CustomLog.d(TAG, "Banner:onAdClosed()");
 			}
 		});
 		// TestDevices
