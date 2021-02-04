@@ -4,7 +4,7 @@
 static UtilDebug *selfUtilDebug = nullptr;
 
 UtilDebug::UtilDebug() : dWidth(0), dHeight(0), dColor(0),
-						 gSize(0), gRows(0), gCols(20),
+						 gSize(0), gRows(0), gCols(40),
 						 gColor(GetColor(0, 99, 0)) {
 	LOGD("Util", "UtilDebug()\n");
 }
@@ -34,6 +34,11 @@ bool UtilDebug::init() {
 	gSize = dWidth / gCols;
 	gRows = dHeight / gSize;
 	return true;
+}
+
+void UtilDebug::drawDebug(float delay) {
+	//this->drawGrid();
+	this->drawFPS(delay);
 }
 
 void UtilDebug::drawGrid() {

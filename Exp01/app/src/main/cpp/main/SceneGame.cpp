@@ -42,45 +42,47 @@ bool SceneGame::init() {
 
 	// Background
 	background = SpriteBase::createSprite("images/c_temple_135x480.png",
-										  cX, cY - gSize * 14);
+										  cX, cY - gSize * 32);
 
 	// BoardGrid
-	bGrid = BoardGrid::createBoard(cX, cY + gSize * 2, gSize * 2, 9, 9);
+	bGrid = BoardGrid::createBoard(cX, cY + gSize * 5, gSize * 5,
+								   8, 8);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
-										  dWidth - gSize * 1, gSize);
+										  dWidth - gSize * 2, gSize * 2);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
 												  "images/c_sound_off.png",
-												  dWidth - gSize * 3, gSize);
+												  dWidth - gSize * 6, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
 	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png",
-										  cX, gSize * 1);
+										  dWidth - gSize * 2, gSize * 6);
 	btnTest->addBtnListener(this, BtnTag::RESULT);
 
 	// StatusBar
-	sBar = StatusBar::create(0, 0, dWidth, gSize * 2);
+	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
 	sBar->pushBtnBase(btnTest);
 	sBar->offsetAdHeight();
+	sBar->resetScore();// Reset
 
 	// Dpad
-	dPad = CtlDpad::createDpad(cX, cY + gSize * 14);
+	dPad = CtlDpad::createDpad(cX, cY + gSize * 24);
 	dPad->addDpadListener(this);
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png",
-									  cX + gSize * 1, cY - gSize * 2);
+									  cX, cY - gSize * 2);
 	// Osho
 	osho = SpriteOsho::createSprite("images/c_osho.png",
-									cX - gSize * 3, cY - gSize * 9);
+									cX - gSize * 3, cY - gSize * 18);
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
-										  cX + gSize * 3, cY - gSize * 9);
+										  cX + gSize * 3, cY - gSize * 18);
 	chicken->setNext(cX, cY);
 	chicken->setEggListener(this);
 	// Tanu
@@ -291,6 +293,9 @@ void SceneGame::chainChick(int num, int x, int y) {
 		chick->setTarget(chicks.at(last));
 		chicks.push_back(chick);
 	}
+
+	// ScoreBar
+	sBar->addScore(10);
 
 	// Hopper
 	ScoreHopper *hopper = ScoreHopper::createHopper(x, y, 10);

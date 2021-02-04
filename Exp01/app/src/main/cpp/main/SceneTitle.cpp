@@ -30,24 +30,25 @@ bool SceneTitle::init() {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Background
-	background = SpriteBase::createSprite("images/c_temple_135x480.png", cX, cY + gSize * 14);
+	background = SpriteBase::createSprite("images/c_temple_135x480.png",
+										  cX, cY + gSize * 34);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
-										  dWidth - gSize * 1, gSize);
+										  dWidth - gSize * 2, gSize * 2);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
 												  "images/c_sound_off.png",
-												  dWidth - gSize * 3, gSize);
+												  dWidth - gSize * 6, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
 	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png",
-										  cX, gSize * 1);
+										  dWidth - gSize * 2, gSize * 6);
 	btnTest->addBtnListener(this, BtnTag::GAME);
 
 	// StatusBar
-	sBar = StatusBar::create(0, 0, dWidth, gSize * 2);
+	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
 	sBar->pushBtnBase(btnTest);

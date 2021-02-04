@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.ozateck.chickader"
-        minSdkVersion 21
+        minSdkVersion 27
         targetSdkVersion 30
         versionCode 17
         versionName "0.1.7"

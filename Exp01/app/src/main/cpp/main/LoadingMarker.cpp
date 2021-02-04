@@ -51,7 +51,7 @@ void LoadingMarker::update() {
 	const float percent = (float) loadCnt / (float) loadTotal;
 
 	// Message
-	UtilLabel::getInstance()->drawStr(loadMsg, pos.x, pos.y - gSize,
+	UtilLabel::getInstance()->drawStr(loadMsg, pos.x, pos.y - gSize * 2,
 									  2, UtilAlign::CENTER);
 	// Background
 	DrawBox(pos.x - width / 2, pos.y - height / 2,

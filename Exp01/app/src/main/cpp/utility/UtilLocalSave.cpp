@@ -87,23 +87,40 @@ string UtilLocalSave::getFullPath() {
 	return fullPath + fileName;
 }
 
-bool UtilLocalSave::getBool(const string &key) {
-	if (jsonObj.count(key) <= 0) return false;
+bool UtilLocalSave::getBool(const string &key, bool def) {
+	if (jsonObj.count(key) <= 0) {
+		jsonObj[key] = def;
+	}
 	return jsonObj.find(key).value();
 }
 
-void UtilLocalSave::setBool(const string &key, const bool flg) {
+void UtilLocalSave::setBool(const string &key, bool flg) {
 	if (jsonObj[key] == flg) return;
 	jsonObj[key] = flg;
 	this->saveData();
 }
 
-string UtilLocalSave::getString(const string &key) {
-	if (jsonObj.count(key) <= 0) return "";
+int UtilLocalSave::getNum(const string &key, int def) {
+	if (jsonObj.count(key) <= 0) {
+		jsonObj[key] = def;
+	}
 	return jsonObj.find(key).value();
 }
 
-void UtilLocalSave::setString(const string &key, const string &str) {
+void UtilLocalSave::setNum(const string &key, const int num) {
+	if (jsonObj[key] == num) return;
+	jsonObj[key] = num;
+	this->saveData();
+}
+
+string UtilLocalSave::getString(const string &key, string def) {
+	if (jsonObj.count(key) <= 0) {
+		jsonObj[key] = def;
+	}
+	return jsonObj.find(key).value();
+}
+
+void UtilLocalSave::setString(const string &key, const string str) {
 	if (jsonObj[key] == str) return;
 	jsonObj[key] = str;
 	this->saveData();

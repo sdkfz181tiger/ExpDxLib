@@ -24,9 +24,7 @@ public:
 
 	int getGridSize() { return gSize; }
 
-	int getGridRows() { return gRows; }
-
-	int getGridCols() { return gCols; }
+	void drawDebug(float delay);
 
 	void drawGrid();
 

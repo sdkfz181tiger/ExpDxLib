@@ -12,10 +12,12 @@ protected:
 	int width, height, gSize;
 	int waitCnt, waitInterval;
 	int offsetY;
-	unsigned int black;
 
 private:
 	vector<BtnBase *> btns;
+	int score, high;
+	char scoreStr[10], highStr[10];
+	unsigned int black;
 
 public:
 	static StatusBar *create(float x, float y, int w, int h);
@@ -35,6 +37,10 @@ public:
 	void pushBtnBase(BtnBase *btn);
 
 	void offsetAdHeight();
+
+	void resetScore();
+
+	void addScore(int num);
 
 	void update(const float delay);
 };

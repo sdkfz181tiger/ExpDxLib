@@ -30,7 +30,7 @@ bool UtilSound::init() {
 	LOGD("Util", "UtilSound::init()\n");
 
 	// Mute
-	muteFlg = UtilLocalSave::getInstance()->getBool("mute_flg");
+	muteFlg = UtilLocalSave::getInstance()->getBool("mute_flg", false);
 
 	// JSON
 	const string fullPath = UtilJNI::getInstance()->getFilePath() + "index.json";

@@ -57,7 +57,7 @@ bool ScenePreload::init() {
 	UtilJNI::getInstance()->connectGitHub(url.c_str(), fileName.c_str(), func);
 
 	// LoadingMarker
-	lMarker = new LoadingMarker(cX, cY, gSize * 10, gSize / 4);
+	lMarker = new LoadingMarker(cX, cY + gSize, gSize * 20, gSize / 4);
 
 	return true;
 }
@@ -71,12 +71,12 @@ void ScenePreload::downloadJson(const char *fileName) {
 	if (jObj.find(key) == jObj.end()) {
 		LOGW("Main", "Please connect to internet!!");
 		lMarker->setMsg("PLEASE CONNECT TO INTERNET");// Message
-		UtilLocalSave::getInstance()->setString(key, "");// Reset
+		UtilLocalSave::getInstance()->getString(key, "");// Reset
 		return;
 	}
 
 	const string jTime = jObj[key].get<string>();
-	const string sTime = UtilLocalSave::getInstance()->getString(key);
+	const string sTime = UtilLocalSave::getInstance()->getString(key, "");
 	LOGD("Main", "jTime:%s <-> sTime:%s", jTime.c_str(), sTime.c_str());
 	if (sTime.length() == 0) {
 		LOGD("Main", "Downloding assets!!");

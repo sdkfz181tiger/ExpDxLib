@@ -12,6 +12,9 @@ StatusBar::StatusBar(float x, float y, int w, int h) :
 		pos(Vec2(x, y)), center(Vec2(x + w / 2, y + h / 2)),
 		width(w), height(h), gSize(UtilDebug::getInstance()->getGridSize()),
 		waitCnt(0), waitInterval(8), offsetY(0),
+		score(UtilLocalSave::getInstance()->getNum("score", 0)),
+		high(UtilLocalSave::getInstance()->getNum("high", 0)),
+		scoreStr(""), highStr(""),
 		black(GetColor(0, 0, 0)) {
 	LOGD("Main", "StatusBar()\n");
 }
@@ -51,6 +54,21 @@ void StatusBar::offsetAdHeight() {
 	for (auto btn : btns) btn->offsetPos(0, offsetY);
 }
 
+void StatusBar::resetScore() {
+	score = 0;
+}
+
+void StatusBar::addScore(int num) {
+	// Score
+	score += num;
+	UtilLocalSave::getInstance()->setNum("score", score);
+	// High
+	if (high < score) {
+		high = score;
+		UtilLocalSave::getInstance()->setNum("high", high);
+	}
+}
+
 void StatusBar::update(const float delay) {
 
 	if (offsetY <= 0) {
@@ -67,9 +85,14 @@ void StatusBar::update(const float delay) {
 			black, true);
 
 	// Labels
-	UtilLabel::getInstance()->drawStr("SCORE:12345",
+	sprintf(scoreStr, "SC:%d", score);
+	UtilLabel::getInstance()->drawStr(scoreStr,
 									  gSize / 2, center.y + offsetY,
 									  2, UtilAlign::LEFT);
+	sprintf(highStr, "HI:%d", high);
+	UtilLabel::getInstance()->drawStr(highStr,
+									  center.x, center.y + offsetY,
+									  2, UtilAlign::CENTER);
 
 	// Buttons
 	for (auto btn : btns) btn->update(delay);

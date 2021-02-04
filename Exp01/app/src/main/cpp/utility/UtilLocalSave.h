@@ -32,13 +32,17 @@ private:
 	string getFullPath();
 
 public:
-	bool getBool(const string &key);
+	bool getBool(const string &key, bool def);
 
 	void setBool(const string &key, const bool flg);
 
-	string getString(const string &key);
+	int getNum(const string &key, int def);
 
-	void setString(const string &key, const string &str);
+	void setNum(const string &key, const int num);
+
+	string getString(const string &key, string def);
+
+	void setString(const string &key, const string str);
 };
 
 #endif // _UTILLOCALSAVE_H_

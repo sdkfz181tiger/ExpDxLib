@@ -49,11 +49,12 @@ bool BoardGrid::init(int size, int rows, int cols) {
 }
 
 void BoardGrid::update(const float delay) {
-	// Draw
-	DrawBox(minX, minY, maxX, maxY, cGreen, true);
-	// Test
-	for (auto pos:positions) {
-		DrawBox(pos.x, pos.y, pos.x + 5, pos.y + 5,
+	// Tile
+	int half = gSize / 2;
+	for (int i = 0; i < positions.size(); i++) {
+		Vec2 &pos = positions.at(i);
+		DrawBox(pos.x, pos.y,
+				pos.x + 4, pos.y + 4,
 				cWhite, true);
 	}
 }
