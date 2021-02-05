@@ -6,6 +6,8 @@
 #include "BtnBase.h"
 #include "BtnToggle.h"
 #include "CtlDpad.h"
+#include "LoadingMarker.h"
+#include "RankingView.h"
 #include "StatusBar.h"
 #include "ScoreHopper.h"
 #include "SpriteBase.h"

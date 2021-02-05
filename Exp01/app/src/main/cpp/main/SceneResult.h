@@ -8,6 +8,8 @@ class SceneResult : public SceneBase, BtnListener {
 private:
 	SpriteBase *background;
 	StatusBar *sBar;
+	RankingView *rView;
+	vector<SpriteBase *> sprites;
 
 public:
 	static SceneResult *createScene(int dWidth, int dHeight);

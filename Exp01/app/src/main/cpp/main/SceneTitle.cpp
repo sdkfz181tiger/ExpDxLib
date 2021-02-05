@@ -87,14 +87,15 @@ void SceneTitle::update(const float delay) {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	background->update(delay);// Background
 
 	for (auto sprite : sprites) sprite->update(delay);// Sprites
 
 	// Label, Buttons
-	UtilLabel::getInstance()->drawStr("==REALLY==", cX, 120,
-									  3, UtilAlign::CENTER);
+	UtilLabel::getInstance()->drawStr("=TITLE=", cX, cY - gSize * 10,
+									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
 									  2, UtilAlign::CENTER);
 	UtilLabel::getInstance()->drawStr(vName, cX, 180,

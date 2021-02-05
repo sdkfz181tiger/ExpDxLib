@@ -52,9 +52,16 @@ bool SceneResult::init() {
 	sBar->pushBtnBase(btnTest);
 	sBar->offsetAdHeight();
 
+	// RankingView
+	rView = RankingView::createRanking(cX, cY - gSize * 14, gSize, gSize * 5);
+
+	// Characters
+	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY - gSize * 4);
+	sprites.push_back(osho);
+
 	// BGM
-	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false, true);
+	//UtilSound::getInstance()->stopBGM();
+	//UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false, true);
 
 	return true;
 }
@@ -81,15 +88,15 @@ void SceneResult::update(const float delay) {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
+	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	background->update(delay);// Background
 
-	// Label
-	UtilLabel::getInstance()->drawStr("=RESULT=", cX, 120,
-									  2, UtilAlign::CENTER);
+	for (auto sprite : sprites) sprite->update(delay);// Sprites
 
-	// StatusBar, Buttons
+	// StatusBar, RankingView, Buttons
 	if (sBar) sBar->update(delay);
+	if (rView) rView->update(delay);
 	for (auto btn : btns) btn->update(delay);
 
 	this->replaceSceneTick(delay);// NextScene

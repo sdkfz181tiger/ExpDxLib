@@ -104,7 +104,7 @@ void ScenePreload::downloadJson(const char *fileName) {
 
 	LOGD("Main", "Starting game!!");
 	lMarker->setMsg("STARTING");// Message
-	this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
+	this->replaceSceneNext();// Next
 }
 
 void ScenePreload::downloadAssets(const json &jObj) {
@@ -122,7 +122,7 @@ void ScenePreload::downloadImages() {
 		LOGD("Main", "Completed!!");
 		lMarker->setMsg("COMPLETED");
 		lMarker->progress(1);// Progress
-		this->replaceSceneWait(1.0f, SceneTag::GAME);// Title
+		this->replaceSceneNext();// Next
 		return;
 	}
 
@@ -186,11 +186,11 @@ void ScenePreload::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Label
-	UtilLabel::getInstance()->drawStr(vName, dWidth - gSize / 2, dHeight - gSize / 2,
-									  2, UtilAlign::RIGHT);
-
 	lMarker->update();// Loading
+
+	// Version
+	UtilLabel::getInstance()->drawStr(vName, cX, cY + gSize * 4,
+									  2, UtilAlign::CENTER);
 
 	this->replaceSceneTick(delay);// NextScene
 }
@@ -205,4 +205,8 @@ void ScenePreload::onBtnCanceled(BtnTag &tag) {
 
 void ScenePreload::onBtnReleased(BtnTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
+}
+
+void ScenePreload::replaceSceneNext() {
+	this->replaceSceneWait(1.0f, SceneTag::RESULT);// Title
 }

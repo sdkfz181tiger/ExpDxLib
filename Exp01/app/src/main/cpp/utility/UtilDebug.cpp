@@ -62,6 +62,6 @@ void UtilDebug::drawGrid() {
 void UtilDebug::drawFPS(float delay) {
 	// FPS
 	sprintf(fpsStr, "FPS:%.2f", 1.0f / delay);
-	UtilLabel::getInstance()->drawStr(fpsStr, gSize / 2, dHeight - gSize / 2,
-									  2, UtilAlign::LEFT);
+	UtilLabel::getInstance()->drawStr(fpsStr, dWidth / 2, dHeight - gSize,
+									  2, UtilAlign::CENTER);
 }

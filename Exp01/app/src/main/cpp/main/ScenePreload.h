@@ -2,7 +2,6 @@
 #define _SCENEPRELOAD_H_
 
 #include "SceneBase.h"
-#include "LoadingMarker.h"
 
 class ScenePreload : public SceneBase, BtnListener {
 
@@ -42,6 +41,8 @@ public:
 	void onBtnCanceled(BtnTag &tag) override;
 
 	void onBtnReleased(BtnTag &tag) override;
+
+	void replaceSceneNext();
 };
 
 #endif // _SCENEPRELOAD_H_

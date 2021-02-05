@@ -55,7 +55,9 @@ void StatusBar::offsetAdHeight() {
 }
 
 void StatusBar::resetScore() {
+	// Score
 	score = 0;
+	UtilLocalSave::getInstance()->setNum("score", score);
 }
 
 void StatusBar::addScore(int num) {
