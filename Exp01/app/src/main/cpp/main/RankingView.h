@@ -14,7 +14,7 @@ private:
 	int blinkCnt, blinkInterval;
 	int blinkTimes;
 	bool blinkFlg;
-	vector<RankingLine*> lines;
+	vector<RankingLine *> lines;
 
 public:
 	static RankingView *createRanking(float x, float y, int pX, int pY);

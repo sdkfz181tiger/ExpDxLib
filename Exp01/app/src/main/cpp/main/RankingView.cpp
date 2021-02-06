@@ -32,11 +32,9 @@ bool RankingView::init() {
 
 	// Ranking
 	vector<Rank> ranking = {
-			Rank{true,  1, 99999, 999, "SMJ"},
-			Rank{false, 2, 88888, 888, "ABC"},
-			Rank{false, 3, 77777, 777, "DEF"},
-			Rank{false, 4, 66666, 666, "GHI"},
-			Rank{false, 5, 55555, 555, "JKL"}
+			Rank{true, 1, 99999, 99, "SMJ"},
+			Rank{false, 2, 8888, 88, "ABC"},
+			Rank{false, 3, 777, 77, "DEF"}
 	};
 
 	const int total = ranking.size();
@@ -51,9 +49,11 @@ bool RankingView::init() {
 
 void RankingView::update(const float delay) {
 
-	char str[30];
+	UtilLabel::getInstance()->drawStr("SCORE", pos.x, pos.y - padY * 1, 3,
+									  UtilAlign::CENTER);
 
 	// Score
+	char str[30];
 	counter += progress;
 	if (cntScore < counter) counter = cntScore;
 

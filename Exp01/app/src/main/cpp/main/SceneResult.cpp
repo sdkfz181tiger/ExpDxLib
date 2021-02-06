@@ -44,15 +44,10 @@ bool SceneResult::init() {
 												  dWidth - gSize * 6, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
-	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png",
-										  dWidth - gSize * 2, gSize * 6);
-	btnTest->addBtnListener(this, BtnTag::TITLE);
-
 	// StatusBar
 	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
-	sBar->pushBtnBase(btnTest);
 	sBar->offsetAdHeight();
 
 	// RankingView
@@ -61,6 +56,19 @@ bool SceneResult::init() {
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY - gSize * 4);
 	sprites.push_back(osho);
+
+	// Title, Retry
+	BtnBase *btnTitle = BtnBase::createBtn("images/box_38x22.png",
+										   cX - gSize * 8, cY + gSize * 25);
+	btnTitle->addBtnListener(this, BtnTag::TITLE);
+	btnTitle->setTitle("TITLE");
+	btns.push_back(btnTitle);
+
+	BtnBase *btnGame = BtnBase::createBtn("images/box_38x22.png",
+										  cX + gSize * 8, cY + gSize * 25);
+	btnGame->addBtnListener(this, BtnTag::GAME);
+	btnGame->setTitle("RETRY");
+	btns.push_back(btnGame);
 
 	// BGM
 	//UtilSound::getInstance()->stopBGM();
@@ -93,7 +101,7 @@ void SceneResult::update(const float delay) {
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	background->update(delay);// Background
+	//background->update(delay);// Background
 
 	for (auto sprite : sprites) sprite->update(delay);// Sprites
 
@@ -119,5 +127,9 @@ void SceneResult::onBtnReleased(BtnTag &tag) {
 	if (tag == BtnTag::TITLE) {
 		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
 		this->replaceSceneWait(0.2f, SceneTag::TITLE);
+	}
+	if (tag == BtnTag::GAME) {
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
+		this->replaceSceneWait(0.2f, SceneTag::GAME);
 	}
 }

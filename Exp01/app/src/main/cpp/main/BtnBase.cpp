@@ -15,7 +15,7 @@ BtnBase::BtnBase(float x, float y) :
 		pos(Vec2(x, y)),
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
-		touchFlg(false), touchID(-1),
+		touchFlg(false), touchID(-1), title(""),
 		btnListener(nullptr), btnTag(BtnTag::DEFAULT) {
 	LOGD("Main", "BtnBase()\n");
 }
@@ -42,6 +42,10 @@ void BtnBase::setScale(int scale) {
 	this->scale = scale;
 	this->width *= scale;
 	this->height *= scale;
+}
+
+void BtnBase::setTitle(string str) {
+	title = str;
 }
 
 bool BtnBase::containsPoint(int x, int y) {
@@ -90,6 +94,10 @@ void BtnBase::update(const float delay) {
 	maxY = pos.y + height * 0.5f;
 	// Draw
 	DrawExtendGraph(minX, minY, maxX, maxY, graph, true);
+	// Title
+	if (title.empty()) return;
+	UtilLabel::getInstance()->drawStr(title, pos.x, pos.y, 2,
+									  UtilAlign::CENTER);
 }
 
 void BtnBase::addBtnListener(BtnListener *listener, BtnTag tag) {

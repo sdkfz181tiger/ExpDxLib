@@ -27,6 +27,7 @@ protected:
 	int minX, maxX, minY, maxY;
 	bool touchFlg;
 	int touchID;
+	string title;
 
 	// EventListener
 	BtnListener *btnListener;
@@ -45,6 +46,8 @@ public:
 	void offsetPos(int x, int y);
 
 	void setScale(int scale);
+
+	void setTitle(string str);
 
 	bool containsPoint(int x, int y);
 

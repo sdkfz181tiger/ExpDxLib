@@ -2,10 +2,11 @@
 #define _RANKINGLINE_H_
 
 #include "Utility.h"
+#include "SpriteChick.h";
 
 struct Rank {
-	bool icon;
-	int num;
+	bool flg;
+	int rank;
 	int score;
 	int hiyoko;
 	string name;
@@ -17,6 +18,8 @@ private:
 	Vec2 pos;
 	int padX, waitCnt;
 	Rank rank;
+	SpriteChick *mkL;
+	SpriteChick *mkR;
 
 public:
 	static RankingLine *createLine(float x, float y, int pX, int wC, Rank &r);

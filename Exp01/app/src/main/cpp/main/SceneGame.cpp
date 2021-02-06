@@ -124,7 +124,7 @@ void SceneGame::update(const float delay) {
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Background, Board
-	background->update(delay);
+	//background->update(delay);
 	bGrid->update(delay);
 
 	// Eggs x Player or Tanu

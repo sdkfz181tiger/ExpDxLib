@@ -17,9 +17,16 @@ RankingLine::RankingLine(float x, float y, int pX, int wC, Rank &r) :
 
 RankingLine::~RankingLine() {
 	LOGD("Main", "~RankingLine()\n");
+	DX_SAFE_DELETE(mkL);
+	DX_SAFE_DELETE(mkR);
 }
 
 bool RankingLine::init() {
+
+	// Marker
+	mkL = SpriteChick::createSprite("images/c_chick.png", pos.x - padX * 16, pos.y);
+	mkR = SpriteChick::createSprite("images/c_chick.png", pos.x + padX * 16, pos.y);
+
 	return true;
 }
 
@@ -29,21 +36,27 @@ void RankingLine::update(const float delay) {
 	waitCnt--;
 	if(0 < waitCnt) return;
 
+	// Marker
+	if(rank.flg){
+		mkL->update(delay);
+		mkR->update(delay);
+	}
+
 	// Rank
 	char str[30];
-	sprintf(str, "%d", rank.num);
-	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 16, pos.y, 3,
+	sprintf(str, "%d", rank.rank);
+	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 14, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Score
-	sprintf(str, "%06d", rank.score);
-	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 12, pos.y, 3,
+	sprintf(str, "%05d", rank.score);
+	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 10, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Hiyoko
-	sprintf(str, "%03d", rank.hiyoko);
+	sprintf(str, "%02d", rank.hiyoko);
 	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 2, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Name
 	sprintf(str, "%s", rank.name.c_str());
-	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 10, pos.y, 3,
+	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 8, pos.y, 3,
 									  UtilAlign::LEFT);
 }
