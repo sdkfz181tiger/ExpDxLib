@@ -30,6 +30,10 @@ bool RankingView::init() {
 		progress = (cntScore / fps) * 2;
 	}
 
+	// Test
+	json obj1 = {{"name" "hoge"}, {"age", 42}, {"sex", "male"}};
+	UtilLocalSave::getInstance()->pushObj("ranking", obj1);
+
 	// Ranking
 	vector<Rank> ranking = {
 			Rank{true, 1, 99999, 99, "SMJ"},

@@ -43,6 +43,10 @@ public:
 	string getString(const string &key, string def);
 
 	void setString(const string &key, const string str);
+
+	json &getObj(const string &key, int index);
+
+	void pushObj(const string &key, const json obj);
 };
 
 #endif // _UTILLOCALSAVE_H_

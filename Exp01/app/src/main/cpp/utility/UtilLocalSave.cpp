@@ -125,3 +125,22 @@ void UtilLocalSave::setString(const string &key, const string str) {
 	jsonObj[key] = str;
 	this->saveData();
 }
+
+json &UtilLocalSave::getObj(const string &key, int index) {
+	if (jsonObj.count(key) <= 0) {
+		jsonObj[key] = json::array();
+	}
+	if (jsonObj[key].at(index)) {
+
+	}
+	return jsonObj.find(key).value();
+}
+
+void UtilLocalSave::pushObj(const string &key, const json obj) {
+	if (jsonObj.count(key) <= 0) {
+		jsonObj[key] = json::array();
+	}
+	jsonObj[key].push_back(obj);
+	this->saveData();
+}
+
