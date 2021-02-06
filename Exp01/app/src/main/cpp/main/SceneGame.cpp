@@ -252,7 +252,7 @@ void SceneGame::onDpadReleased(DpadTag &tag) {
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
-	int spd = UtilDebug::getInstance()->getGridSize() * 10;
+	int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	player->startStay();
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);

@@ -19,6 +19,7 @@ SceneTitle::~SceneTitle() {
 	LOGD("Main", "~SceneTitle()\n");
 	// Delete
 	DX_SAFE_DELETE(background);
+	DX_SAFE_DELETE(sBar);
 	DX_SAFE_DELETE_VECTOR(btns);
 }
 

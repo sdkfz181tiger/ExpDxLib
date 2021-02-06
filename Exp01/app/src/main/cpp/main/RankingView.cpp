@@ -12,12 +12,13 @@ RankingView::RankingView(float x, float y, int pX, int pY) :
 		pos(Vec2(x, y)), padX(pX), padY(pY), counter(0), progress(0),
 		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
 		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
-		blinkCnt(0), blinkInterval(8), blinkTimes(10), blinkFlg(false) {
+		blinkCnt(0), blinkInterval(8), blinkTimes(8), blinkFlg(false) {
 	LOGD("Main", "RankingView()\n");
 }
 
 RankingView::~RankingView() {
 	LOGD("Main", "~RankingView()\n");
+	DX_SAFE_DELETE_VECTOR(lines);
 }
 
 bool RankingView::init() {
@@ -29,12 +30,21 @@ bool RankingView::init() {
 		progress = (cntScore / fps) * 2;
 	}
 
-	// Test
-	ranking.push_back(Rank{99999, 999, "SMJ"});
-	ranking.push_back(Rank{8888, 888, "ABC"});
-	ranking.push_back(Rank{777, 77, "DEF"});
-	ranking.push_back(Rank{66, 66, "DEF"});
-	ranking.push_back(Rank{5, 5, "GHI"});
+	// Ranking
+	vector<Rank> ranking = {
+			Rank{true,  1, 99999, 999, "SMJ"},
+			Rank{false, 2, 88888, 888, "ABC"},
+			Rank{false, 3, 77777, 777, "DEF"},
+			Rank{false, 4, 66666, 666, "GHI"},
+			Rank{false, 5, 55555, 555, "JKL"}
+	};
+
+	const int total = ranking.size();
+	for (int i = 0; i < total; i++) {
+		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
+												padX, (total - i) * 5,
+												ranking.at(i)));
+	}
 
 	return true;
 }
@@ -63,29 +73,10 @@ void RankingView::update(const float delay) {
 	}
 
 	// TOP
-	sprintf(str, "= TOP %d =", ranking.size());
+	sprintf(str, "= TOP %d =", lines.size());
 	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y + padY * 3, 3,
 									  UtilAlign::CENTER);
 
-	for (int i = 0; i < ranking.size(); i++) {
-		const int x = pos.x;
-		const int y = pos.y + padY * (i + 4);
-		Rank &rank = ranking.at(i);
-		// Rank
-		sprintf(str, "%d", i + 1);
-		UtilLabel::getInstance()->drawStr(str, x - padX * 16, y, 3,
-										  UtilAlign::LEFT);
-		// Score
-		sprintf(str, "%06d", rank.score);
-		UtilLabel::getInstance()->drawStr(str, x - padX * 12, y, 3,
-										  UtilAlign::LEFT);
-		// Hiyoko
-		sprintf(str, "%03d", rank.hiyoko);
-		UtilLabel::getInstance()->drawStr(str, x + padX * 2, y, 3,
-										  UtilAlign::LEFT);
-		// Name
-		sprintf(str, "%s", rank.name.c_str());
-		UtilLabel::getInstance()->drawStr(str, x + padX * 10, y, 3,
-										  UtilAlign::LEFT);
-	}
+	// Line
+	for (auto line:lines) line->update(delay);
 }

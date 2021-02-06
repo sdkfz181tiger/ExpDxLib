@@ -2,12 +2,7 @@
 #define _RANKINGVIEW_H_
 
 #include "Utility.h"
-
-struct Rank {
-	int score;
-	int hiyoko;
-	string name;
-};
+#include "RankingLine.h"
 
 class RankingView {
 
@@ -19,7 +14,7 @@ private:
 	int blinkCnt, blinkInterval;
 	int blinkTimes;
 	bool blinkFlg;
-	vector<Rank> ranking;
+	vector<RankingLine*> lines;
 
 public:
 	static RankingView *createRanking(float x, float y, int pX, int pY);

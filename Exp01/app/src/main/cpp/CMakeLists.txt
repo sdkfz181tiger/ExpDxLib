@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
         main/CtlDpad.cpp
         main/GameManager.cpp
         main/LoadingMarker.cpp
+        main/RankingLine.cpp
         main/RankingView.cpp
         main/SceneBase.cpp
         main/SceneGame.cpp

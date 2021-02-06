@@ -17,7 +17,10 @@ SceneResult::~SceneResult() {
 	LOGD("Main", "~SceneResult()\n");
 	// Delete
 	DX_SAFE_DELETE(background);
+	DX_SAFE_DELETE(sBar);
+	DX_SAFE_DELETE(rView);
 	DX_SAFE_DELETE_VECTOR(btns);
+	DX_SAFE_DELETE_VECTOR(sprites);
 }
 
 bool SceneResult::init() {
