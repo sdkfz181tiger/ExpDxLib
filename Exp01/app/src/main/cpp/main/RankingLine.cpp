@@ -2,7 +2,7 @@
 
 #include <utility>
 
-RankingLine *RankingLine::createLine(float x, float y, int pX, int wC, Rank &r) {
+RankingLine *RankingLine::createLine(float x, float y, int pX, int wC, json &r) {
 	// New
 	RankingLine *sprite = new RankingLine(x, y, pX, wC, r);
 	if (sprite && sprite->init()) return sprite;
@@ -10,7 +10,7 @@ RankingLine *RankingLine::createLine(float x, float y, int pX, int wC, Rank &r) 
 	return nullptr;
 }
 
-RankingLine::RankingLine(float x, float y, int pX, int wC, Rank &r) :
+RankingLine::RankingLine(float x, float y, int pX, int wC, json &r) :
 		pos(Vec2(x, y)), padX(pX), waitCnt(wC), rank(r) {
 	LOGD("Main", "RankingLine()\n");
 }
@@ -34,29 +34,35 @@ void RankingLine::update(const float delay) {
 
 	// Wait
 	waitCnt--;
-	if(0 < waitCnt) return;
+	if (0 < waitCnt) return;
+
+	bool flg = rank["flg"].get<bool>();
+	int num = rank["num"].get<int>();
+	int score = rank["score"].get<int>();
+	int hiyoko = rank["hiyoko"].get<int>();
+	string name = rank["name"].get<string>();
 
 	// Marker
-	if(rank.flg){
+	if (flg) {
 		mkL->update(delay);
 		mkR->update(delay);
 	}
 
 	// Rank
 	char str[30];
-	sprintf(str, "%d", rank.rank);
+	sprintf(str, "%d", num);
 	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 14, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Score
-	sprintf(str, "%05d", rank.score);
+	sprintf(str, "%05d", score);
 	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 10, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Hiyoko
-	sprintf(str, "%02d", rank.hiyoko);
+	sprintf(str, "%02d", hiyoko);
 	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 2, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Name
-	sprintf(str, "%s", rank.name.c_str());
+	sprintf(str, "%s", name.c_str());
 	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 8, pos.y, 3,
 									  UtilAlign::LEFT);
 }

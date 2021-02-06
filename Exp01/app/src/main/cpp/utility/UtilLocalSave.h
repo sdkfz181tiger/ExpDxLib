@@ -44,9 +44,9 @@ public:
 
 	void setString(const string &key, const string str);
 
-	json &getObj(const string &key, int index);
+	json &getArray(const string &key);
 
-	void pushObj(const string &key, const json obj);
+	void pushArray(const string &key, const json obj);
 };
 
 #endif // _UTILLOCALSAVE_H_

@@ -69,8 +69,8 @@ void ScenePreload::downloadJson(const char *fileName) {
 	const char *key = "time";
 
 	if (jObj.find(key) == jObj.end()) {
-		LOGW("Main", "Please connect to internet!!");
-		lMarker->setMsg("PLEASE CONNECT TO INTERNET");// Message
+		LOGW("Main", "No internet!!");
+		lMarker->setMsg("NO INTERNET");// Message
 		UtilLocalSave::getInstance()->getString(key, "");// Reset
 		return;
 	}

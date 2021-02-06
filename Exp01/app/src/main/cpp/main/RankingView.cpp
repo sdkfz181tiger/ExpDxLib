@@ -31,16 +31,17 @@ bool RankingView::init() {
 	}
 
 	// Test
-	json obj1 = {{"name" "hoge"}, {"age", 42}, {"sex", "male"}};
-	UtilLocalSave::getInstance()->pushObj("ranking", obj1);
+	bool flg = UtilMath::getInstance()->getRandom(0, 10) < 5;
+	int score = UtilMath::getInstance()->getRandom(100, 3000);
+	int hiyoko = UtilMath::getInstance()->getRandom(1, 99);
+	json obj1 = {{"flg",    flg},
+				 {"num",    1},
+				 {"score",  score},
+				 {"hiyoko", hiyoko},
+				 {"name",   "SMJ"}};
+	UtilLocalSave::getInstance()->pushArray("ranking", obj1);
 
-	// Ranking
-	vector<Rank> ranking = {
-			Rank{true, 1, 99999, 99, "SMJ"},
-			Rank{false, 2, 8888, 88, "ABC"},
-			Rank{false, 3, 777, 77, "DEF"}
-	};
-
+	json &ranking = UtilLocalSave::getInstance()->getArray("ranking");
 	const int total = ranking.size();
 	for (int i = 0; i < total; i++) {
 		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),

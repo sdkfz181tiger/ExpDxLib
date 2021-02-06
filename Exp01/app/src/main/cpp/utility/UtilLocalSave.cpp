@@ -88,9 +88,7 @@ string UtilLocalSave::getFullPath() {
 }
 
 bool UtilLocalSave::getBool(const string &key, bool def) {
-	if (jsonObj.count(key) <= 0) {
-		jsonObj[key] = def;
-	}
+	if (jsonObj.count(key) <= 0) jsonObj[key] = def;
 	return jsonObj.find(key).value();
 }
 
@@ -101,9 +99,7 @@ void UtilLocalSave::setBool(const string &key, bool flg) {
 }
 
 int UtilLocalSave::getNum(const string &key, int def) {
-	if (jsonObj.count(key) <= 0) {
-		jsonObj[key] = def;
-	}
+	if (jsonObj.count(key) <= 0) jsonObj[key] = def;
 	return jsonObj.find(key).value();
 }
 
@@ -114,9 +110,7 @@ void UtilLocalSave::setNum(const string &key, const int num) {
 }
 
 string UtilLocalSave::getString(const string &key, string def) {
-	if (jsonObj.count(key) <= 0) {
-		jsonObj[key] = def;
-	}
+	if (jsonObj.count(key) <= 0) jsonObj[key] = def;
 	return jsonObj.find(key).value();
 }
 
@@ -126,20 +120,13 @@ void UtilLocalSave::setString(const string &key, const string str) {
 	this->saveData();
 }
 
-json &UtilLocalSave::getObj(const string &key, int index) {
-	if (jsonObj.count(key) <= 0) {
-		jsonObj[key] = json::array();
-	}
-	if (jsonObj[key].at(index)) {
-
-	}
+json &UtilLocalSave::getArray(const string &key) {
+	if (jsonObj.count(key) <= 0) jsonObj[key] = json::array();
 	return jsonObj.find(key).value();
 }
 
-void UtilLocalSave::pushObj(const string &key, const json obj) {
-	if (jsonObj.count(key) <= 0) {
-		jsonObj[key] = json::array();
-	}
+void UtilLocalSave::pushArray(const string &key, const json obj) {
+	if (jsonObj.count(key) <= 0) jsonObj[key] = json::array();
 	jsonObj[key].push_back(obj);
 	this->saveData();
 }

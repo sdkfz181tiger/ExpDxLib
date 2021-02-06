@@ -4,27 +4,19 @@
 #include "Utility.h"
 #include "SpriteChick.h";
 
-struct Rank {
-	bool flg;
-	int rank;
-	int score;
-	int hiyoko;
-	string name;
-};
-
 class RankingLine {
 
 private:
 	Vec2 pos;
 	int padX, waitCnt;
-	Rank rank;
+	json rank;
 	SpriteChick *mkL;
 	SpriteChick *mkR;
 
 public:
-	static RankingLine *createLine(float x, float y, int pX, int wC, Rank &r);
+	static RankingLine *createLine(float x, float y, int pX, int wC, json &r);
 
-	RankingLine(float x, float y, int pX, int wC, Rank &r);
+	RankingLine(float x, float y, int pX, int wC, json &r);
 
 	virtual ~RankingLine();
 
