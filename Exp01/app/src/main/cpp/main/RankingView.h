@@ -25,6 +25,8 @@ public:
 
 	bool init();
 
+	void sortRanking();
+
 	void update(const float delay);
 };
 

@@ -30,26 +30,49 @@ bool RankingView::init() {
 		progress = (cntScore / fps) * 2;
 	}
 
-	// Test
-	bool flg = UtilMath::getInstance()->getRandom(0, 10) < 5;
-	int score = UtilMath::getInstance()->getRandom(100, 3000);
-	int hiyoko = UtilMath::getInstance()->getRandom(1, 99);
-	json obj1 = {{"flg",    flg},
-				 {"num",    1},
-				 {"score",  score},
+	// Score
+	int hiyoko = UtilMath::getInstance()->getRandom(1, 30);
+	json rank = {{"rankin", false},
+				 {"num",    0},
+				 {"score",  cntScore},
 				 {"hiyoko", hiyoko},
-				 {"name",   "SMJ"}};
-	UtilLocalSave::getInstance()->pushArray("ranking", obj1);
+				 {"name",   "YOU"}};
+	UtilLocalSave::getInstance()->pushArray("ranking", rank);
 
-	json &ranking = UtilLocalSave::getInstance()->getArray("ranking");
-	const int total = ranking.size();
-	for (int i = 0; i < total; i++) {
-		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
-												padX, (total - i) * 5,
-												ranking.at(i)));
-	}
+	this->sortRanking();
 
 	return true;
+}
+
+void RankingView::sortRanking() {
+
+	// Ranking
+	json &ranking = UtilLocalSave::getInstance()->getArray("ranking");
+	const int total = ranking.size();
+	// Sort
+	for (int a = total - 1; 0 <= a; a--) {
+		json &objA = ranking.at(a);
+		for (int b = a - 1; 0 <= b; b--) {
+			json &objB = ranking.at(b);
+			if (objA["score"].get<int>() < objB["score"].get<int>()) continue;
+			objA.swap(objB);// Swap
+		}
+	}
+	// Number
+	bool flg = false;
+	for (int i = 0; i < total; i++) {
+		json &rank = ranking.at(i);
+		int score = rank["score"].get<int>();
+		if (!flg && score <= cntScore) {
+			rank["rankin"] = true;
+			flg = true;
+		} else {
+			rank["rankin"] = false;
+		}
+		rank["num"] = i + 1;
+		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
+												padX, (total - i) * 5, rank));
+	}
 }
 
 void RankingView::update(const float delay) {

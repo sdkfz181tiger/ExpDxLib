@@ -36,14 +36,14 @@ void RankingLine::update(const float delay) {
 	waitCnt--;
 	if (0 < waitCnt) return;
 
-	bool flg = rank["flg"].get<bool>();
+	bool rankin = rank["rankin"].get<bool>();
 	int num = rank["num"].get<int>();
 	int score = rank["score"].get<int>();
 	int hiyoko = rank["hiyoko"].get<int>();
 	string name = rank["name"].get<string>();
 
 	// Marker
-	if (flg) {
+	if (rankin) {
 		mkL->update(delay);
 		mkR->update(delay);
 	}
