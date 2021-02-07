@@ -48,9 +48,8 @@ void RankingView::sortRanking() {
 
 	// Ranking
 	json &ranking = UtilLocalSave::getInstance()->getArray("ranking");
-	const int total = ranking.size();
 	// Sort
-	for (int a = total - 1; 0 <= a; a--) {
+	for (int a = ranking.size() - 1; 0 <= a; a--) {
 		json &objA = ranking.at(a);
 		for (int b = a - 1; 0 <= b; b--) {
 			json &objB = ranking.at(b);
@@ -58,9 +57,11 @@ void RankingView::sortRanking() {
 			objA.swap(objB);// Swap
 		}
 	}
+	// Top 3
+	ranking.erase(ranking.begin()+3, ranking.end());
 	// Number
 	bool flg = false;
-	for (int i = 0; i < total; i++) {
+	for (int i = 0; i < ranking.size(); i++) {
 		json &rank = ranking.at(i);
 		int score = rank["score"].get<int>();
 		if (!flg && score <= cntScore) {
@@ -71,7 +72,7 @@ void RankingView::sortRanking() {
 		}
 		rank["num"] = i + 1;
 		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
-												padX, (total - i) * 5, rank));
+												padX, (ranking.size() - i) * 5, rank));
 	}
 }
 
