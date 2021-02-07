@@ -2,6 +2,7 @@
 #define _RANKINGVIEW_H_
 
 #include "Utility.h"
+#include "SpriteChick.h"
 #include "RankingLine.h"
 
 class RankingView {
@@ -9,11 +10,14 @@ class RankingView {
 private:
 	Vec2 pos;
 	int padX, padY;
-	int counter, progress;
-	int cntScore, cntHigh;
-	int blinkCnt, blinkInterval;
+	int counter;
+	int cntScore, cntBonus, cntHigh;
+	int stpA, stpIntervalA;
+	int stpB, stpIntervalB;
+	int stpC, stpIntervalC;
 	int blinkTimes;
 	bool blinkFlg;
+	vector<SpriteChick *> chicks;
 	vector<RankingLine *> lines;
 
 public:
@@ -26,6 +30,14 @@ public:
 	bool init();
 
 	void sortRanking();
+
+	void stepScore(const float delay);
+
+	void stepBonus(const float delay);
+
+	void stepBlink(const float delay);
+
+	void progressRanking(const float delay);
 
 	void update(const float delay);
 };

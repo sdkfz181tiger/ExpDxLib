@@ -15,7 +15,7 @@ protected:
 
 private:
 	vector<BtnBase *> btns;
-	int score, high;
+	int score, bonus, high;
 	char scoreStr[10], highStr[10];
 	unsigned int black;
 
@@ -41,6 +41,10 @@ public:
 	void resetScore();
 
 	void addScore(int num);
+
+	void resetBonus();
+
+	void setBonus(int num);
 
 	void update(const float delay);
 };

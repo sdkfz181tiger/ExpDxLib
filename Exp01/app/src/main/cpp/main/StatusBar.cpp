@@ -13,6 +13,7 @@ StatusBar::StatusBar(float x, float y, int w, int h) :
 		width(w), height(h), gSize(UtilDebug::getInstance()->getGridSize()),
 		waitCnt(0), waitInterval(8), offsetY(0),
 		score(UtilLocalSave::getInstance()->getNum("score", 0)),
+		bonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
 		high(UtilLocalSave::getInstance()->getNum("high", 0)),
 		scoreStr(""), highStr(""),
 		black(GetColor(0, 0, 0)) {
@@ -69,6 +70,18 @@ void StatusBar::addScore(int num) {
 		high = score;
 		UtilLocalSave::getInstance()->setNum("high", high);
 	}
+}
+
+void StatusBar::resetBonus() {
+	// Bonus
+	bonus = 0;
+	UtilLocalSave::getInstance()->setNum("bonus", score);
+}
+
+void StatusBar::setBonus(int num) {
+	// Bonus
+	bonus = num;
+	UtilLocalSave::getInstance()->setNum("bonus", bonus);
 }
 
 void StatusBar::update(const float delay) {

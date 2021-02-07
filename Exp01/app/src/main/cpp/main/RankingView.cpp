@@ -9,10 +9,14 @@ RankingView *RankingView::createRanking(float x, float y, int pX, int pY) {
 }
 
 RankingView::RankingView(float x, float y, int pX, int pY) :
-		pos(Vec2(x, y)), padX(pX), padY(pY), counter(0), progress(0),
+		pos(Vec2(x, y)), padX(pX), padY(pY), counter(0),
 		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
+		cntBonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
 		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
-		blinkCnt(0), blinkInterval(8), blinkTimes(8), blinkFlg(false) {
+		stpA(0), stpIntervalA(2),
+		stpB(0), stpIntervalB(10),
+		stpC(0), stpIntervalC(10),
+		blinkTimes(7), blinkFlg(false) {
 	LOGD("Main", "RankingView()\n");
 }
 
@@ -23,19 +27,11 @@ RankingView::~RankingView() {
 
 bool RankingView::init() {
 
-	const int fps = UtilDx::getInstance()->getFPS();
-	if (cntScore < fps) {
-		progress = 1;
-	} else {
-		progress = (cntScore / fps) * 2;
-	}
-
-	// Score
-	int hiyoko = UtilMath::getInstance()->getRandom(1, 30);
+	// Rank
 	json rank = {{"rankin", false},
 				 {"num",    0},
 				 {"score",  cntScore},
-				 {"hiyoko", hiyoko},
+				 {"bonus",  cntBonus},
 				 {"name",   "YOU"}};
 	UtilLocalSave::getInstance()->pushArray("ranking", rank);
 
@@ -58,7 +54,7 @@ void RankingView::sortRanking() {
 		}
 	}
 	// Top 3
-	ranking.erase(ranking.begin()+3, ranking.end());
+	ranking.erase(ranking.begin() + 3, ranking.end());
 	// Number
 	bool flg = false;
 	for (int i = 0; i < ranking.size(); i++) {
@@ -72,8 +68,74 @@ void RankingView::sortRanking() {
 		}
 		rank["num"] = i + 1;
 		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
-												padX, (ranking.size() - i) * 5, rank));
+												padX, (ranking.size() - i) * 5,
+												rank));
 	}
+}
+
+void RankingView::stepScore(const float delay) {
+
+	// Score
+	stpA++;
+	if (stpIntervalA < stpA) {
+		stpA = 0;
+		counter += 1;
+		if (cntScore < counter) counter = cntScore;
+		UtilSound::getInstance()->playSE("sounds/se_cnt_score.wav");
+	}
+
+	char str[30];
+	sprintf(str, "%d", counter);
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y, 8,
+									  UtilAlign::CENTER);
+}
+
+void RankingView::stepBonus(const float delay) {
+
+	// Bonus
+	stpB++;
+	if (stpIntervalB < stpB) {
+		stpB = 0;
+		counter += 5;
+		if (cntScore + cntBonus < counter) counter = cntScore + cntBonus;
+		UtilSound::getInstance()->playSE("sounds/se_cnt_bonus.wav");
+	}
+
+	char str[30];
+	sprintf(str, "%d", counter);
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y, 8,
+									  UtilAlign::CENTER);
+}
+
+void RankingView::stepBlink(const float delay) {
+
+	// Blink
+	if (0 < blinkTimes) {
+		stpC++;
+		if (stpIntervalC < stpC) {
+			stpC = 0;
+			blinkTimes--;
+			blinkFlg = !blinkFlg;
+		}
+	}
+
+	if (!blinkFlg) return;
+	char str[30];
+	sprintf(str, "%d", counter);
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y, 8,
+									  UtilAlign::CENTER);
+}
+
+void RankingView::progressRanking(const float delay) {
+
+	// Ranking
+	char str[20];
+	sprintf(str, "= TOP %lu =", lines.size());
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y + padY * 3, 3,
+									  UtilAlign::CENTER);
+
+	// Line
+	for (auto line:lines) line->update(delay);
 }
 
 void RankingView::update(const float delay) {
@@ -82,30 +144,13 @@ void RankingView::update(const float delay) {
 									  UtilAlign::CENTER);
 
 	// Score
-	char str[30];
-	counter += progress;
-	if (cntScore < counter) counter = cntScore;
-
-	if (cntScore <= counter && 0 < blinkTimes) {
-		blinkCnt++;
-		if (blinkInterval < blinkCnt) {
-			blinkCnt = 0;
-			blinkTimes--;
-			blinkFlg = !blinkFlg;
-		}
+	if (counter < cntScore) {
+		this->stepScore(delay);
+	} else if (counter < cntScore + cntBonus) {
+		this->stepBonus(delay);
+	} else {
+		this->stepBlink(delay);
 	}
 
-	if (!blinkFlg) {
-		sprintf(str, "%d", counter);
-		UtilLabel::getInstance()->drawStr(str, pos.x, pos.y, 8,
-										  UtilAlign::CENTER);
-	}
-
-	// TOP
-	sprintf(str, "= TOP %d =", lines.size());
-	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y + padY * 3, 3,
-									  UtilAlign::CENTER);
-
-	// Line
-	for (auto line:lines) line->update(delay);
+	this->progressRanking(delay);
 }

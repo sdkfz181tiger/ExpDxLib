@@ -2,7 +2,7 @@
 #define _RANKINGLINE_H_
 
 #include "Utility.h"
-#include "SpriteChick.h";
+#include "SpriteChick.h"
 
 class RankingLine {
 
