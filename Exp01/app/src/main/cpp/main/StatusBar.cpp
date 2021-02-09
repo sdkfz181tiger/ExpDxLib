@@ -62,6 +62,7 @@ void StatusBar::resetScore() {
 }
 
 void StatusBar::addScore(int num) {
+	if (num <= 0) return;
 	// Score
 	score += num;
 	UtilLocalSave::getInstance()->setNum("score", score);
@@ -79,6 +80,7 @@ void StatusBar::resetBonus() {
 }
 
 void StatusBar::setBonus(int num) {
+	if (bonus == num) return;
 	// Bonus
 	bonus = num;
 	UtilLocalSave::getInstance()->setNum("bonus", bonus);

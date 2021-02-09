@@ -297,7 +297,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 
 	// ScoreBar
 	sBar->addScore(10);
-	sBar->setBonus(chicks.size() * 100);
+	sBar->setBonus(chicks.size());
 
 	// Hopper
 	ScoreHopper *hopper = ScoreHopper::createHopper(x, y, 10);

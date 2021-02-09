@@ -7,18 +7,23 @@
 
 class RankingView {
 
+	enum StepMode {
+		SCORE, BONUS, BLINK
+	};
+
 private:
 	Vec2 pos;
 	int padX, padY;
 	int counter;
 	int cntScore, cntBonus, cntHigh;
+	StepMode stpMode;
 	int stpA, stpIntervalA;
 	int stpB, stpIntervalB;
 	int stpC, stpIntervalC;
-	int blinkTimes;
-	bool blinkFlg;
-	vector<SpriteChick *> chicks;
+	int rateBonus, blinkTimes;
+	bool blinkFlg, replaceFlg;
 	vector<RankingLine *> lines;
+	vector<SpriteChick *> chicks;
 
 public:
 	static RankingView *createRanking(float x, float y, int pX, int pY);
@@ -37,7 +42,9 @@ public:
 
 	void stepBlink(const float delay);
 
-	void progressRanking(const float delay);
+	void stepRanking(const float delay);
+
+	void replaceScore();
 
 	void update(const float delay);
 };

@@ -53,10 +53,6 @@ bool SceneResult::init() {
 	// RankingView
 	rView = RankingView::createRanking(cX, cY - gSize * 14, gSize, gSize * 5);
 
-	// Characters
-	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY - gSize * 4);
-	sprites.push_back(osho);
-
 	// Title, Retry
 	BtnBase *btnTitle = BtnBase::createBtn("images/box_38x22.png",
 										   cX - gSize * 8, cY + gSize * 25);

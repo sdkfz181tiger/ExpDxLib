@@ -39,7 +39,6 @@ void RankingLine::update(const float delay) {
 	bool rankin = rank["rankin"].get<bool>();
 	int num = rank["num"].get<int>();
 	int score = rank["score"].get<int>();
-	int bonus = rank["bonus"].get<int>();
 	string name = rank["name"].get<string>();
 
 	// Marker
@@ -54,13 +53,9 @@ void RankingLine::update(const float delay) {
 	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 14, pos.y, 3,
 									  UtilAlign::LEFT);
 	// Score
-	sprintf(str, "%05d", score);
-	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 10, pos.y, 3,
-									  UtilAlign::LEFT);
-	// Bonus
-	sprintf(str, "%02d", bonus);
-	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 2, pos.y, 3,
-									  UtilAlign::LEFT);
+	sprintf(str, "%07d", score);
+	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 5, pos.y, 3,
+									  UtilAlign::RIGHT);
 	// Name
 	sprintf(str, "%s", name.c_str());
 	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 8, pos.y, 3,

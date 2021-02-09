@@ -13,10 +13,12 @@ RankingView::RankingView(float x, float y, int pX, int pY) :
 		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
 		cntBonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
 		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
+		stpMode(SCORE),
 		stpA(0), stpIntervalA(2),
-		stpB(0), stpIntervalB(10),
-		stpC(0), stpIntervalC(10),
-		blinkTimes(7), blinkFlg(false) {
+		stpB(0), stpIntervalB(12),
+		stpC(0), stpIntervalC(5),
+		rateBonus(30), blinkTimes(15),
+		blinkFlg(false), replaceFlg(false) {
 	LOGD("Main", "RankingView()\n");
 }
 
@@ -30,8 +32,7 @@ bool RankingView::init() {
 	// Rank
 	json rank = {{"rankin", false},
 				 {"num",    0},
-				 {"score",  cntScore},
-				 {"bonus",  cntBonus},
+				 {"score",  cntScore + cntBonus * rateBonus},
 				 {"name",   "YOU"}};
 	UtilLocalSave::getInstance()->pushArray("ranking", rank);
 
@@ -54,13 +55,13 @@ void RankingView::sortRanking() {
 		}
 	}
 	// Top 3
-	ranking.erase(ranking.begin() + 3, ranking.end());
+	if (3 < ranking.size()) ranking.erase(ranking.begin() + 3, ranking.end());
 	// Number
 	bool flg = false;
 	for (int i = 0; i < ranking.size(); i++) {
 		json &rank = ranking.at(i);
 		int score = rank["score"].get<int>();
-		if (!flg && score <= cntScore) {
+		if (!flg && score <= cntScore + cntBonus * rateBonus) {
 			rank["rankin"] = true;
 			flg = true;
 		} else {
@@ -79,8 +80,12 @@ void RankingView::stepScore(const float delay) {
 	stpA++;
 	if (stpIntervalA < stpA) {
 		stpA = 0;
-		counter += 1;
-		if (cntScore < counter) counter = cntScore;
+		counter += (int) ((float) cntScore / 10.0f);
+		if (cntScore < counter) {
+			counter = cntScore;
+			stpMode = BONUS;// Next
+		}
+		// SE
 		UtilSound::getInstance()->playSE("sounds/se_cnt_score.wav");
 	}
 
@@ -96,9 +101,29 @@ void RankingView::stepBonus(const float delay) {
 	stpB++;
 	if (stpIntervalB < stpB) {
 		stpB = 0;
-		counter += 5;
-		if (cntScore + cntBonus < counter) counter = cntScore + cntBonus;
+		counter += rateBonus;
+		if (cntScore + cntBonus * rateBonus < counter) {
+			counter = cntScore + cntBonus * rateBonus;
+			stpMode = BLINK;// Next
+		}
+		// SE
 		UtilSound::getInstance()->playSE("sounds/se_cnt_bonus.wav");
+		// Chicks
+		int cols = 12;
+		if (cntBonus < 13) {
+			cols = 6;
+		}
+		// Chicks
+		const int r = chicks.size() / cols;
+		const int c = chicks.size() % cols;
+		const int padH = padX * 3;
+		const int padV = padY * 2 / 3;
+		const int startX = pos.x - padH * (cols - 1) / 2;
+		const int startY = pos.y + padV * 2;
+		const int x = startX + padH * c;
+		const int y = startY + padV * r;
+		auto chick = SpriteChick::createSprite("images/c_chick.png", x, y);
+		chicks.push_back(chick);
 	}
 
 	char str[30];
@@ -126,7 +151,7 @@ void RankingView::stepBlink(const float delay) {
 									  UtilAlign::CENTER);
 }
 
-void RankingView::progressRanking(const float delay) {
+void RankingView::stepRanking(const float delay) {
 
 	// Ranking
 	char str[20];
@@ -138,19 +163,39 @@ void RankingView::progressRanking(const float delay) {
 	for (auto line:lines) line->update(delay);
 }
 
+void RankingView::replaceScore() {
+	if (replaceFlg) return;
+	replaceFlg = true;
+	// Score
+	cntScore += cntBonus * rateBonus;
+	UtilLocalSave::getInstance()->setNum("score", cntScore);
+	// High
+	if (cntHigh < cntScore) {
+		cntHigh = cntScore;
+		UtilLocalSave::getInstance()->setNum("high", cntHigh);
+	}
+}
+
 void RankingView::update(const float delay) {
 
 	UtilLabel::getInstance()->drawStr("SCORE", pos.x, pos.y - padY * 1, 3,
 									  UtilAlign::CENTER);
 
 	// Score
-	if (counter < cntScore) {
+	if (stpMode == SCORE) {
 		this->stepScore(delay);
-	} else if (counter < cntScore + cntBonus) {
-		this->stepBonus(delay);
-	} else {
-		this->stepBlink(delay);
 	}
 
-	this->progressRanking(delay);
+	if (stpMode == BONUS) {
+		this->stepBonus(delay);
+	}
+
+	if (stpMode == BLINK) {
+		this->stepBlink(delay);
+		this->stepRanking(delay);
+		this->replaceScore();// Replace
+	}
+
+	// Chicks
+	for (auto chick:chicks) chick->update(delay);
 }
