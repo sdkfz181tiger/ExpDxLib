@@ -13,12 +13,12 @@ RankingView::RankingView(float x, float y, int pX, int pY) :
 		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
 		cntBonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
 		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
-		stpMode(SCORE),
 		stpA(0), stpIntervalA(2),
 		stpB(0), stpIntervalB(12),
 		stpC(0), stpIntervalC(5),
 		rateBonus(30), blinkTimes(15),
-		blinkFlg(false), replaceFlg(false) {
+		blinkFlg(false), replaceFlg(false),
+		updateMode(SCORE) {
 	LOGD("Main", "RankingView()\n");
 }
 
@@ -76,6 +76,8 @@ void RankingView::sortRanking() {
 
 void RankingView::stepScore(const float delay) {
 
+	if (cntScore <= 0) updateMode = BLINK;// Next
+
 	// Score
 	stpA++;
 	if (stpIntervalA < stpA) {
@@ -83,7 +85,8 @@ void RankingView::stepScore(const float delay) {
 		counter += (int) ((float) cntScore / 10.0f);
 		if (cntScore < counter) {
 			counter = cntScore;
-			stpMode = BONUS;// Next
+			updateMode = BONUS;// Next
+			return;
 		}
 		// SE
 		UtilSound::getInstance()->playSE("sounds/se_cnt_score.wav");
@@ -104,7 +107,8 @@ void RankingView::stepBonus(const float delay) {
 		counter += rateBonus;
 		if (cntScore + cntBonus * rateBonus < counter) {
 			counter = cntScore + cntBonus * rateBonus;
-			stpMode = BLINK;// Next
+			updateMode = BLINK;// Next
+			return;
 		}
 		// SE
 		UtilSound::getInstance()->playSE("sounds/se_cnt_bonus.wav");
@@ -182,15 +186,15 @@ void RankingView::update(const float delay) {
 									  UtilAlign::CENTER);
 
 	// Score
-	if (stpMode == SCORE) {
+	if (updateMode == SCORE) {
 		this->stepScore(delay);
 	}
 
-	if (stpMode == BONUS) {
+	if (updateMode == BONUS) {
 		this->stepBonus(delay);
 	}
 
-	if (stpMode == BLINK) {
+	if (updateMode == BLINK) {
 		this->stepBlink(delay);
 		this->stepRanking(delay);
 		this->replaceScore();// Replace

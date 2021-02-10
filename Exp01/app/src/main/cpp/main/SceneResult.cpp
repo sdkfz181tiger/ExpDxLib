@@ -106,7 +106,7 @@ void SceneResult::update(const float delay) {
 	if (rView) rView->update(delay);
 	for (auto btn : btns) btn->update(delay);
 
-	this->replaceSceneTick(delay);// NextScene
+	this->replaceSceneTick(delay);// Tick
 }
 
 void SceneResult::onBtnPressed(BtnTag &tag) {

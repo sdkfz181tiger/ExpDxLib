@@ -59,7 +59,7 @@ bool CtlDpad::containsPoint(int x, int y) {
 void CtlDpad::setOnTouchBegan(int id, int x, int y) {
 	if (dpadFlg) return;
 	if (dpadID != -1) return;
-	if (!this->containsPoint(x, y)) this->setPosition(x, y);
+	this->setPosition(x, y);
 	if (dpadListener) dpadListener->onDpadPressed(dpadTag);
 	dpadFlg = true;
 	dpadID = id;

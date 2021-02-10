@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
         main/CtlDpad.cpp
         main/GameManager.cpp
         main/LoadingMarker.cpp
+        main/MsgHopper.cpp
         main/RankingLine.cpp
         main/RankingView.cpp
         main/SceneBase.cpp
@@ -42,7 +43,6 @@ add_library( # Sets the name of the library.
         main/ScenePreload.cpp
         main/SceneResult.cpp
         main/SceneTitle.cpp
-        main/ScoreHopper.cpp
         main/SpriteBase.cpp
         main/SpriteChara.cpp
         main/SpriteChick.cpp

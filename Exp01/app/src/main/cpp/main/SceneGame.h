@@ -6,6 +6,13 @@
 class SceneGame : public SceneBase, BtnListener, DpadListener, EggListener {
 
 private:
+	enum UpdateMode {
+		READY, START, FINISH
+	};
+	UpdateMode updateMode;
+	int waitCnt, waitInterval;
+
+private:
 	SpriteBase *background;
 	BoardGrid *bGrid;
 	StatusBar *sBar;
@@ -16,7 +23,7 @@ private:
 	SpriteTanu *tanuA, *tanuB;
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
-	vector<ScoreHopper *> hoppers;
+	vector<MsgHopper *> hoppers;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);
@@ -48,6 +55,12 @@ public:
 	void onDpadReleased(DpadTag &tag) override;
 
 	void onDpadChanged(DpadTag &tag) override;
+
+	void gameReady(const float delay);
+
+	void gameStart(const float delay);
+
+	void gameFinish(const float delay);
 
 	void onEggLayed(int x, int y) override;
 

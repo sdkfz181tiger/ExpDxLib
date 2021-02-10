@@ -104,7 +104,7 @@ void SceneTitle::update(const float delay) {
 	if (sBar) sBar->update(delay);
 	for (auto btn : btns) btn->update(delay);
 
-	this->replaceSceneTick(delay);// NextScene
+	this->replaceSceneTick(delay);// Tick
 }
 
 void SceneTitle::onBtnPressed(BtnTag &tag) {

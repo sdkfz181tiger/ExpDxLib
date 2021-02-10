@@ -13,7 +13,9 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), osho(nullptr),
 												chicken(nullptr),
-												tanuA(nullptr), tanuB(nullptr) {
+												tanuA(nullptr), tanuB(nullptr),
+												updateMode(READY),
+												waitCnt(0), waitInterval(60) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -92,6 +94,10 @@ bool SceneGame::init() {
 	tanuB = SpriteTanu::createSprite("images/c_tanu.png",
 									 cX + gSize * 2, cY + gSize * 4);
 
+	// Hopper
+	MsgHopper *hopper = MsgHopper::createStr(cX, cY, "READY!");
+	hoppers.push_back(hopper);
+
 	UtilSound::getInstance()->stopBGM();// BGM
 
 	return true;
@@ -120,13 +126,129 @@ void SceneGame::setOnTouchEnded(int id, int x, int y) {
 
 void SceneGame::update(const float delay) {
 
+	// Background, Board
+	//background->update(delay);
+	bGrid->update(delay);
+
+	// Mode
+	switch (updateMode) {
+		case READY:
+			this->gameReady(delay);
+			break;
+		case START:
+			this->gameStart(delay);
+			break;
+		case FINISH:
+			this->gameFinish(delay);
+			break;
+		default:
+			// Do nothing
+			break;
+	}
+
+	// Hopper
+	auto itS = hoppers.end();
+	while (itS-- != hoppers.begin()) {
+		auto hopper = static_cast<MsgHopper *>(*itS);
+		hopper->update(delay);
+		if (hopper->isWaiting()) continue;
+		hoppers.erase(itS);
+		DX_SAFE_DELETE(hopper);
+	}
+
+	// StatusBar, Dpad, Buttons
+	if (sBar) sBar->update(delay);
+	if (dPad) dPad->update(delay);
+	for (auto btn : btns) btn->update(delay);
+
+	this->replaceSceneTick(delay);// Tick
+}
+
+void SceneGame::onBtnPressed(BtnTag &tag) {
+	LOGD("Main", "onBtnPressed()");
+}
+
+void SceneGame::onBtnCanceled(BtnTag &tag) {
+	LOGD("Main", "onBtnCanceled()");
+}
+
+void SceneGame::onBtnReleased(BtnTag &tag) {
+	LOGD("Main", "onBtnReleased():%d", tag);
+	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
+	if (tag == BtnTag::RESULT) {
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
+		this->replaceSceneWait(0.2f, SceneTag::RESULT);
+	}
+}
+
+void SceneGame::onDpadPressed(DpadTag &tag) {
+	//LOGD("Dpad", "onDpadPressed():%d", tag);
+	int spd = UtilDebug::getInstance()->getGridSize() * 5;
+	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
+	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
+	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
+}
+
+void SceneGame::onDpadCanceled(DpadTag &tag) {
+	//LOGD("Dpad", "onDpadCanceled():%d", tag);
+	player->startStay();// Stay
+	UtilSound::getInstance()->stopBGM();// BGM
+}
+
+void SceneGame::onDpadReleased(DpadTag &tag) {
+	//LOGD("Dpad", "onDpadReleased():%d", tag);
+	player->startStay();// Stay
+	UtilSound::getInstance()->stopBGM();// BGM
+}
+
+void SceneGame::onDpadChanged(DpadTag &tag) {
+	//LOGD("Main", "onBtnReleased()");
+	if (updateMode != START) return;// Important
+	int spd = UtilDebug::getInstance()->getGridSize() * 20;
+	player->startStay();
+	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
+	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
+	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
+}
+
+void SceneGame::gameReady(const float delay) {
+
+	// Eggs, Chicks
+	for (auto egg : eggs) egg->update(delay);
+	for (auto chick : chicks) chick->update(delay);
+
+	// Player, Osho, Chicken
+	player->update(delay);
+	osho->update(delay);
+	chicken->update(delay);
+
+	// Wait
+	waitCnt++;
+	if (waitInterval < waitCnt) {
+		waitCnt = 0;
+		updateMode = START;// Next
+		// Hopper
+		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, "START!");
+		hoppers.push_back(hopper);
+	}
+}
+
+void SceneGame::gameStart(const float delay) {
+
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 	const int gSize = UtilDebug::getInstance()->getGridSize();
 
-	// Background, Board
-	//background->update(delay);
-	bGrid->update(delay);
+	// Player x Osho
+	if (player->containsPos(osho)) {
+		player->startStay();// Stay
+		updateMode = FINISH;// Next
+		// Hopper
+		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, "FINISH!");
+		hoppers.push_back(hopper);
+	}
 
 	// Eggs x Player or Tanu
 	auto itE = eggs.end();
@@ -190,75 +312,27 @@ void SceneGame::update(const float delay) {
 	chicken->update(delay);
 	tanuA->update(delay);
 	tanuB->update(delay);
+}
 
-	// Label
-	UtilLabel::getInstance()->drawStr("GAME START!!", cX, cY - gSize * 12,
-									  2, UtilAlign::CENTER);
+void SceneGame::gameFinish(const float delay) {
 
-	// Hopper
-	auto itS = hoppers.end();
-	while (itS-- != hoppers.begin()) {
-		auto hopper = static_cast<ScoreHopper *>(*itS);
-		hopper->update(delay);
-		if (hopper->isWaiting()) continue;
-		hoppers.erase(itS);
-		DX_SAFE_DELETE(hopper);
+	// Eggs, Chicks
+	for (auto egg : eggs) egg->update(delay);
+	for (auto chick : chicks) chick->update(delay);
+
+	// Player, Osho, Chicken, Tanu
+	player->update(delay);
+	osho->update(delay);
+	chicken->update(delay);
+	tanuA->update(delay);
+	tanuB->update(delay);
+
+	// Wait
+	waitCnt++;
+	if (waitInterval < waitCnt) {
+		waitCnt = 0;
+		this->replaceSceneWait(0.2f, SceneTag::RESULT);// NextScene
 	}
-
-	// StatusBar, Dpad, Buttons
-	if (sBar) sBar->update(delay);
-	if (dPad) dPad->update(delay);
-	for (auto btn : btns) btn->update(delay);
-
-	this->replaceSceneTick(delay);// NextScene
-}
-
-void SceneGame::onBtnPressed(BtnTag &tag) {
-	LOGD("Main", "onBtnPressed()");
-}
-
-void SceneGame::onBtnCanceled(BtnTag &tag) {
-	LOGD("Main", "onBtnCanceled()");
-}
-
-void SceneGame::onBtnReleased(BtnTag &tag) {
-	LOGD("Main", "onBtnReleased():%d", tag);
-	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
-	if (tag == BtnTag::RESULT) {
-		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		this->replaceSceneWait(0.2f, SceneTag::RESULT);
-	}
-}
-
-void SceneGame::onDpadPressed(DpadTag &tag) {
-	//LOGD("Dpad", "onDpadPressed():%d", tag);
-	int spd = UtilDebug::getInstance()->getGridSize() * 5;
-	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
-	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
-	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
-	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
-}
-
-void SceneGame::onDpadCanceled(DpadTag &tag) {
-	//LOGD("Dpad", "onDpadCanceled():%d", tag);
-	player->startStay();// Stay
-	UtilSound::getInstance()->stopBGM();// BGM
-}
-
-void SceneGame::onDpadReleased(DpadTag &tag) {
-	//LOGD("Dpad", "onDpadReleased():%d", tag);
-	player->startStay();// Stay
-	UtilSound::getInstance()->stopBGM();// BGM
-}
-
-void SceneGame::onDpadChanged(DpadTag &tag) {
-	//LOGD("Main", "onBtnReleased()");
-	int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	player->startStay();
-	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
-	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
-	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
-	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
 }
 
 void SceneGame::onEggLayed(int x, int y) {
@@ -300,7 +374,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 	sBar->setBonus(chicks.size());
 
 	// Hopper
-	ScoreHopper *hopper = ScoreHopper::createHopper(x, y, 10);
+	MsgHopper *hopper = MsgHopper::createNum(x, y, 10);
 	hoppers.push_back(hopper);
 }
 

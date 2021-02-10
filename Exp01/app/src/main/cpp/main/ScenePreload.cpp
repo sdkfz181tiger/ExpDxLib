@@ -208,5 +208,5 @@ void ScenePreload::onBtnReleased(BtnTag &tag) {
 }
 
 void ScenePreload::replaceSceneNext() {
-	this->replaceSceneWait(1.0f, SceneTag::RESULT);// Title
+	this->replaceSceneWait(1.0f, SceneTag::TITLE);// Title
 }

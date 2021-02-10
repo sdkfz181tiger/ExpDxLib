@@ -7,16 +7,17 @@
 
 class RankingView {
 
-	enum StepMode {
+private:
+	enum UpdateMode {
 		SCORE, BONUS, BLINK
 	};
+	UpdateMode updateMode;
 
 private:
 	Vec2 pos;
 	int padX, padY;
 	int counter;
 	int cntScore, cntBonus, cntHigh;
-	StepMode stpMode;
 	int stpA, stpIntervalA;
 	int stpB, stpIntervalB;
 	int stpC, stpIntervalC;
