@@ -95,7 +95,7 @@ bool SceneGame::init() {
 									 cX + gSize * 2, cY + gSize * 4);
 
 	// Hopper
-	MsgHopper *hopper = MsgHopper::createStr(cX, cY, "READY!");
+	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "READY!");
 	hoppers.push_back(hopper);
 
 	UtilSound::getInstance()->stopBGM();// BGM
@@ -230,7 +230,7 @@ void SceneGame::gameReady(const float delay) {
 		waitCnt = 0;
 		updateMode = START;// Next
 		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, "START!");
+		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "START!");
 		hoppers.push_back(hopper);
 	}
 }
@@ -246,7 +246,7 @@ void SceneGame::gameStart(const float delay) {
 		player->startStay();// Stay
 		updateMode = FINISH;// Next
 		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, "FINISH!");
+		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "FINISH!");
 		hoppers.push_back(hopper);
 	}
 
@@ -374,7 +374,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 	sBar->setBonus(chicks.size());
 
 	// Hopper
-	MsgHopper *hopper = MsgHopper::createNum(x, y, 10);
+	MsgHopper *hopper = MsgHopper::createNum(x, y, 2, 10);
 	hoppers.push_back(hopper);
 }
 

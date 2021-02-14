@@ -6,23 +6,25 @@
 class MsgHopper {
 
 private:
-	Vec2 pos, vel;
+	Vec2 pos;
+	int scale;
+	float vY;
 	int waitCnt, waitInterval;
 	float groundY, gravityY;
-	string str;
+	string msg;
 
 public:
-	static MsgHopper *createNum(float x, float y, int n);
+	static MsgHopper *createNum(float x, float y, int s, int n);
 
-	static MsgHopper *createStr(float x, float y, const string &s);
+	static MsgHopper *createStr(float x, float y, int s, const string &m);
 
-	MsgHopper(float x, float y);
+	MsgHopper(float x, float y, int s);
 
 	virtual ~MsgHopper();
 
 	bool init(int n);
 
-	bool init(const string &s);
+	bool init(const string &m);
 
 	void update(const float delay);
 
