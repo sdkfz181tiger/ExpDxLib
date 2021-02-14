@@ -66,10 +66,6 @@ bool SceneResult::init() {
 	btnGame->setTitle("RETRY");
 	btns.push_back(btnGame);
 
-	// BGM
-	//UtilSound::getInstance()->stopBGM();
-	//UtilSound::getInstance()->playBGM("sounds/bgm_result_ng.wav", false, true);
-
 	return true;
 }
 

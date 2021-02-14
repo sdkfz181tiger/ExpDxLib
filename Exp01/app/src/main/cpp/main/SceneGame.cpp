@@ -15,7 +15,7 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												chicken(nullptr),
 												tanuA(nullptr), tanuB(nullptr),
 												updateMode(READY),
-												waitCnt(0), waitInterval(60) {
+												waitCnt(0), waitInterval(90) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -98,7 +98,10 @@ bool SceneGame::init() {
 	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "READY!");
 	hoppers.push_back(hopper);
 
-	UtilSound::getInstance()->stopBGM();// BGM
+	// BGM
+	UtilSound::getInstance()->stopBGM();
+	UtilSound::getInstance()->playBGM("sounds/bgm_ready_01.wav",
+									  false, true);
 
 	return true;
 }
@@ -193,13 +196,11 @@ void SceneGame::onDpadPressed(DpadTag &tag) {
 void SceneGame::onDpadCanceled(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadCanceled():%d", tag);
 	player->startStay();// Stay
-	UtilSound::getInstance()->stopBGM();// BGM
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadReleased():%d", tag);
 	player->startStay();// Stay
-	UtilSound::getInstance()->stopBGM();// BGM
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
@@ -232,6 +233,10 @@ void SceneGame::gameReady(const float delay) {
 		// Hopper
 		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "START!");
 		hoppers.push_back(hopper);
+		// BGM
+		UtilSound::getInstance()->stopBGM();
+		UtilSound::getInstance()->playBGM("sounds/bgm_game_01.wav",
+										  true, true);
 	}
 }
 
@@ -248,6 +253,10 @@ void SceneGame::gameStart(const float delay) {
 		// Hopper
 		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "FINISH!");
 		hoppers.push_back(hopper);
+		// BGM
+		UtilSound::getInstance()->stopBGM();
+		UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
+										  false, true);
 	}
 
 	// Eggs x Player or Tanu

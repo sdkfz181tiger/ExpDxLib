@@ -108,6 +108,10 @@ void RankingView::stepBonus(const float delay) {
 		if (cntScore + cntBonus * rateBonus < counter) {
 			counter = cntScore + cntBonus * rateBonus;
 			updateMode = BLINK;// Next
+			// BGM
+			UtilSound::getInstance()->stopBGM();
+			UtilSound::getInstance()->playBGM("sounds/bgm_result_01.wav",
+											  false, true);
 			return;
 		}
 		// SE

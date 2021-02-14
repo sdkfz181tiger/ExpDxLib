@@ -56,7 +56,8 @@ bool SceneTitle::init() {
 
 	// BGM
 	UtilSound::getInstance()->stopBGM();
-	UtilSound::getInstance()->playBGM("sounds/bgm_title.wav", false, true);
+	UtilSound::getInstance()->playBGM("sounds/bgm_title_01.wav",
+									  false, true);
 
 	return true;
 }
