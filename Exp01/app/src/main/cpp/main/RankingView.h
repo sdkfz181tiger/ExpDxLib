@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "SpriteChick.h"
 #include "RankingLine.h"
+#include "Firework.h"
 
 class RankingView {
 
@@ -18,14 +19,16 @@ private:
 	int padX, padY;
 	bool rankinFlg;
 	int counter;
-	int cntScore, cntBonus, cntHigh;
+	int score, bonus, high;
 	int stpA, stpIntervalA;
 	int stpB, stpIntervalB;
 	int stpC, stpIntervalC;
 	int rateBonus, blinkTimes;
 	bool blinkFlg, replaceFlg;
+	int fireCnt, fireInterval;
 	vector<RankingLine *> lines;
 	vector<SpriteChick *> chicks;
+	vector<Firework *> fireworks;
 
 public:
 	static RankingView *createRanking(float x, float y, int pX, int pY);
@@ -45,6 +48,8 @@ public:
 	void stepBlink(const float delay);
 
 	void stepRanking(const float delay);
+
+	void stepFireworks(const float delay);
 
 	void replaceScore();
 

@@ -10,14 +10,15 @@ RankingView *RankingView::createRanking(float x, float y, int pX, int pY) {
 
 RankingView::RankingView(float x, float y, int pX, int pY) :
 		pos(Vec2(x, y)), padX(pX), padY(pY), rankinFlg(false), counter(0),
-		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
-		cntBonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
-		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
+		score(UtilLocalSave::getInstance()->getNum("score", 0)),
+		bonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
+		high(UtilLocalSave::getInstance()->getNum("high", 0)),
 		stpA(0), stpIntervalA(2),
 		stpB(0), stpIntervalB(12),
 		stpC(0), stpIntervalC(5),
 		rateBonus(30), blinkTimes(15),
 		blinkFlg(false), replaceFlg(false),
+		fireCnt(0), fireInterval(30),
 		updateMode(SCORE) {
 	LOGD("Main", "RankingView()\n");
 }
@@ -25,6 +26,7 @@ RankingView::RankingView(float x, float y, int pX, int pY) :
 RankingView::~RankingView() {
 	LOGD("Main", "~RankingView()\n");
 	DX_SAFE_DELETE_VECTOR(lines);
+	DX_SAFE_DELETE_VECTOR(fireworks);
 }
 
 bool RankingView::init() {
@@ -32,7 +34,7 @@ bool RankingView::init() {
 	// Rank
 	json rank = {{"rankin", false},
 				 {"num",    0},
-				 {"score",  cntScore + cntBonus * rateBonus},
+				 {"score",  score + bonus * rateBonus},
 				 {"name",   "YOU"}};
 	UtilLocalSave::getInstance()->pushArray("ranking", rank);
 
@@ -60,8 +62,7 @@ void RankingView::sortRanking() {
 	rankinFlg = false;// Rankin or not
 	for (int i = 0; i < ranking.size(); i++) {
 		json &rank = ranking.at(i);
-		int score = rank["score"].get<int>();
-		if (!rankinFlg && score <= cntScore + cntBonus * rateBonus) {
+		if (!rankinFlg && rank["score"].get<int>() <= score + bonus * rateBonus) {
 			rank["rankin"] = true;
 			rankinFlg = true;// Rankin!!
 		} else {
@@ -76,7 +77,7 @@ void RankingView::sortRanking() {
 
 void RankingView::stepScore(const float delay) {
 
-	if (cntScore <= 0) {
+	if (score <= 0) {
 		updateMode = BLINK;// Next
 		this->startRankinEffect();// Effect
 		return;
@@ -86,9 +87,9 @@ void RankingView::stepScore(const float delay) {
 	stpA++;
 	if (stpIntervalA < stpA) {
 		stpA = 0;
-		counter += (int) ((float) cntScore / 10.0f);
-		if (cntScore < counter) {
-			counter = cntScore;
+		counter++;
+		if (score < counter) {
+			counter = score;
 			updateMode = BONUS;// Next
 			return;
 		}
@@ -109,8 +110,8 @@ void RankingView::stepBonus(const float delay) {
 	if (stpIntervalB < stpB) {
 		stpB = 0;
 		counter += rateBonus;
-		if (cntScore + cntBonus * rateBonus < counter) {
-			counter = cntScore + cntBonus * rateBonus;
+		if (score + bonus * rateBonus < counter) {
+			counter = score + bonus * rateBonus;
 			updateMode = BLINK;// Next
 			this->startRankinEffect();// Effect
 			return;
@@ -119,15 +120,15 @@ void RankingView::stepBonus(const float delay) {
 		UtilSound::getInstance()->playSE("sounds/se_cnt_bonus.wav");
 		// Chicks
 		int cols = 12;
-		if (cntBonus < 13) cols = 6;
+		if (bonus < 13) cols = 6;
 		// Chicks
 		const int r = chicks.size() / cols;
 		const int c = chicks.size() % cols;
 		const int padH = padX * 3;
 		const int padV = padY * 2 / 3;
 		int startX = pos.x - padH / 2 * (cols - 1);
-		if (cntBonus < cols) {
-			startX = pos.x - padH / 2 * (cntBonus - 1);
+		if (bonus < cols) {
+			startX = pos.x - padH / 2 * (bonus - 1);
 		}
 		const int startY = pos.y + padV * 2;
 		const int x = startX + padH * c;
@@ -173,27 +174,44 @@ void RankingView::stepRanking(const float delay) {
 	for (auto line:lines) line->update(delay);
 }
 
+void RankingView::stepFireworks(const float delay) {
+
+	// Fireworks
+	if (fireInterval < fireCnt++) {
+		fireCnt = 0;
+		const int gSize = UtilDebug::getInstance()->getGridSize();
+		int padX = gSize * 10;
+		int x = pos.x - padX + UtilMath::getInstance()->getRandom(0, padX * 2);
+		int y = pos.y - UtilMath::getInstance()->getRandom(gSize * 5, gSize * 10);
+		float gY = gSize * 2;
+		float bY = y + gSize * 20;
+		Firework *fWork = Firework::create(x, y, gY, bY);
+		fireworks.push_back(fWork);
+	}
+	for (auto firework : fireworks) firework->update(delay);// Fireworks
+}
+
 void RankingView::replaceScore() {
 	if (replaceFlg) return;
 	replaceFlg = true;
 	// Score
-	cntScore += cntBonus * rateBonus;
-	UtilLocalSave::getInstance()->setNum("score", cntScore);
+	score += bonus * rateBonus;
+	UtilLocalSave::getInstance()->setNum("score", score);
 	// High
-	if (cntHigh < cntScore) {
-		cntHigh = cntScore;
-		UtilLocalSave::getInstance()->setNum("high", cntHigh);
+	if (high < score) {
+		high = score;
+		UtilLocalSave::getInstance()->setNum("high", high);
 	}
 }
 
 void RankingView::startRankinEffect() {
 	// Rankin or not
-	if (rankinFlg){
+	if (rankinFlg) {
 		// BGM
 		UtilSound::getInstance()->stopBGM();
 		UtilSound::getInstance()->playBGM("sounds/bgm_result_01.wav",
 										  false, true);
-	}else{
+	} else {
 		// BGM
 		UtilSound::getInstance()->stopBGM();
 		UtilSound::getInstance()->playBGM("sounds/bgm_result_02.wav",
@@ -218,6 +236,7 @@ void RankingView::update(const float delay) {
 	if (updateMode == BLINK) {
 		this->stepBlink(delay);
 		this->stepRanking(delay);
+		if(rankinFlg) this->stepFireworks(delay);
 		this->replaceScore();// Replace
 	}
 

@@ -33,6 +33,7 @@ add_library( # Sets the name of the library.
         main/BtnBase.cpp
         main/BtnToggle.cpp
         main/CtlDpad.cpp
+        main/Firework.cpp
         main/GameManager.cpp
         main/LoadingMarker.cpp
         main/MsgHopper.cpp

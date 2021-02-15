@@ -15,7 +15,7 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												chicken(nullptr),
 												tanuA(nullptr), tanuB(nullptr),
 												updateMode(READY),
-												waitCnt(0), waitInterval(100) {
+												waitCnt(0), waitInterval(150) {
 	LOGD("Main", "SceneGame()\n");
 }
 
