@@ -16,6 +16,7 @@ private:
 private:
 	Vec2 pos;
 	int padX, padY;
+	bool rankinFlg;
 	int counter;
 	int cntScore, cntBonus, cntHigh;
 	int stpA, stpIntervalA;
@@ -46,6 +47,8 @@ public:
 	void stepRanking(const float delay);
 
 	void replaceScore();
+
+	void startRankinEffect();
 
 	void update(const float delay);
 };

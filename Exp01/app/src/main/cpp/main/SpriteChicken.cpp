@@ -30,7 +30,7 @@ bool SpriteChicken::init(const string &fileName) {
 
 void SpriteChicken::update(float delay) {
 	// Stay
-	if (state == StateChara::STAY) {
+	if (state == StateChicken::STAY) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
@@ -38,7 +38,7 @@ void SpriteChicken::update(float delay) {
 		}
 	}
 	// Idle
-	if (state == StateChara::IDLE) {
+	if (state == StateChicken::IDLE) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
@@ -46,7 +46,7 @@ void SpriteChicken::update(float delay) {
 		}
 	}
 	// Walk
-	if (state == StateChara::WALK) {
+	if (state == StateChicken::WALK) {
 		if (this->getMoveFlg()) {
 			pos.x += vel.x * delay;
 			pos.y += vel.y * delay;
@@ -97,13 +97,13 @@ void SpriteChicken::changeState(int sta) {
 	if (state == sta) return;
 	state = sta;
 
-	if (state == StateChara::STAY) {
+	if (state == StateChicken::STAY) {
 		//LOGD("Main", "Let's stay!!");
 		// Frames
 		this->pauseFrames();
 		return;
 	}
-	if (state == StateChara::IDLE) {
+	if (state == StateChicken::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
 		vector<string> frames = {"chicken_f_i1", "chicken_f_i2", "chicken_f_i3", "chicken_f_i4"};
@@ -111,7 +111,7 @@ void SpriteChicken::changeState(int sta) {
 		this->changeFrames(frames.at(index), 2);
 		return;
 	}
-	if (state == StateChara::WALK) {
+	if (state == StateChicken::WALK) {
 		//LOGD("Main", "Let's walk!!");
 		// Frames
 		int deg = this->getDegree();

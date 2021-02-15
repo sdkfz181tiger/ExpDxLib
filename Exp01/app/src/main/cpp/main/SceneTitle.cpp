@@ -54,6 +54,12 @@ bool SceneTitle::init() {
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
 	sprites.push_back(osho);
 
+	BtnBase *btnStart = BtnBase::createBtn("images/box_38x22.png",
+										   cX, cY + gSize * 12);
+	btnStart->addBtnListener(this, BtnTag::GAME);
+	btnStart->setTitle("START");
+	btns.push_back(btnStart);
+
 	// BGM
 	UtilSound::getInstance()->stopBGM();
 	UtilSound::getInstance()->playBGM("sounds/bgm_title_01.wav",
@@ -66,9 +72,6 @@ void SceneTitle::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	// Tap to game
-	UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-	this->replaceSceneWait(0.2f, SceneTag::GAME);
 }
 
 void SceneTitle::setOnTouchMoved(int id, int x, int y) {
@@ -119,4 +122,9 @@ void SceneTitle::onBtnCanceled(BtnTag &tag) {
 void SceneTitle::onBtnReleased(BtnTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
+	if (tag == BtnTag::GAME) {
+		// Tap to game
+		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
+		this->replaceSceneWait(0.2f, SceneTag::GAME);
+	}
 }

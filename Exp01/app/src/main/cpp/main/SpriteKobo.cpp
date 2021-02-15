@@ -24,7 +24,7 @@ bool SpriteKobo::init(const string &fileName) {
 
 void SpriteKobo::update(float delay) {
 	// Stay
-	if (state == StateChara::STAY) {
+	if (state == StateKobo::STAY) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
@@ -32,7 +32,7 @@ void SpriteKobo::update(float delay) {
 		}
 	}
 	// Idle
-	if (state == StateChara::IDLE) {
+	if (state == StateKobo::IDLE) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
@@ -40,7 +40,7 @@ void SpriteKobo::update(float delay) {
 		}
 	}
 	// Walk
-	if (state == StateChara::WALK) {
+	if (state == StateKobo::WALK) {
 		if (this->getMoveFlg()) {
 			pos.x += vel.x * delay;
 			pos.y += vel.y * delay;
@@ -50,6 +50,7 @@ void SpriteKobo::update(float delay) {
 			}
 		}
 	}
+
 	// Draw
 	this->draw();
 }
@@ -59,21 +60,19 @@ void SpriteKobo::changeState(int sta) {
 	if (state == sta) return;
 	state = sta;
 
-	if (state == StateChara::STAY) {
+	if (state == StateKobo::STAY) {
 		//LOGD("Main", "Let's stay!!");
 		// Frames
 		this->pauseFrames();
 		return;
 	}
-	if (state == StateChara::IDLE) {
+	if (state == StateKobo::IDLE) {
 		//LOGD("Main", "Let's idle!!");
 		// Frames
-		vector<string> frames = {"kobo_f", "kobo_r", "kobo_l", "kobo_b"};
-		int index = UtilMath::getInstance()->getRandom(0, frames.size() - 1);
-		this->changeFrames(frames.at(index), 2);
+		this->changeFrames("kobo_f", 2);
 		return;
 	}
-	if (state == StateChara::WALK) {
+	if (state == StateKobo::WALK) {
 		//LOGD("Main", "Let's walk!!");
 		// Frames
 		int deg = this->getDegree();
@@ -90,4 +89,17 @@ void SpriteKobo::changeState(int sta) {
 		}
 		return;
 	}
+	if (state == StateKobo::DEAD) {
+		//LOGD("Main", "Let's walk!!");
+		this->changeFrames("kobo_roll", 5);
+	}
+}
+
+bool SpriteKobo::isDead() {
+	return state == StateKobo::DEAD;
+}
+
+void SpriteKobo::startDead() {
+	// State
+	this->changeState(StateKobo::DEAD);
 }

@@ -3,6 +3,11 @@
 
 #include "SpriteChara.h"
 
+class StateKobo : public StateChara {
+public:
+	const static int DEAD = 101;
+};
+
 class SpriteKobo : public SpriteChara {
 
 public:
@@ -17,6 +22,10 @@ public:
 	void update(const float delay) override;
 
 	void changeState(int sta) override;
+
+	bool isDead();
+
+	void startDead();
 };
 
 #endif // _SPRITEKOBO_H_

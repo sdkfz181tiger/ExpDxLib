@@ -9,7 +9,7 @@ RankingView *RankingView::createRanking(float x, float y, int pX, int pY) {
 }
 
 RankingView::RankingView(float x, float y, int pX, int pY) :
-		pos(Vec2(x, y)), padX(pX), padY(pY), counter(0),
+		pos(Vec2(x, y)), padX(pX), padY(pY), rankinFlg(false), counter(0),
 		cntScore(UtilLocalSave::getInstance()->getNum("score", 0)),
 		cntBonus(UtilLocalSave::getInstance()->getNum("bonus", 0)),
 		cntHigh(UtilLocalSave::getInstance()->getNum("high", 0)),
@@ -57,13 +57,13 @@ void RankingView::sortRanking() {
 	// Top 3
 	if (3 < ranking.size()) ranking.erase(ranking.begin() + 3, ranking.end());
 	// Number
-	bool flg = false;
+	rankinFlg = false;// Rankin or not
 	for (int i = 0; i < ranking.size(); i++) {
 		json &rank = ranking.at(i);
 		int score = rank["score"].get<int>();
-		if (!flg && score <= cntScore + cntBonus * rateBonus) {
+		if (!rankinFlg && score <= cntScore + cntBonus * rateBonus) {
 			rank["rankin"] = true;
-			flg = true;
+			rankinFlg = true;// Rankin!!
 		} else {
 			rank["rankin"] = false;
 		}
@@ -76,7 +76,11 @@ void RankingView::sortRanking() {
 
 void RankingView::stepScore(const float delay) {
 
-	if (cntScore <= 0) updateMode = BLINK;// Next
+	if (cntScore <= 0) {
+		updateMode = BLINK;// Next
+		this->startRankinEffect();// Effect
+		return;
+	}
 
 	// Score
 	stpA++;
@@ -108,25 +112,23 @@ void RankingView::stepBonus(const float delay) {
 		if (cntScore + cntBonus * rateBonus < counter) {
 			counter = cntScore + cntBonus * rateBonus;
 			updateMode = BLINK;// Next
-			// BGM
-			UtilSound::getInstance()->stopBGM();
-			UtilSound::getInstance()->playBGM("sounds/bgm_result_01.wav",
-											  false, true);
+			this->startRankinEffect();// Effect
 			return;
 		}
 		// SE
 		UtilSound::getInstance()->playSE("sounds/se_cnt_bonus.wav");
 		// Chicks
 		int cols = 12;
-		if (cntBonus < 13) {
-			cols = 6;
-		}
+		if (cntBonus < 13) cols = 6;
 		// Chicks
 		const int r = chicks.size() / cols;
 		const int c = chicks.size() % cols;
 		const int padH = padX * 3;
 		const int padV = padY * 2 / 3;
-		const int startX = pos.x - padH * (cols - 1) / 2;
+		int startX = pos.x - padH / 2 * (cols - 1);
+		if (cntBonus < cols) {
+			startX = pos.x - padH / 2 * (cntBonus - 1);
+		}
 		const int startY = pos.y + padV * 2;
 		const int x = startX + padH * c;
 		const int y = startY + padV * r;
@@ -181,6 +183,21 @@ void RankingView::replaceScore() {
 	if (cntHigh < cntScore) {
 		cntHigh = cntScore;
 		UtilLocalSave::getInstance()->setNum("high", cntHigh);
+	}
+}
+
+void RankingView::startRankinEffect() {
+	// Rankin or not
+	if (rankinFlg){
+		// BGM
+		UtilSound::getInstance()->stopBGM();
+		UtilSound::getInstance()->playBGM("sounds/bgm_result_01.wav",
+										  false, true);
+	}else{
+		// BGM
+		UtilSound::getInstance()->stopBGM();
+		UtilSound::getInstance()->playBGM("sounds/bgm_result_02.wav",
+										  false, true);
 	}
 }
 

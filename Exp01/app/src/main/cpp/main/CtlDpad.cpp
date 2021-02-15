@@ -48,6 +48,11 @@ void CtlDpad::setScale(int scl) {
 	scale = scl;
 }
 
+void CtlDpad::hide() {
+	pos.x = -width;
+	pos.y = -height;
+}
+
 bool CtlDpad::containsPoint(int x, int y) {
 	if (x < pos.x - width) return false;
 	if (pos.x + width < x) return false;
@@ -83,7 +88,7 @@ void CtlDpad::setOnTouchEnded(int id, int x, int y) {
 	if (!dpadFlg) return;
 	if (dpadID != id) return;
 	if (!this->containsPoint(x, y)) return;
-	this->setPosition(-width, -height);// Hide
+	this->hide();// Hide
 	if (dpadListener) dpadListener->onDpadReleased(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;

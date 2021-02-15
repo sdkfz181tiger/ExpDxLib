@@ -15,7 +15,7 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												chicken(nullptr),
 												tanuA(nullptr), tanuB(nullptr),
 												updateMode(READY),
-												waitCnt(0), waitInterval(90) {
+												waitCnt(0), waitInterval(100) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -60,21 +60,17 @@ bool SceneGame::init() {
 												  dWidth - gSize * 6, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
-	BtnBase *btnTest = BtnBase::createBtn("images/box_12x12.png",
-										  dWidth - gSize * 2, gSize * 6);
-	btnTest->addBtnListener(this, BtnTag::RESULT);
-
 	// StatusBar
 	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
-	sBar->pushBtnBase(btnTest);
 	sBar->offsetAdHeight();
 	sBar->resetScore();// Reset score
 	sBar->resetBonus();// Reset bonus
 
 	// Dpad
-	dPad = CtlDpad::createDpad(cX, cY + gSize * 24);
+	dPad = CtlDpad::createDpad(cX, cY);
+	dPad->hide();// Hide
 	dPad->addDpadListener(this);
 
 	// Player
@@ -108,6 +104,7 @@ bool SceneGame::init() {
 
 void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchBegan()[%d]:%d, %d", id, x, y);
+	if (updateMode != START) return;// Important
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
@@ -115,6 +112,7 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchMoved()[%d]:%d, %d", id, x, y);
+	if (updateMode != START) return;// Important
 	if (sBar) sBar->setOnTouchMoved(id, x, y);
 	if (dPad) dPad->setOnTouchMoved(id, x, y);
 	for (auto btn : btns) btn->setOnTouchMoved(id, x, y);
@@ -122,6 +120,7 @@ void SceneGame::setOnTouchMoved(int id, int x, int y) {
 
 void SceneGame::setOnTouchEnded(int id, int x, int y) {
 	//LOGD("Main", "setOnTouchEnded()[%d]:%d, %d", id, x, y);
+	if (updateMode != START) return;// Important
 	if (sBar) sBar->setOnTouchEnded(id, x, y);
 	if (dPad) dPad->setOnTouchEnded(id, x, y);
 	for (auto btn : btns) btn->setOnTouchEnded(id, x, y);
@@ -178,14 +177,11 @@ void SceneGame::onBtnCanceled(BtnTag &tag) {
 void SceneGame::onBtnReleased(BtnTag &tag) {
 	LOGD("Main", "onBtnReleased():%d", tag);
 	if (tag == BtnTag::QUIT) UtilDx::getInstance()->setQuitFlg();
-	if (tag == BtnTag::RESULT) {
-		UtilSound::getInstance()->playSE("sounds/se_coin_01.wav");
-		this->replaceSceneWait(0.2f, SceneTag::RESULT);
-	}
 }
 
 void SceneGame::onDpadPressed(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadPressed():%d", tag);
+	if (player->isDead()) return;
 	int spd = UtilDebug::getInstance()->getGridSize() * 5;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
@@ -195,19 +191,21 @@ void SceneGame::onDpadPressed(DpadTag &tag) {
 
 void SceneGame::onDpadCanceled(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadCanceled():%d", tag);
+	if (player->isDead()) return;
 	player->startStay();// Stay
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadReleased():%d", tag);
+	if (player->isDead()) return;
 	player->startStay();// Stay
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
-	if (updateMode != START) return;// Important
-	int spd = UtilDebug::getInstance()->getGridSize() * 20;
+	if (player->isDead()) return;
 	player->startStay();
+	int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
@@ -216,14 +214,16 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 
 void SceneGame::gameReady(const float delay) {
 
+	const float cX = dWidth * 0.5f;
+	const float cY = dHeight * 0.5f;
+
 	// Eggs, Chicks
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Player, Osho, Chicken
-	player->update(delay);
+	// Osho, Player
 	osho->update(delay);
-	chicken->update(delay);
+	player->update(delay);
 
 	// Wait
 	waitCnt++;
@@ -231,7 +231,7 @@ void SceneGame::gameReady(const float delay) {
 		waitCnt = 0;
 		updateMode = START;// Next
 		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "START!");
+		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "START!");
 		hoppers.push_back(hopper);
 		// BGM
 		UtilSound::getInstance()->stopBGM();
@@ -244,14 +244,14 @@ void SceneGame::gameStart(const float delay) {
 
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
-	const int gSize = UtilDebug::getInstance()->getGridSize();
 
 	// Player x Osho
 	if (player->containsPos(osho)) {
-		player->startStay();// Stay
 		updateMode = FINISH;// Next
+		// Player
+		player->startDead();
 		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(dWidth / 2, dHeight / 2, 4, "FINISH!");
+		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
 		hoppers.push_back(hopper);
 		// BGM
 		UtilSound::getInstance()->stopBGM();
@@ -315,12 +315,12 @@ void SceneGame::gameStart(const float delay) {
 		}
 	}
 
-	// Player, Osho, Chicken, Tanu
-	player->update(delay);
+	// Osho, Chicken, Tanu, Player
 	osho->update(delay);
 	chicken->update(delay);
 	tanuA->update(delay);
 	tanuB->update(delay);
+	player->update(delay);
 }
 
 void SceneGame::gameFinish(const float delay) {
@@ -329,12 +329,12 @@ void SceneGame::gameFinish(const float delay) {
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Player, Osho, Chicken, Tanu
-	player->update(delay);
+	// Osho, Chicken, Tanu, Player
 	osho->update(delay);
 	chicken->update(delay);
 	tanuA->update(delay);
 	tanuB->update(delay);
+	player->update(delay);
 
 	// Wait
 	waitCnt++;

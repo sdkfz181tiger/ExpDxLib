@@ -48,6 +48,8 @@ public:
 
 	void setScale(int scl);
 
+	void hide();
+
 	bool containsPoint(int x, int y);
 
 	void setOnTouchBegan(int id, int x, int y);
