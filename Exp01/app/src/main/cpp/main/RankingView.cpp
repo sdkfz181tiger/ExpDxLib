@@ -236,7 +236,7 @@ void RankingView::update(const float delay) {
 	if (updateMode == BLINK) {
 		this->stepBlink(delay);
 		this->stepRanking(delay);
-		if (!rankinFlg) this->stepFireworks(delay);
+		if (rankinFlg) this->stepFireworks(delay);
 		this->replaceScore();// Replace
 	}
 

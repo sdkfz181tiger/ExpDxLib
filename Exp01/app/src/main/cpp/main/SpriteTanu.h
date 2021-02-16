@@ -11,6 +11,7 @@ public:
 	const static int CAPTURED = 102;
 	const static int ESCAPE = 103;
 	const static int RELEASE = 104;
+	const static int SLEEP = 105;
 };
 
 class SpriteTanu : public SpriteChara {
@@ -20,6 +21,7 @@ private:
 	int capCnt, capInterval;
 	int escCnt, escInterval;
 	int relCnt, relInterval;
+	int slpCnt, slpInterval;
 	bool eggFlg, chickFlg;
 	SpriteEgg *egg;
 	SpriteChick *chick;
@@ -44,6 +46,8 @@ public:
 	void startEscape();
 
 	void startRelease();
+
+	void startSleep();
 
 	bool getItemFlg();
 };

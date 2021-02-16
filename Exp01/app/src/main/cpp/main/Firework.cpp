@@ -24,7 +24,7 @@ Firedot::~Firedot() {
 
 bool Firedot::init() {
 	// Graph
-	const vector<int> graphs = UtilGraph::getInstance()->getDivGraph("fc_01");
+	const vector<int> graphs = UtilGraph::getInstance()->getDivGraph("fc_03");
 	const int index = UtilMath::getInstance()->getRandom(0, graphs.size() - 1);
 	graph = graphs.at(index);
 	GetGraphSize(graph, &width, &height);
@@ -70,9 +70,10 @@ Firework::~Firework() {
 bool Firework::init(float gY, float bY) {
 
 	const int gSize = UtilDebug::getInstance()->getGridSize();
+	const int total = UtilMath::getInstance()->getRandom(20, 50);
 
 	// Dots
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < total; i++) {
 		int deg = UtilMath::getInstance()->getRandom(210, 330);
 		int speed = gSize * UtilMath::getInstance()->getRandom(12, 24);
 		float vX = speed * UtilMath::getInstance()->getCos(deg);

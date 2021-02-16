@@ -13,6 +13,7 @@ SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
 										   capCnt(0), capInterval(10),
 										   escCnt(0), escInterval(10),
 										   relCnt(0), relInterval(20),
+										   slpCnt(0), slpInterval(240),
 										   eggFlg(false), egg(nullptr),
 										   chickFlg(false), chick(nullptr) {
 	LOGD("Main", "SpriteTanu()\n");
@@ -44,7 +45,12 @@ void SpriteTanu::update(float delay) {
 		if (0 < idleCnt) {
 			idleCnt--;
 		} else {
-			this->startWander();
+			const int rdm = UtilMath::getInstance()->getRandom(0, 10);
+			if (rdm < 8) {
+				this->startWander();
+			} else {
+				this->startSleep();
+			}
 		}
 	}
 	// Walk
@@ -106,6 +112,14 @@ void SpriteTanu::update(float delay) {
 	if (state == StateTanu::RELEASE) {
 		if (0 < relCnt) {
 			relCnt--;
+		} else {
+			this->startIdle();
+		}
+	}
+	// Sleep
+	if (state == StateTanu::SLEEP) {
+		if (0 < slpCnt) {
+			slpCnt--;
 		} else {
 			this->startIdle();
 		}
@@ -193,6 +207,17 @@ void SpriteTanu::changeState(int sta) {
 		this->changeFrames("tanu_eat", -1);
 		return;
 	}
+	if (state == StateTanu::SLEEP) {
+		//LOGD("Main", "Let's sleep!!");
+		// Frames
+		const int rdm = UtilMath::getInstance()->getRandom(0, 10);
+		if (rdm < 5) {
+			this->changeFrames("tanu_sleep_r", -1);
+		} else {
+			this->changeFrames("tanu_sleep_l", -1);
+		}
+		return;
+	}
 }
 
 void SpriteTanu::startWander() {
@@ -222,11 +247,18 @@ void SpriteTanu::startEscape() {
 void SpriteTanu::startRelease() {
 	// Release
 	relCnt = relInterval;
+	// State
+	this->changeState(StateTanu::RELEASE);
 	// Flgs
 	eggFlg = false;
 	chickFlg = false;
+}
+
+void SpriteTanu::startSleep() {
+	// Sleep
+	slpCnt = slpInterval;
 	// State
-	this->changeState(StateTanu::RELEASE);
+	this->changeState(StateTanu::SLEEP);
 }
 
 bool SpriteTanu::getItemFlg() {

@@ -91,7 +91,7 @@ void SpriteKobo::changeState(int sta) {
 	}
 	if (state == StateKobo::DEAD) {
 		//LOGD("Main", "Let's walk!!");
-		this->changeFrames("kobo_roll", 5);
+		this->changeFrames("kobo_omg", 5);
 	}
 }
 
