@@ -87,7 +87,7 @@ void RankingView::stepScore(const float delay) {
 	stpA++;
 	if (stpIntervalA < stpA) {
 		stpA = 0;
-		counter++;
+		counter += (score < 30) ? 1 : score / 10;
 		if (score < counter) {
 			counter = score;
 			updateMode = BONUS;// Next
@@ -236,7 +236,7 @@ void RankingView::update(const float delay) {
 	if (updateMode == BLINK) {
 		this->stepBlink(delay);
 		this->stepRanking(delay);
-		if(rankinFlg) this->stepFireworks(delay);
+		if (!rankinFlg) this->stepFireworks(delay);
 		this->replaceScore();// Replace
 	}
 

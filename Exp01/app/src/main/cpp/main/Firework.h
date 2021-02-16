@@ -2,25 +2,28 @@
 #define _FIREWORK_H_
 
 #include "Utility.h"
+#include "SpriteBase.h"
 
 class Firedot {
 
 private:
 	Vec2 pos, vel;
-	int size;
 	float gravityY, borderY;
-	size_t color;
+	int graph, width, height;
+	int scale;
 
 public:
 	static Firedot *create(float x, float y, float vX, float vY,
-						   int s, float gY, float bY);
+						   float gY, float bY);
 
 	Firedot(float x, float y, float vX, float vY,
-			int s, float gY, float bY);
+			float gY, float bY);
 
 	virtual ~Firedot();
 
 	bool init();
+
+	bool isFinished();
 
 	void update(const float delay);
 };

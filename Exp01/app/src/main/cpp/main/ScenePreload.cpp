@@ -160,7 +160,10 @@ bool ScenePreload::checkAssets(const json &jObj) {
 	const json jArr = jObj["assets"];
 	for (string fileName : jArr) {
 		const string fullPath = UtilJNI::getInstance()->getFilePath() + fileName;
-		if (!UtilDx::getInstance()->isFileExists(fullPath)) return false;
+		if (!UtilDx::getInstance()->isFileExists(fullPath)) {
+			LOGW("Main", "No file:%s", fullPath.c_str());
+			return false;
+		}
 	}
 	return true;
 }

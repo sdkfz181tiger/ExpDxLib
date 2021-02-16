@@ -248,8 +248,9 @@ void SceneGame::gameStart(const float delay) {
 	// Player x Osho
 	if (player->containsPos(osho)) {
 		updateMode = FINISH;// Next
-		// Player
+		// Player, Dpad
 		player->startDead();
+		dPad->hide();
 		// Hopper
 		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
 		hoppers.push_back(hopper);

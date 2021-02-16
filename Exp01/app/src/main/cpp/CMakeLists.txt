@@ -57,14 +57,14 @@ add_library( # Sets the name of the library.
         main/StatusBar.cpp
         main/TimerCpp.cpp
         utility/Utility.h
-        utility/UtilJNI.cpp
-        utility/UtilJson.cpp
         utility/UtilDebug.cpp
         utility/UtilDx.cpp
         utility/UtilGraph.cpp
         utility/UtilLabel.cpp
-        utility/UtilMath.cpp
+        utility/UtilJNI.cpp
+        utility/UtilJson.cpp
         utility/UtilLocalSave.cpp
+        utility/UtilMath.cpp
         utility/UtilSound.cpp
         utility/Vec2.cpp
         )
