@@ -47,8 +47,7 @@ bool SceneGame::init() {
 										  cX, cY - gSize * 32);
 
 	// BoardGrid
-	bGrid = BoardGrid::createBoard(cX, cY + gSize * 5, gSize * 5,
-								   8, 8);
+	bGrid = BoardGrid::createBoard(cX, cY, gSize * 3, gSize / 2);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -82,7 +81,8 @@ bool SceneGame::init() {
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
 										  cX + gSize * 3, cY - gSize * 18);
-	chicken->setNext(cX, cY);
+	Vec2 &next = bGrid->getRdmPos();
+	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
 	// Tanu
 	tanuA = SpriteTanu::createSprite("images/c_tanu.png",
@@ -354,7 +354,7 @@ void SceneGame::onEggLayed(int x, int y) {
 	eggs.push_back(egg);
 
 	// Chicken
-	Vec2 next = bGrid->getRdmPos();
+	Vec2 &next = bGrid->getRdmPos();
 	chicken->setNext(next.x, next.y);
 }
 
