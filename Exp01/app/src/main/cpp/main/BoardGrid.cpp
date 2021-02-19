@@ -201,17 +201,19 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	this->stepRoute(nodes, 0, startR, startC, -1, 0);
 	this->stepRoute(nodes, 0, startR, startC, 1, 0);
 
-	// Check
-	const int kGoal = goalR * gCols + goalC;
-	auto pair = nodes.find(kGoal);
-	int pR = pair->second.pR;
-	int pC = pair->second.pC;
-	LOGD("Maze", "Prev: %d, %d", pR, pC);
-
 	for (auto node : nodes) {
 		LOGD("Maze", "Route[%d]: %d, %d <- %d, %d",
 			 node.first, node.second.r, node.second.c,
 			 node.second.pR, node.second.pC);
+	}
+
+	// Check
+	auto kPair = nodes.find(goalR * gCols + goalC);
+	int kPrev = kPair->second.pR * gCols + kPair->second.pC;
+	while (kPrev != kStart) {
+		kPair = nodes.find(kPrev);
+		LOGD("Maze", "Backward: %d, %d", kPair->second.r, kPair->second.c);
+		kPrev = kPair->second.pR * gCols + kPair->second.pC;
 	}
 }
 
