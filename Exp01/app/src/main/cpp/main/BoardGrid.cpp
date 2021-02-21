@@ -30,7 +30,7 @@ bool BoardGrid::init(int fS, int wS) {
 	wallSize = wS;
 	this->loadBoard();// Load
 	this->createMaze();// Maze
-	this->detectRoute(1, 1, 3, 3);
+	this->detectRoute(1, 1, 13, 13);
 	return true;
 }
 
@@ -189,7 +189,7 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	int hue = abs(goalR - startR) + abs(goalC - startC);
 	int score = hue;
 
-	map<int, Node> nodes;
+	unordered_map<int, Node> nodes;
 	// Start
 	const int kStart = startR * gCols + startC;
 	Node nStart = {startR, startC, -1, -1, cost, hue, score};
@@ -201,12 +201,6 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	this->stepRoute(nodes, 0, startR, startC, -1, 0);
 	this->stepRoute(nodes, 0, startR, startC, 1, 0);
 
-	for (auto node : nodes) {
-		LOGD("Maze", "Route[%d]: %d, %d <- %d, %d",
-			 node.first, node.second.r, node.second.c,
-			 node.second.pR, node.second.pC);
-	}
-
 	// Check
 	auto kPair = nodes.find(goalR * gCols + goalC);
 	int kPrev = kPair->second.pR * gCols + kPair->second.pC;
@@ -217,7 +211,7 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	}
 }
 
-void BoardGrid::stepRoute(map<int, Node> &nodes, int cost,
+void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
 						  int cR, int cC, int oR, int oC) {
 	const int r = cR + oR;
 	const int c = cC + oC;
@@ -225,21 +219,18 @@ void BoardGrid::stepRoute(map<int, Node> &nodes, int cost,
 	if (board[r][c].type != FLOOR) return;
 
 	const int key = r * gCols + c;
-	if (nodes.count(key)) return;// 探索済
+	if (nodes.count(key)) return;// Already searched
 
 	const int kGoal = goalR * gCols + goalC;
-	if (nodes.count(kGoal)) {
-		LOGD("Maze", "Goal: %d, %d", r, c);
-		return;
-	}
+	if (nodes.count(kGoal)) return;// Already goaled
 
 	const int hue = abs(goalR - r) + abs(goalC - c);
 	const int score = cost + hue;
 	Node next = {r, c, cR, cC, cost + 1, hue, score};
 	nodes.insert(make_pair(key, next));
-	LOGD("Maze", "[%d] %d, %d <- %d, %d", key, r, c, cR, cC);
+	//LOGD("Maze", "[%d] %d, %d <- %d, %d", key, r, c, cR, cC);
 
-	// TODO: A*っぽく優先順位をつける
+	// TODO: A*っぽく優先順位をつけて再起する順序を調整する
 
 	// 4 directions
 	this->stepRoute(nodes, cost + 1, r, c, 0, -1);

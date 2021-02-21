@@ -65,7 +65,7 @@ public:
 
 	void detectRoute(int sR, int sC, int gR, int gC);
 
-	void stepRoute(map<int, Node> &nodes, int cost,
+	void stepRoute(unordered_map<int, Node> &nodes, int cost,
 				   int r, int c, int oR, int oC);
 };
 
