@@ -158,6 +158,12 @@ void BoardGrid::update(const float delay) {
 					cWhite, true);
 		}
 	}
+
+	for(auto rout: routes){
+		const int x = rout.x;
+		const int y = rout.y;
+		DrawBox(x, y, x+10, y+10, cWhite, true);
+	}
 }
 
 Vec2 &BoardGrid::getPos(int r, int c) {
@@ -192,7 +198,7 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	unordered_map<int, Node> nodes;
 	// Start
 	const int kStart = startR * gCols + startC;
-	Node nStart = {startR, startC, -1, -1, cost, hue, score};
+	Node nStart = {startR, startC, -1, -1, 0, 0, cost, hue, score};
 	nodes.insert(make_pair(kStart, nStart));
 
 	// 4 directions
@@ -207,6 +213,8 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	while (kPrev != kStart) {
 		kPair = nodes.find(kPrev);
 		LOGD("Maze", "Backward: %d, %d", kPair->second.r, kPair->second.c);
+		auto second = kPair->second;
+		routes.push_back(second);
 		kPrev = kPair->second.pR * gCols + kPair->second.pC;
 	}
 }
@@ -224,9 +232,11 @@ void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
 	const int kGoal = goalR * gCols + goalC;
 	if (nodes.count(kGoal)) return;// Already goaled
 
+	const int x = board[r][c].pos.x;
+	const int y = board[r][c].pos.y;
 	const int hue = abs(goalR - r) + abs(goalC - c);
 	const int score = cost + hue;
-	Node next = {r, c, cR, cC, cost + 1, hue, score};
+	Node next = {r, c, cR, cC, x, y, cost + 1, hue, score};
 	nodes.insert(make_pair(key, next));
 	//LOGD("Maze", "[%d] %d, %d <- %d, %d", key, r, c, cR, cC);
 

@@ -23,7 +23,7 @@ public:
 	};
 
 	struct Node {
-		int r, c, pR, pC;
+		int r, c, pR, pC, x, y;
 		int cost, hue, score;
 	};
 
@@ -37,6 +37,7 @@ protected:
 private:
 	vector<vector<Grid>> board;
 	vector<Grid> pillars;
+	vector<Node> routes;
 
 public:
 	static BoardGrid *createBoard(float x, float y, int fS, int wS);
