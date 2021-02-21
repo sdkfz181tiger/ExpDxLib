@@ -11,6 +11,7 @@
 #include <list>
 #include <locale>
 #include <map>
+#include <queue>
 #include <random>
 #include <string>
 #include <sstream>

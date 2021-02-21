@@ -230,11 +230,24 @@ void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
 	nodes.insert(make_pair(key, next));
 	//LOGD("Maze", "[%d] %d, %d <- %d, %d", key, r, c, cR, cC);
 
-	// TODO: A*っぽく優先順位をつけて再起する順序を調整する
-
-	// 4 directions
-	this->stepRoute(nodes, cost + 1, r, c, 0, -1);
-	this->stepRoute(nodes, cost + 1, r, c, 0, 1);
-	this->stepRoute(nodes, cost + 1, r, c, -1, 0);
-	this->stepRoute(nodes, cost + 1, r, c, 1, 0);
+	// A*
+	vector<vector<int>> dirs = {
+			{abs(goalR - r) + abs(goalC - c - 1), 0,  -1},
+			{abs(goalR - r) + abs(goalC - c + 1), 0,  1},
+			{abs(goalR - r - 1) + abs(goalC - c), -1, 0},
+			{abs(goalR - r + 1) + abs(goalC - c), 1,  0}
+	};
+	// Sort
+	const vector<vector<int>>::iterator first = dirs.begin();
+	const vector<vector<int>>::iterator last = dirs.end();
+	for (auto a = first; a != last; ++a) {
+		for (auto b = last - 1; b != a; --b) {
+			if ((*a).at(0) < (*b).at(0)) iter_swap(a, b);
+		}
+	}
+	// Recursive
+	for (auto dir : dirs) {
+		this->stepRoute(nodes, cost + 1, r, c,
+						dir.at(1), dir.at(2));
+	}
 }
