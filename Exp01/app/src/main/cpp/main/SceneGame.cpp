@@ -9,7 +9,7 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 }
 
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
-												background(nullptr), bGrid(nullptr),
+												background(nullptr), mManager(nullptr),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), osho(nullptr),
 												chicken(nullptr),
@@ -23,7 +23,7 @@ SceneGame::~SceneGame() {
 	LOGD("Main", "~SceneGame()\n");
 	// Delete
 	DX_SAFE_DELETE(background);
-	DX_SAFE_DELETE(bGrid);
+	DX_SAFE_DELETE(mManager);
 	DX_SAFE_DELETE(sBar);
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
@@ -46,8 +46,9 @@ bool SceneGame::init() {
 	background = SpriteBase::createSprite("images/c_temple_135x480.png",
 										  cX, cY - gSize * 32);
 
-	// BoardGrid
-	bGrid = BoardGrid::createBoard(cX, cY, gSize * 3, gSize / 2);
+	// MazeManager
+	mManager = MazeManager::createBoard(cX, cY, gSize * 4, gSize / 2);
+	routes = mManager->detectRoute(1, 1, 19, 17);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -77,11 +78,11 @@ bool SceneGame::init() {
 									  cX, cY - gSize * 2);
 	// Osho
 	osho = SpriteOsho::createSprite("images/c_osho.png",
-									cX - gSize * 3, cY - gSize * 18);
+									cX, cY - gSize * 18);
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
-										  cX + gSize * 3, cY - gSize * 18);
-	Vec2 &next = bGrid->getRdmPos();
+										  cX, cY - gSize * 25);
+	Vec2 &next = mManager->getRdmPos();
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
 	// Tanu
@@ -128,9 +129,16 @@ void SceneGame::setOnTouchEnded(int id, int x, int y) {
 
 void SceneGame::update(const float delay) {
 
-	// Background, Board
+	// Background, MazeManager
 	//background->update(delay);
-	bGrid->update(delay);
+	mManager->update(delay);
+
+	unsigned int cWhite = GetColor(255, 255, 255);
+	for (auto rout: routes) {
+		const int x = rout.x;
+		const int y = rout.y;
+		DrawBox(x - 2, y - 2, x + 2, y + 2, cWhite, true);
+	}
 
 	// Mode
 	switch (updateMode) {
@@ -354,7 +362,7 @@ void SceneGame::onEggLayed(int x, int y) {
 	eggs.push_back(egg);
 
 	// Chicken
-	Vec2 &next = bGrid->getRdmPos();
+	Vec2 &next = mManager->getRdmPos();
 	chicken->setNext(next.x, next.y);
 }
 

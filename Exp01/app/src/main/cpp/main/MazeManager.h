@@ -1,9 +1,9 @@
-#ifndef _BOARDGRID_H_
-#define _BOARDGRID_H_
+#ifndef _MAZEMANAGER_H_
+#define _MAZEMANAGER_H_
 
 #include "Utility.h"
 
-class BoardGrid {
+class MazeManager {
 
 public:
 	enum Type {
@@ -22,7 +22,7 @@ public:
 		Vec2 pos;
 	};
 
-	struct Node {
+	struct Route {
 		int r, c, pR, pC, x, y;
 		int cost, hue, score;
 	};
@@ -37,26 +37,27 @@ protected:
 private:
 	vector<vector<Grid>> board;
 	vector<Grid> pillars;
-	vector<Node> routes;
 
 public:
-	static BoardGrid *createBoard(float x, float y, int fS, int wS);
+	static MazeManager *createBoard(float x, float y, int fS, int wS);
 
-	BoardGrid(float x, float y);
+	MazeManager(float x, float y);
 
-	virtual ~BoardGrid();
+	virtual ~MazeManager();
 
 	bool init(int fS, int wS);
 
-	void loadBoard();
+	void loadMaze();
 
 	void createMaze();
 
-	void extendPath(Grid &pillar, vector<Grid> &path, int d);
+	void extendPath(Grid &pillar, vector<Grid> &path);
 
 	bool checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC);
 
-	bool checkPath(Grid &pillar, vector<Grid> &path, int oR, int oC);
+	bool checkPathClosed(Grid &pillar, vector<Grid> &path);
+
+	bool checkPathOwn(Grid &pillar, vector<Grid> &path, int oR, int oC);
 
 	void update(const float delay);
 
@@ -64,10 +65,10 @@ public:
 
 	Vec2 &getRdmPos();
 
-	void detectRoute(int sR, int sC, int gR, int gC);
+	vector<Route> detectRoute(int sR, int sC, int gR, int gC);
 
-	void stepRoute(unordered_map<int, Node> &nodes, int cost,
+	void stepRoute(unordered_map<int, Route> &nodes, int cost,
 				   int r, int c, int oR, int oC);
 };
 
-#endif // _BOARDGRID_H_
+#endif // _MAZEMANAGER_H_

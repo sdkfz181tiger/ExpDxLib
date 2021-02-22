@@ -2,11 +2,11 @@
 #define _SCENEBASE_H_
 
 #include "Utility.h"
-#include "BoardGrid.h"
 #include "BtnBase.h"
 #include "BtnToggle.h"
 #include "CtlDpad.h"
 #include "LoadingMarker.h"
+#include "MazeManager.h"
 #include "MsgHopper.h"
 #include "RankingView.h"
 #include "StatusBar.h"

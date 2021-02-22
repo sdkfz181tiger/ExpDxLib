@@ -29,13 +29,13 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         native-lib.cpp
-        main/BoardGrid.cpp
         main/BtnBase.cpp
         main/BtnToggle.cpp
         main/CtlDpad.cpp
         main/Firework.cpp
         main/GameManager.cpp
         main/LoadingMarker.cpp
+        main/MazeManager.cpp
         main/MsgHopper.cpp
         main/RankingLine.cpp
         main/RankingView.cpp

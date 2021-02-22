@@ -1,14 +1,14 @@
-#include "BoardGrid.h"
+#include "MazeManager.h"
 
-BoardGrid *BoardGrid::createBoard(float x, float y, int fS, int wS) {
+MazeManager *MazeManager::createBoard(float x, float y, int fS, int wS) {
 	// New
-	BoardGrid *board = new BoardGrid(x, y);
+	MazeManager *board = new MazeManager(x, y);
 	if (board && board->init(fS, wS)) return board;
 	DX_SAFE_DELETE(board);
 	return nullptr;
 }
 
-BoardGrid::BoardGrid(float x, float y) :
+MazeManager::MazeManager(float x, float y) :
 		center(Vec2(x, y)), start(Vec2(0, 0)),
 		floorSize(0), wallSize(0), gRows(0), gCols(0),
 		index(0), bWidth(0), bHeight(0),
@@ -18,24 +18,22 @@ BoardGrid::BoardGrid(float x, float y) :
 		cRed(GetColor(225, 65, 100)),
 		cGreen(GetColor(110, 140, 50)),
 		cBlue(GetColor(75, 60, 155)) {
-	LOGD("Main", "BoardGrid()\n");
+	LOGD("Main", "MazeManager()\n");
 }
 
-BoardGrid::~BoardGrid() {
-	LOGD("Main", "~BoardGrid()\n");
+MazeManager::~MazeManager() {
+	LOGD("Main", "~MazeManager()\n");
 }
 
-bool BoardGrid::init(int fS, int wS) {
+bool MazeManager::init(int fS, int wS) {
 	floorSize = fS;
 	wallSize = wS;
-	this->loadBoard();// Load
+	this->loadMaze();// Load
 	this->createMaze();// Maze
-	this->detectRoute(1, 1, 13, 13);
 	return true;
 }
 
-void BoardGrid::loadBoard() {
-
+void MazeManager::loadMaze() {
 	// Clear
 	for (auto line:board) line.clear();
 	board.clear();
@@ -79,8 +77,7 @@ void BoardGrid::loadBoard() {
 	}
 }
 
-void BoardGrid::createMaze() {
-
+void MazeManager::createMaze() {
 	// Pillars
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
@@ -88,12 +85,10 @@ void BoardGrid::createMaze() {
 			if (grid.type == PILLAR) pillars.push_back(grid);
 		}
 	}
-
 	for (auto &pillar : pillars) {
 		if (board[pillar.r][pillar.c].type == WALL) continue;
 		vector<Grid> path = {pillar};
-		const int d = UtilMath::getInstance()->getRandom(0, 3);
-		this->extendPath(pillar, path, d);
+		this->extendPath(pillar, path);
 
 		for (int i = 0; i < path.size() - 1; i++) {
 			Grid &from = path.at(i);
@@ -107,8 +102,8 @@ void BoardGrid::createMaze() {
 	}
 }
 
-void BoardGrid::extendPath(Grid &pillar, vector<Grid> &path, int d) {
-	const Dir dir = static_cast<Dir>(d);
+void MazeManager::extendPath(Grid &pillar, vector<Grid> &path) {
+	const int dir = UtilMath::getInstance()->getRandom(0, 3);
 	int oR = 0;
 	int oC = 0;
 	if (dir == LEFT) oC = -2;
@@ -116,20 +111,18 @@ void BoardGrid::extendPath(Grid &pillar, vector<Grid> &path, int d) {
 	if (dir == UP) oR = -2;
 	if (dir == DOWN) oR = 2;
 	if (this->checkDeadend(pillar, path, oR, oC)) return;
-
-	const int n = UtilMath::getInstance()->getRandom(0, 3);
-	if (this->checkPath(pillar, path, oR, oC)) {// Retry
-		this->extendPath(pillar, path, n);
+	if (this->checkPathClosed(pillar, path)) return;
+	if (this->checkPathOwn(pillar, path, oR, oC)) {// Retry
+		this->extendPath(pillar, path);
 		return;
 	} else {
 		Grid &next = board[pillar.r + oR][pillar.c + oC];// Next
 		path.push_back(next);
-		this->extendPath(next, path, n);
+		this->extendPath(next, path);
 	}
 }
 
-bool BoardGrid::checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC) {
-
+bool MazeManager::checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC) {
 	const int r = pillar.r + oR;
 	const int c = pillar.c + oC;
 	if (board[r][c].type == WALL) {
@@ -139,15 +132,21 @@ bool BoardGrid::checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC) {
 	return false;
 }
 
-bool BoardGrid::checkPath(Grid &pillar, vector<Grid> &path, int oR, int oC) {
+bool MazeManager::checkPathClosed(Grid &pillar, vector<Grid> &path) {
+	return (this->checkPathOwn(pillar, path, 0, -2) &&
+			this->checkPathOwn(pillar, path, 0, 2) &&
+			this->checkPathOwn(pillar, path, -2, 0) &&
+			this->checkPathOwn(pillar, path, 2, 0));
+}
 
+bool MazeManager::checkPathOwn(Grid &pillar, vector<Grid> &path, int oR, int oC) {
 	const int r = pillar.r + oR;
 	const int c = pillar.c + oC;
 	for (auto p : path) if (p.r == r && p.c == c) return true;
 	return false;
 }
 
-void BoardGrid::update(const float delay) {
+void MazeManager::update(const float delay) {
 
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
@@ -158,21 +157,15 @@ void BoardGrid::update(const float delay) {
 					cWhite, true);
 		}
 	}
-
-	for(auto rout: routes){
-		const int x = rout.x;
-		const int y = rout.y;
-		DrawBox(x, y, x+10, y+10, cWhite, true);
-	}
 }
 
-Vec2 &BoardGrid::getPos(int r, int c) {
+Vec2 &MazeManager::getPos(int r, int c) {
 	if (r < 0 || c < 0) return board[0][0].pos;
 	if (gRows <= r || gCols <= c) return board[gRows - 1][gCols - 1].pos;
 	return board[r][c].pos;
 }
 
-Vec2 &BoardGrid::getRdmPos() {
+Vec2 &MazeManager::getRdmPos() {
 	const int rdmR = UtilMath::getInstance()->getRandom(0, (gRows - 2) / 2);
 	const int rdmC = UtilMath::getInstance()->getRandom(0, (gCols - 2) / 2);
 	const int r = rdmR * 2 + 1;
@@ -180,25 +173,29 @@ Vec2 &BoardGrid::getRdmPos() {
 	return getPos(r, c);
 }
 
-void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
+vector<MazeManager::Route> MazeManager::detectRoute(int sR, int sC, int gR, int gC) {
+
+	vector<MazeManager::Route> routes;
 
 	startR = sR;
 	startC = sC;
 	goalR = gR;
 	goalC = gC;
-	if (startR < 0 || gRows <= startR) return;
-	if (startC < 0 || gCols <= startC) return;
-	if (goalR < 0 || gRows <= goalR) return;
-	if (goalC < 0 || gCols <= goalC) return;
+	if (startR < 0 || gRows <= startR) return routes;
+	if (startC < 0 || gCols <= startC) return routes;
+	if (goalR < 0 || gRows <= goalR) return routes;
+	if (goalC < 0 || gCols <= goalC) return routes;
 
 	int cost = 0;
 	int hue = abs(goalR - startR) + abs(goalC - startC);
 	int score = hue;
 
-	unordered_map<int, Node> nodes;
+	unordered_map<int, Route> nodes;
 	// Start
 	const int kStart = startR * gCols + startC;
-	Node nStart = {startR, startC, -1, -1, 0, 0, cost, hue, score};
+	const Vec2 &pStart = board[startR][startC].pos;
+	Route nStart = {startR, startC, -1, -1,
+					(int) pStart.x, (int) pStart.y, cost, hue, score};
 	nodes.insert(make_pair(kStart, nStart));
 
 	// 4 directions
@@ -207,20 +204,21 @@ void BoardGrid::detectRoute(int sR, int sC, int gR, int gC) {
 	this->stepRoute(nodes, 0, startR, startC, -1, 0);
 	this->stepRoute(nodes, 0, startR, startC, 1, 0);
 
-	// Check
+	// Routes
 	auto kPair = nodes.find(goalR * gCols + goalC);
 	int kPrev = kPair->second.pR * gCols + kPair->second.pC;
+	routes.push_back(nStart);
 	while (kPrev != kStart) {
 		kPair = nodes.find(kPrev);
-		LOGD("Maze", "Backward: %d, %d", kPair->second.r, kPair->second.c);
-		auto second = kPair->second;
-		routes.push_back(second);
 		kPrev = kPair->second.pR * gCols + kPair->second.pC;
+		routes.push_back(kPair->second);
 	}
+	return routes;
 }
 
-void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
-						  int cR, int cC, int oR, int oC) {
+void MazeManager::stepRoute(unordered_map<int, Route> &nodes, int cost,
+							int cR, int cC, int oR, int oC) {
+
 	const int r = cR + oR;
 	const int c = cC + oC;
 	if (r < 0 || c < 0 || gRows <= r || gCols <= c) return;
@@ -236,9 +234,8 @@ void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
 	const int y = board[r][c].pos.y;
 	const int hue = abs(goalR - r) + abs(goalC - c);
 	const int score = cost + hue;
-	Node next = {r, c, cR, cC, x, y, cost + 1, hue, score};
+	Route next = {r, c, cR, cC, x, y, cost + 1, hue, score};
 	nodes.insert(make_pair(key, next));
-	//LOGD("Maze", "[%d] %d, %d <- %d, %d", key, r, c, cR, cC);
 
 	// A*
 	vector<vector<int>> dirs = {
@@ -247,14 +244,18 @@ void BoardGrid::stepRoute(unordered_map<int, Node> &nodes, int cost,
 			{abs(goalR - r - 1) + abs(goalC - c), -1, 0},
 			{abs(goalR - r + 1) + abs(goalC - c), 1,  0}
 	};
+
 	// Sort
-	const vector<vector<int>>::iterator first = dirs.begin();
-	const vector<vector<int>>::iterator last = dirs.end();
+	const vector<vector<int>>
+	::iterator first = dirs.begin();
+	const vector<vector<int>>
+	::iterator last = dirs.end();
 	for (auto a = first; a != last; ++a) {
 		for (auto b = last - 1; b != a; --b) {
 			if ((*a).at(0) < (*b).at(0)) iter_swap(a, b);
 		}
 	}
+
 	// Recursive
 	for (auto dir : dirs) {
 		this->stepRoute(nodes, cost + 1, r, c,
