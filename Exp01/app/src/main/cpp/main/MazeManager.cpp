@@ -9,7 +9,7 @@ MazeManager *MazeManager::createBoard(float x, float y, int fS, int wS) {
 }
 
 MazeManager::MazeManager(float x, float y) :
-		center(Vec2(x, y)), start(Vec2(0, 0)),
+		center(Vec2(x, y)), min(Vec2(0, 0)), max(Vec2(0, 0)),
 		floorSize(0), wallSize(0), gRows(0), gCols(0),
 		index(0), bWidth(0), bHeight(0),
 		startR(-1), startC(-1), goalR(-1), goalC(-1),
@@ -48,12 +48,14 @@ void MazeManager::loadMaze() {
 	bWidth += (gCols % 2 == 0) ? 0 : wallSize;
 	bHeight = (floorSize + wallSize) * (gRows / 2);
 	bHeight += (gRows % 2 == 2) ? 0 : wallSize;
-	start.x = center.x - bWidth / 2;
-	start.y = center.y - bHeight / 2;
+	min.x = center.x - bWidth / 2;
+	min.y = center.y - bHeight / 2;
+	max.x = min.x + bWidth;
+	max.y = min.y + bHeight;
 
-	int oY = start.y;
+	int oY = min.y;
 	for (int r = 0; r < gRows; r++) {
-		int oX = start.x;// Reset
+		int oX = min.x;// Reset
 		const int h = (r % 2 == 0) ? wallSize : floorSize;
 		vector<Grid> line = {};
 		for (int c = 0; c < gCols; c++) {
@@ -148,6 +150,8 @@ bool MazeManager::checkPathOwn(Grid &pillar, vector<Grid> &path, int oR, int oC)
 
 void MazeManager::update(const float delay) {
 
+	DrawBox(min.x, min.y, max.x, max.y, cGreen, true);
+
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
 			Grid &grid = board[r][c];
@@ -173,9 +177,50 @@ Vec2 &MazeManager::getRdmPos() {
 	return getPos(r, c);
 }
 
-vector<MazeManager::Route> MazeManager::detectRoute(int sR, int sC, int gR, int gC) {
+vector<Vec2> MazeManager::detectRouteByRdm(int sX, int sY) {
+	const int gX = UtilMath::getInstance()->getRandom(min.x, max.x);
+	const int gY = UtilMath::getInstance()->getRandom(min.y, max.y);
+	return this->detectRouteByPos(sX, sY, gX, gY);
+}
 
-	vector<MazeManager::Route> routes;
+vector<Vec2> MazeManager::detectRouteByPos(int sX, int sY, int gX, int gY) {
+	// Start
+	int sR = 1;
+	int sC = 1;
+	for (int r = 1; r < gRows; r += 2) {
+		if (sY < board[r][0].maxY) {
+			sR = r;
+			break;
+		}
+	}
+	for (int c = 1; c < gCols; c += 2) {
+		if (sX < board[0][c].maxX) {
+			sC = c;
+			break;
+		}
+	}
+	// Goal
+	int gR = 1;
+	int gC = 1;
+	for (int r = 1; r < gRows; r += 2) {
+		if (gY < board[r][0].maxY) {
+			gR = r;
+			break;
+		}
+	}
+	for (int c = 1; c < gCols; c += 2) {
+		if (gX < board[0][c].maxX) {
+			gC = c;
+			break;
+		}
+	}
+	return this->detectRouteByRC(sR, sC, gR, gC);
+}
+
+vector<Vec2> MazeManager::detectRouteByRC(int sR, int sC, int gR, int gC) {
+
+	vector<Vec2> routes;
+	if (sR == gR && sC == gC) return routes;
 
 	startR = sR;
 	startC = sC;
@@ -186,37 +231,35 @@ vector<MazeManager::Route> MazeManager::detectRoute(int sR, int sC, int gR, int 
 	if (goalR < 0 || gRows <= goalR) return routes;
 	if (goalC < 0 || gCols <= goalC) return routes;
 
-	int cost = 0;
-	int hue = abs(goalR - startR) + abs(goalC - startC);
-	int score = hue;
-
-	unordered_map<int, Route> nodes;
+	unordered_map<int, MazeRoute> nodes;
 	// Start
 	const int kStart = startR * gCols + startC;
 	const Vec2 &pStart = board[startR][startC].pos;
-	Route nStart = {startR, startC, -1, -1,
-					(int) pStart.x, (int) pStart.y, cost, hue, score};
+	MazeRoute nStart = {startR, startC, -1, -1, (int) pStart.x, (int) pStart.y};
 	nodes.insert(make_pair(kStart, nStart));
 
 	// 4 directions
-	this->stepRoute(nodes, 0, startR, startC, 0, -1);
-	this->stepRoute(nodes, 0, startR, startC, 0, 1);
-	this->stepRoute(nodes, 0, startR, startC, -1, 0);
-	this->stepRoute(nodes, 0, startR, startC, 1, 0);
+	this->stepRoute(nodes, startR, startC, 0, -1);
+	this->stepRoute(nodes, startR, startC, 0, 1);
+	this->stepRoute(nodes, startR, startC, -1, 0);
+	this->stepRoute(nodes, startR, startC, 1, 0);
 
 	// Routes
 	auto kPair = nodes.find(goalR * gCols + goalC);
 	int kPrev = kPair->second.pR * gCols + kPair->second.pC;
-	routes.push_back(nStart);
+	routes.push_back(Vec2(kPair->second.x, kPair->second.y));// Goal
+
 	while (kPrev != kStart) {
 		kPair = nodes.find(kPrev);
 		kPrev = kPair->second.pR * gCols + kPair->second.pC;
-		routes.push_back(kPair->second);
+		routes.push_back(Vec2(kPair->second.x, kPair->second.y));
 	}
+	routes.push_back(pStart);// Start
+	//reverse(routes.begin(), routes.end());// Reverce
 	return routes;
 }
 
-void MazeManager::stepRoute(unordered_map<int, Route> &nodes, int cost,
+void MazeManager::stepRoute(unordered_map<int, MazeRoute> &nodes,
 							int cR, int cC, int oR, int oC) {
 
 	const int r = cR + oR;
@@ -232,9 +275,7 @@ void MazeManager::stepRoute(unordered_map<int, Route> &nodes, int cost,
 
 	const int x = board[r][c].pos.x;
 	const int y = board[r][c].pos.y;
-	const int hue = abs(goalR - r) + abs(goalC - c);
-	const int score = cost + hue;
-	Route next = {r, c, cR, cC, x, y, cost + 1, hue, score};
+	MazeRoute next = {r, c, cR, cC, x, y,};
 	nodes.insert(make_pair(key, next));
 
 	// A*
@@ -246,19 +287,16 @@ void MazeManager::stepRoute(unordered_map<int, Route> &nodes, int cost,
 	};
 
 	// Sort
-	const vector<vector<int>>
-	::iterator first = dirs.begin();
-	const vector<vector<int>>
-	::iterator last = dirs.end();
+	const vector<vector<int>>::iterator first = dirs.begin();
+	const vector<vector<int>>::iterator last = dirs.end();
 	for (auto a = first; a != last; ++a) {
 		for (auto b = last - 1; b != a; --b) {
-			if ((*a).at(0) < (*b).at(0)) iter_swap(a, b);
+			if ((*a).at(0) > (*b).at(0)) iter_swap(a, b);
 		}
 	}
 
 	// Recursive
 	for (auto dir : dirs) {
-		this->stepRoute(nodes, cost + 1, r, c,
-						dir.at(1), dir.at(2));
+		this->stepRoute(nodes, r, c, dir.at(1), dir.at(2));
 	}
 }

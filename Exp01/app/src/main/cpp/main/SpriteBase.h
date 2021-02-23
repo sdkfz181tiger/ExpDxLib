@@ -23,6 +23,8 @@ public:
 
 	virtual bool init(const string &fileName);
 
+	void setPos(const Vec2 &p);
+
 	void setPosX(float x);
 
 	void setPosY(float y);

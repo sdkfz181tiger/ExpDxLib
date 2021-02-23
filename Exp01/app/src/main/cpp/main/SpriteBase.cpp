@@ -29,6 +29,11 @@ bool SpriteBase::init(const string &fileName) {
 	return true;
 }
 
+void SpriteBase::setPos(const Vec2 &p) {
+	pos.x = p.x;
+	pos.y = p.y;
+}
+
 void SpriteBase::setPosX(float x) {
 	pos.x = x;
 }

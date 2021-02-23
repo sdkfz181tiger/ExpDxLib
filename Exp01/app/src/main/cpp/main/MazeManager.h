@@ -3,6 +3,10 @@
 
 #include "Utility.h"
 
+struct MazeRoute {
+	int cR, cC, pR, pC, x, y;
+};
+
 class MazeManager {
 
 public:
@@ -22,13 +26,8 @@ public:
 		Vec2 pos;
 	};
 
-	struct Route {
-		int r, c, pR, pC, x, y;
-		int cost, hue, score;
-	};
-
 protected:
-	Vec2 center, start;
+	Vec2 center, min, max;
 	int floorSize, wallSize, gRows, gCols;
 	int index, bWidth, bHeight;
 	int startR, startC, goalR, goalC;
@@ -65,9 +64,13 @@ public:
 
 	Vec2 &getRdmPos();
 
-	vector<Route> detectRoute(int sR, int sC, int gR, int gC);
+	vector<Vec2> detectRouteByRdm(int sX, int sY);
 
-	void stepRoute(unordered_map<int, Route> &nodes, int cost,
+	vector<Vec2> detectRouteByPos(int sX, int sY, int gX, int gY);
+
+	vector<Vec2> detectRouteByRC(int sR, int sC, int gR, int gC);
+
+	void stepRoute(unordered_map<int, MazeRoute> &nodes,
 				   int r, int c, int oR, int oC);
 };
 

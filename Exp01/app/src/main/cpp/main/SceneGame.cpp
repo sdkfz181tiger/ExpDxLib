@@ -48,7 +48,6 @@ bool SceneGame::init() {
 
 	// MazeManager
 	mManager = MazeManager::createBoard(cX, cY, gSize * 4, gSize / 2);
-	routes = mManager->detectRoute(1, 1, 19, 17);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -74,22 +73,27 @@ bool SceneGame::init() {
 	dPad->addDpadListener(this);
 
 	// Player
-	player = SpriteKobo::createSprite("images/c_kobo.png",
-									  cX, cY - gSize * 2);
+	player = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
+	player->setPos(mManager->getRdmPos());
+
 	// Osho
-	osho = SpriteOsho::createSprite("images/c_osho.png",
-									cX, cY - gSize * 18);
+	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
+	osho->setPos(mManager->getRdmPos());
+
 	// Chicken
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png",
-										  cX, cY - gSize * 25);
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
+	chicken->setPos(mManager->getRdmPos());
+
+	// Next
 	Vec2 &next = mManager->getRdmPos();
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
+
 	// Tanu
-	tanuA = SpriteTanu::createSprite("images/c_tanu.png",
-									 cX - gSize * 2, cY + gSize * 4);
-	tanuB = SpriteTanu::createSprite("images/c_tanu.png",
-									 cX + gSize * 2, cY + gSize * 4);
+	tanuA = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
+	tanuA->setPos(mManager->getRdmPos());
+	tanuB = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
+	tanuB->setPos(mManager->getRdmPos());
 
 	// Hopper
 	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "READY!");
@@ -109,6 +113,9 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
+	// Test
+	vector<Vec2> routes = mManager->detectRouteByRdm(osho->getPosX(), osho->getPosY());
+	osho->startFollowway(routes, mManager);
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -132,13 +139,6 @@ void SceneGame::update(const float delay) {
 	// Background, MazeManager
 	//background->update(delay);
 	mManager->update(delay);
-
-	unsigned int cWhite = GetColor(255, 255, 255);
-	for (auto rout: routes) {
-		const int x = rout.x;
-		const int y = rout.y;
-		DrawBox(x - 2, y - 2, x + 2, y + 2, cWhite, true);
-	}
 
 	// Mode
 	switch (updateMode) {

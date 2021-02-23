@@ -24,7 +24,6 @@ private:
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
 	vector<MsgHopper *> hoppers;
-	vector<MazeManager::Route> routes;
 
 public:
 	static SceneGame *createScene(int dWidth, int dHeight);
