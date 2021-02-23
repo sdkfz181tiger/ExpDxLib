@@ -291,7 +291,7 @@ void MazeManager::stepRoute(unordered_map<int, MazeRoute> &nodes,
 	const vector<vector<int>>::iterator last = dirs.end();
 	for (auto a = first; a != last; ++a) {
 		for (auto b = last - 1; b != a; --b) {
-			if ((*a).at(0) > (*b).at(0)) iter_swap(a, b);
+			if ((*a).at(0) < (*b).at(0)) iter_swap(a, b);
 		}
 	}
 
