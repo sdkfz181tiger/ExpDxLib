@@ -114,7 +114,12 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 	// Test
-	vector<Vec2> routes = mManager->detectRouteByRdm(osho->getPosX(), osho->getPosY());
+	const float cX = dWidth * 0.5f;
+	const float cY = dHeight * 0.5f;
+	const float oX = osho->getPosX();
+	const float oY = osho->getPosY();
+	//vector<Vec2> routes = mManager->detectRouteByRdm(oX, oY);
+	vector<Vec2> routes = mManager->detectRouteByPos(oX, oY, x, y);
 	osho->startFollowway(routes, mManager);
 }
 

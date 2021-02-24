@@ -3,8 +3,11 @@
 
 #include "Utility.h"
 
-struct MazeRoute {
-	int cR, cC, pR, pC, x, y;
+struct MazeNode {
+	int cR, cC, pR, pC;
+	int x, y;
+	int cost, hue, score;
+	bool closed;
 };
 
 class MazeManager {
@@ -70,8 +73,11 @@ public:
 
 	vector<Vec2> detectRouteByRC(int sR, int sC, int gR, int gC);
 
-	void stepRoute(unordered_map<int, MazeRoute> &nodes,
-				   int r, int c, int oR, int oC);
+	void stepRoute(unordered_map<int, MazeNode> &nodes,
+				   int cR, int cC, int cost);
+
+	void insertRout(unordered_map<int, MazeNode> &nodes,
+					int cR, int cC, int oR, int oC, int cost);
 };
 
 #endif // _MAZEMANAGER_H_
