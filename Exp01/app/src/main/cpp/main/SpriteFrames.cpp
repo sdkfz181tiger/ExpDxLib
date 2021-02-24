@@ -12,11 +12,11 @@ SpriteFrames::SpriteFrames(float x, float y) : SpriteBase(x, y),
 											   frameCnt(0), frameInterval(5),
 											   frameIndex(0), frameLoop(-1),
 											   framePause(false) {
-	LOGD("Main", "SpriteFrames()\n");
+	//LOGD("Main", "SpriteFrames()\n");
 }
 
 SpriteFrames::~SpriteFrames() {
-	LOGD("Main", "~SpriteFrames()\n");
+	//LOGD("Main", "~SpriteFrames()\n");
 }
 
 bool SpriteFrames::init(const string &fileName) {

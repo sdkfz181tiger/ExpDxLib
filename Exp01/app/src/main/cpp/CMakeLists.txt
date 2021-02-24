@@ -52,6 +52,7 @@ add_library( # Sets the name of the library.
         main/SpriteFrames.cpp
         main/SpriteItem.cpp
         main/SpriteKobo.cpp
+        main/SpriteMaze.cpp
         main/SpriteOsho.cpp
         main/SpriteTanu.cpp
         main/StatusBar.cpp

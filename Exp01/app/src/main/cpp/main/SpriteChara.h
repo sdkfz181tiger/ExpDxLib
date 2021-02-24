@@ -37,11 +37,11 @@ public:
 
 	virtual void update(const float delay) override;
 
+	virtual void changeState(int sta);
+
 	void setType(int typ);
 
 	int getType() const;
-
-	virtual void changeState(int sta);
 
 	void startStay();
 

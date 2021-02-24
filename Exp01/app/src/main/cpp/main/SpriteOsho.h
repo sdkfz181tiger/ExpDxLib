@@ -1,20 +1,15 @@
 #ifndef _SPRITEOSHO_H_
 #define _SPRITEOSHO_H_
 
-#include "SpriteChara.h"
-#include "MazeManager.h"
+#include "SpriteMaze.h"
 
-class StateOsho : public StateChara {
+class StateOsho : public StateMaze {
 public:
-	const static int FOLLOWWAY = 101;
-	const static int FOLLOWNEXT = 102;
+	const static int FOLLOWWAY = 2021;
+	const static int FOLLOWNEXT = 2022;
 };
 
-class SpriteOsho : public SpriteChara {
-
-private:
-	vector<Vec2> ways;
-	MazeManager *mManager;
+class SpriteOsho : public SpriteMaze {
 
 public:
 	static SpriteOsho *createSprite(const string &fileName, float x, float y);
@@ -28,10 +23,6 @@ public:
 	void update(const float delay) override;
 
 	void changeState(int sta) override;
-
-	void startFollowway(const vector<Vec2> &poses, MazeManager *mm);
-
-	void startFollownext();
 };
 
 #endif // _SPRITEOSHO_H_

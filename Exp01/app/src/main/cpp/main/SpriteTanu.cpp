@@ -8,7 +8,7 @@ SpriteTanu *SpriteTanu::createSprite(const string &fileName, float x, float y) {
 	return nullptr;
 }
 
-SpriteTanu::SpriteTanu(float x, float y) : SpriteChara(x, y),
+SpriteTanu::SpriteTanu(float x, float y) : SpriteMaze(x, y),
 										   wanCnt(0), wanInterval(10),
 										   capCnt(0), capInterval(10),
 										   escCnt(0), escInterval(10),
@@ -24,7 +24,7 @@ SpriteTanu::~SpriteTanu() {
 }
 
 bool SpriteTanu::init(const string &fileName) {
-	if (!SpriteFrames::init(fileName)) return false;
+	if (!SpriteMaze::init(fileName)) return false;
 	egg = SpriteEgg::createSprite("images/c_egg.png", pos.x, pos.y);// Egg
 	chick = SpriteChick::createSprite("images/c_chick.png", pos.x, pos.y);// Chick
 	this->startIdle();// Idle
@@ -46,8 +46,8 @@ void SpriteTanu::update(float delay) {
 			idleCnt--;
 		} else {
 			const int rdm = UtilMath::getInstance()->getRandom(0, 10);
-			if (rdm < 8) {
-				this->startWander();
+			if (rdm < 5) {
+				this->startFollowRdm();
 			} else {
 				this->startSleep();
 			}
@@ -61,10 +61,14 @@ void SpriteTanu::update(float delay) {
 			if (!walkFlg) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
-					if (!this->getItemFlg()) {
-						this->startStay();
+					if (0 < ways.size()) {
+						this->startFollowNext();
 					} else {
-						this->startRelease();
+						if (this->getItemFlg()) {
+							this->startRelease();
+						} else {
+							this->startStay();
+						}
 					}
 				}
 			}
@@ -100,12 +104,7 @@ void SpriteTanu::update(float delay) {
 			escCnt--;
 		} else {
 			// Next
-			int gSize = UtilDebug::getInstance()->getGridSize();
-			int dWidth = UtilDx::getInstance()->getDispWidth();
-			int dHeight = UtilDx::getInstance()->getDispHeight();
-			int x = dWidth / 2;
-			int y = dHeight - gSize * 4;
-			this->startWalk(gSize * 10, x, y, false);
+			this->startFollowRdm();
 		}
 	}
 	// Release
@@ -124,6 +123,30 @@ void SpriteTanu::update(float delay) {
 			this->startIdle();
 		}
 	}
+	// Followway
+	if (state == StateTanu::FOLLOWWAY) {
+		if (0 < ways.size()) {
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			ways.pop_back();
+		} else {
+			this->startStay();
+		}
+	}
+	// Follownext
+	if (state == StateTanu::FOLLOWNEXT) {
+		if (0 < ways.size()) {
+			int gSize = UtilDebug::getInstance()->getGridSize();
+			Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			ways.pop_back();
+		} else {
+			this->startStay();
+		}
+	}
+	// Ways
+	this->showWays();
 
 	// Draw
 	this->draw();

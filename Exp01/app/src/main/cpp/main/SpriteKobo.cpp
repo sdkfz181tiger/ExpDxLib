@@ -17,7 +17,7 @@ SpriteKobo::~SpriteKobo() {
 }
 
 bool SpriteKobo::init(const string &fileName) {
-	if (!SpriteFrames::init(fileName)) return false;
+	if (!SpriteChara::init(fileName)) return false;
 	this->startIdle();// Idle
 	return true;
 }

@@ -1,11 +1,11 @@
 #ifndef _SPRITETANU_H_
 #define _SPRITETANU_H_
 
-#include "SpriteChara.h"
+#include "SpriteMaze.h"
 #include "SpriteChick.h"
 #include "SpriteEgg.h"
 
-class StateTanu : public StateChara {
+class StateTanu : public StateMaze {
 public:
 	const static int WANDER = 101;
 	const static int CAPTURED = 102;
@@ -14,7 +14,7 @@ public:
 	const static int SLEEP = 105;
 };
 
-class SpriteTanu : public SpriteChara {
+class SpriteTanu : public SpriteMaze {
 
 private:
 	int wanCnt, wanInterval;

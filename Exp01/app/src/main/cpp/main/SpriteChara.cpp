@@ -15,11 +15,11 @@ SpriteChara::SpriteChara(float x, float y) : SpriteFrames(x, y),
 											 idleCnt(0), idleInterval(80),
 											 walkDst(Vec2(x, y)), walkLen(0.0f),
 											 walkFlg(false) {
-	LOGD("Main", "SpriteChara()\n");
+	//LOGD("Main", "SpriteChara()\n");
 }
 
 SpriteChara::~SpriteChara() {
-	LOGD("Main", "~SpriteChara()\n");
+	//LOGD("Main", "~SpriteChara()\n");
 }
 
 bool SpriteChara::init(const string &fileName) {

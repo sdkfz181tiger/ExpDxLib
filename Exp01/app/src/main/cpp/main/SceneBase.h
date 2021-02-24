@@ -17,6 +17,7 @@
 #include "SpriteFrames.h"
 #include "SpriteItem.h"
 #include "SpriteKobo.h"
+#include "SpriteMaze.h"
 #include "SpriteOsho.h"
 #include "SpriteTanu.h"
 #include "TimerCpp.h"

@@ -13,11 +13,11 @@ SpriteBase::SpriteBase(float x, float y) :
 		graph(0), width(0), height(0), scale(1),
 		minX(0), maxX(0), minY(0), maxY(0),
 		moveFlg(false), moveSpd(0), moveDeg(0) {
-	LOGD("Main", "SpriteBase()\n");
+	//LOGD("Main", "SpriteBase()\n");
 }
 
 SpriteBase::~SpriteBase() {
-	LOGD("Main", "~SpriteBase()\n");
+	//LOGD("Main", "~SpriteBase()\n");
 }
 
 bool SpriteBase::init(const string &fileName) {

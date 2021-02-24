@@ -78,6 +78,7 @@ bool SceneGame::init() {
 
 	// Osho
 	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
+	osho->setMazeManager(mManager);
 	osho->setPos(mManager->getRdmPos());
 
 	// Chicken
@@ -91,8 +92,10 @@ bool SceneGame::init() {
 
 	// Tanu
 	tanuA = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
+	tanuA->setMazeManager(mManager);
 	tanuA->setPos(mManager->getRdmPos());
 	tanuB = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
+	tanuB->setMazeManager(mManager);
 	tanuB->setPos(mManager->getRdmPos());
 
 	// Hopper
@@ -114,13 +117,7 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
 	// Test
-	const float cX = dWidth * 0.5f;
-	const float cY = dHeight * 0.5f;
-	const float oX = osho->getPosX();
-	const float oY = osho->getPosY();
-	//vector<Vec2> routes = mManager->detectRouteByRdm(oX, oY);
-	vector<Vec2> routes = mManager->detectRouteByPos(oX, oY, x, y);
-	osho->startFollowway(routes, mManager);
+	osho->startFollowRdm();
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {

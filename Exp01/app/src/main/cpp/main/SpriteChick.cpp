@@ -10,7 +10,7 @@ SpriteChick *SpriteChick::createSprite(const string &fileName, float x, float y)
 
 SpriteChick::SpriteChick(float x, float y) : SpriteChara(x, y),
 										   target(nullptr),
-										   footprints(8, Vec2(0, 0)) {
+										   footprints(6, Vec2(0, 0)) {
 	LOGD("Main", "SpriteChick()\n");
 }
 
@@ -19,7 +19,7 @@ SpriteChick::~SpriteChick() {
 }
 
 bool SpriteChick::init(const string &fileName) {
-	if (!SpriteFrames::init(fileName)) return false;
+	if (!SpriteChara::init(fileName)) return false;
 	this->changeFrames("chick_joy", -1);
 	return true;
 }

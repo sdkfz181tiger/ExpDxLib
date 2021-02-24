@@ -8,7 +8,7 @@ SpriteOsho *SpriteOsho::createSprite(const string &fileName, float x, float y) {
 	return nullptr;
 }
 
-SpriteOsho::SpriteOsho(float x, float y) : SpriteChara(x, y), mManager(nullptr) {
+SpriteOsho::SpriteOsho(float x, float y) : SpriteMaze(x, y) {
 	LOGD("Main", "SpriteOsho()\n");
 }
 
@@ -17,7 +17,7 @@ SpriteOsho::~SpriteOsho() {
 }
 
 bool SpriteOsho::init(const string &fileName) {
-	if (!SpriteFrames::init(fileName)) return false;
+	if (!SpriteMaze::init(fileName)) return false;
 	this->startIdle();// Idle
 	return true;
 }
@@ -48,7 +48,7 @@ void SpriteOsho::update(float delay) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
 					if (0 < ways.size()) {
-						this->startFollownext();
+						this->startFollowNext();
 					} else {
 						this->startStay();
 					}
@@ -59,8 +59,9 @@ void SpriteOsho::update(float delay) {
 	// Followway
 	if (state == StateOsho::FOLLOWWAY) {
 		if (0 < ways.size()) {
+			int gSize = UtilDebug::getInstance()->getGridSize();
 			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(120, pos.x, pos.y, false);
+			this->startWalk(gSize * 5, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
@@ -69,20 +70,16 @@ void SpriteOsho::update(float delay) {
 	// Follownext
 	if (state == StateOsho::FOLLOWNEXT) {
 		if (0 < ways.size()) {
+			int gSize = UtilDebug::getInstance()->getGridSize();
 			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(120, pos.x, pos.y, false);
+			this->startWalk(gSize * 5, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
 		}
 	}
 	// Ways
-	unsigned int cWhite = GetColor(255, 255, 255);
-	for (auto way: ways) {
-		const int x = way.x;
-		const int y = way.y;
-		DrawBox(x - 2, y - 2, x + 2, y + 2, cWhite, true);
-	}
+	this->showWays();
 	// Draw
 	this->draw();
 }
@@ -123,19 +120,4 @@ void SpriteOsho::changeState(int sta) {
 		}
 		return;
 	}
-}
-
-void SpriteOsho::startFollowway(const vector<Vec2> &poses, MazeManager *mm) {
-	// Ways
-	if (0 < ways.size()) ways.clear();
-	for (auto pos: poses) ways.push_back(pos);
-	// MazeManager
-	if (mManager == nullptr) mManager = mm;
-	// State
-	this->changeState(StateOsho::FOLLOWWAY);
-}
-
-void SpriteOsho::startFollownext() {
-	// State
-	this->changeState(StateOsho::FOLLOWNEXT);
 }
