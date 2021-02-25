@@ -33,6 +33,14 @@ public:
 
 	float getPosY() const { return pos.y; }
 
+	int getMinX() const { return minX; }
+
+	int getMaxX() const { return maxX; }
+
+	int getMinY() const { return minY; }
+
+	int getMaxY() const { return maxY; }
+
 	int getWidth() { return width; }
 
 	int getHeight() { return height; }

@@ -37,12 +37,12 @@ bool SceneResult::init() {
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
-										  dWidth - gSize * 2, gSize * 2);
+										  gSize * 2, gSize * 2);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
 												  "images/c_sound_off.png",
-												  dWidth - gSize * 6, gSize * 2);
+												  dWidth - gSize * 2, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
 	// StatusBar

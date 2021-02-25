@@ -51,12 +51,12 @@ bool SceneGame::init() {
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
-										  dWidth - gSize * 2, gSize * 2);
+										  gSize * 2, gSize * 2);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
 												  "images/c_sound_off.png",
-												  dWidth - gSize * 6, gSize * 2);
+												  dWidth - gSize * 2, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
 	// StatusBar
@@ -215,6 +215,9 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (player->isDead()) return;
 	player->startStay();
+
+	// TODO: player制御
+
 	int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
@@ -326,12 +329,26 @@ void SceneGame::gameStart(const float delay) {
 		}
 	}
 
-	// Osho, Chicken, Tanu, Player
+	// Osho, Chicken, Tanu
 	osho->update(delay);
 	chicken->update(delay);
 	tanuA->update(delay);
 	tanuB->update(delay);
+
+	// Player
 	player->update(delay);
+	if (player->getMinX() < mManager->getMinX()) {
+		player->setPosX(mManager->getMinX() + player->getWidth() / 2);
+	}
+	if (mManager->getMaxX() < player->getMaxX()) {
+		player->setPosX(mManager->getMaxX() - player->getWidth() / 2);
+	}
+	if (player->getMinY() < mManager->getMinY()) {
+		player->setPosY(mManager->getMinY() + player->getHeight() / 2);
+	}
+	if (mManager->getMaxY() < player->getMaxY()) {
+		player->setPosY(mManager->getMaxY() - player->getHeight() / 2);
+	}
 }
 
 void SceneGame::gameFinish(const float delay) {

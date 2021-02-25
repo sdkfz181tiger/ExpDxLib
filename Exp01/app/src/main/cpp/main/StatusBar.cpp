@@ -102,10 +102,10 @@ void StatusBar::update(const float delay) {
 			black, true);
 
 	// Labels
-	sprintf(scoreStr, "SC:%d", score);
+	sprintf(scoreStr, "%d", score);
 	UtilLabel::getInstance()->drawStr(scoreStr,
-									  gSize / 2, center.y + offsetY,
-									  2, UtilAlign::LEFT);
+									  center.x, center.y + offsetY + gSize * 3,
+									  3, UtilAlign::CENTER);
 	sprintf(highStr, "HI:%d", high);
 	UtilLabel::getInstance()->drawStr(highStr,
 									  center.x, center.y + offsetY,

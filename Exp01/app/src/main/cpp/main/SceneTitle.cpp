@@ -36,12 +36,12 @@ bool SceneTitle::init() {
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
-										  dWidth - gSize * 2, gSize * 2);
+										  gSize * 2, gSize * 2);
 	btnQuit->addBtnListener(this, BtnTag::QUIT);
 
 	BtnToggle *btnSound = BtnToggle::createToggle("images/c_sound_on.png",
 												  "images/c_sound_off.png",
-												  dWidth - gSize * 6, gSize * 2);
+												  dWidth - gSize * 2, gSize * 2);
 	btnSound->addBtnListener(this, BtnTag::SOUND);
 
 	// StatusBar
@@ -99,9 +99,9 @@ void SceneTitle::update(const float delay) {
 	// Label, Buttons
 	UtilLabel::getInstance()->drawStr("=TITLE=", cX, cY - gSize * 10,
 									  2, UtilAlign::CENTER);
-	UtilLabel::getInstance()->drawStr(vCode, cX, 150,
+	UtilLabel::getInstance()->drawStr(vCode, cX, 200,
 									  2, UtilAlign::CENTER);
-	UtilLabel::getInstance()->drawStr(vName, cX, 180,
+	UtilLabel::getInstance()->drawStr(vName, cX, 240,
 									  2, UtilAlign::CENTER);
 
 	// StatusBar, Buttons

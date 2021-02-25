@@ -126,9 +126,10 @@ void SpriteTanu::update(float delay) {
 	// Followway
 	if (state == StateTanu::FOLLOWWAY) {
 		if (0 < ways.size()) {
-			int gSize = UtilDebug::getInstance()->getGridSize();
-			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			const int gSize = UtilDebug::getInstance()->getGridSize();
+			const int spd = (getItemFlg()) ? gSize * 50 : gSize * 10;
+			const Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalk(spd, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
@@ -137,9 +138,10 @@ void SpriteTanu::update(float delay) {
 	// Follownext
 	if (state == StateTanu::FOLLOWNEXT) {
 		if (0 < ways.size()) {
-			int gSize = UtilDebug::getInstance()->getGridSize();
-			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			const int gSize = UtilDebug::getInstance()->getGridSize();
+			const int spd = (getItemFlg()) ? gSize * 50 : gSize * 10;
+			const Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalk(spd, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
