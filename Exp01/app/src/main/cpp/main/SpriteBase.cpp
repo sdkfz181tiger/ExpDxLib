@@ -52,8 +52,8 @@ void SpriteBase::move(int spd, int deg) {
 	moveFlg = true;
 	moveSpd = spd;
 	moveDeg = deg;
-	vel.x = moveSpd * UtilMath::getInstance()->getCos(moveDeg);
-	vel.y = moveSpd * UtilMath::getInstance()->getSin(moveDeg);
+	vel.x = (int) (moveSpd * UtilMath::getInstance()->getCos(moveDeg));
+	vel.y = (int) (moveSpd * UtilMath::getInstance()->getSin(moveDeg));
 }
 
 void SpriteBase::stop() {

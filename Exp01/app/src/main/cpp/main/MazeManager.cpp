@@ -57,21 +57,21 @@ void MazeManager::loadMaze() {
 	for (int r = 0; r < gRows; r++) {
 		int oX = min.x;// Reset
 		const int h = (r % 2 == 0) ? wallSize : floorSize;
-		vector<Grid> line = {};
+		vector<MazeGrid> line = {};
 		for (int c = 0; c < gCols; c++) {
 			const int w = (c % 2 == 0) ? wallSize : floorSize;
 			const int i = c + gCols * r;
-			Grid grid{};
-			grid.type = static_cast<Type>(maze["board"].at(i).get<int>());
-			grid.r = r;
-			grid.c = c;
-			grid.minX = oX;
-			grid.maxX = oX + w;
-			grid.minY = oY;
-			grid.maxY = oY + h;
-			grid.pos.x = oX + w / 2;
-			grid.pos.y = oY + h / 2;
-			line.push_back(grid);
+			MazeGrid MazeGrid{};
+			MazeGrid.type = static_cast<MazeType>(maze["board"].at(i).get<int>());
+			MazeGrid.r = r;
+			MazeGrid.c = c;
+			MazeGrid.minX = oX;
+			MazeGrid.maxX = oX + w;
+			MazeGrid.minY = oY;
+			MazeGrid.maxY = oY + h;
+			MazeGrid.pos.x = oX + w / 2;
+			MazeGrid.pos.y = oY + h / 2;
+			line.push_back(MazeGrid);
 			oX += w;
 		}
 		board.push_back(line);
@@ -83,19 +83,19 @@ void MazeManager::createMaze() {
 	// Pillars
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
-			Grid &grid = board[r][c];
-			if (grid.type == PILLAR) pillars.push_back(grid);
+			MazeGrid &MazeGrid = board[r][c];
+			if (MazeGrid.type == PILLAR) pillars.push_back(MazeGrid);
 		}
 	}
 	for (auto &pillar : pillars) {
 		if (board[pillar.r][pillar.c].type == WALL) continue;
-		vector<Grid> path = {pillar};
+		vector<MazeGrid> path = {pillar};
 		this->extendPath(pillar, path);
 
 		for (int i = 0; i < path.size() - 1; i++) {
-			Grid &from = path.at(i);
+			MazeGrid &from = path.at(i);
 			board[from.r][from.c].type = WALL;
-			Grid &to = path.at(i + 1);
+			MazeGrid &to = path.at(i + 1);
 			board[to.r][to.c].type = WALL;
 			int mR = from.r + (to.r - from.r) / 2;
 			int mC = from.c + (to.c - from.c) / 2;
@@ -104,7 +104,7 @@ void MazeManager::createMaze() {
 	}
 }
 
-void MazeManager::extendPath(Grid &pillar, vector<Grid> &path) {
+void MazeManager::extendPath(MazeGrid &pillar, vector<MazeGrid> &path) {
 	const int dir = UtilMath::getInstance()->getRandom(0, 3);
 	int oR = 0;
 	int oC = 0;
@@ -118,13 +118,13 @@ void MazeManager::extendPath(Grid &pillar, vector<Grid> &path) {
 		this->extendPath(pillar, path);
 		return;
 	} else {
-		Grid &next = board[pillar.r + oR][pillar.c + oC];// Next
+		MazeGrid &next = board[pillar.r + oR][pillar.c + oC];// Next
 		path.push_back(next);
 		this->extendPath(next, path);
 	}
 }
 
-bool MazeManager::checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC) {
+bool MazeManager::checkDeadend(MazeGrid &pillar, vector<MazeGrid> &path, int oR, int oC) {
 	const int r = pillar.r + oR;
 	const int c = pillar.c + oC;
 	if (board[r][c].type == WALL) {
@@ -134,14 +134,14 @@ bool MazeManager::checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC)
 	return false;
 }
 
-bool MazeManager::checkPathClosed(Grid &pillar, vector<Grid> &path) {
+bool MazeManager::checkPathClosed(MazeGrid &pillar, vector<MazeGrid> &path) {
 	return (this->checkPathOwn(pillar, path, 0, -2) &&
 			this->checkPathOwn(pillar, path, 0, 2) &&
 			this->checkPathOwn(pillar, path, -2, 0) &&
 			this->checkPathOwn(pillar, path, 2, 0));
 }
 
-bool MazeManager::checkPathOwn(Grid &pillar, vector<Grid> &path, int oR, int oC) {
+bool MazeManager::checkPathOwn(MazeGrid &pillar, vector<MazeGrid> &path, int oR, int oC) {
 	const int r = pillar.r + oR;
 	const int c = pillar.c + oC;
 	for (auto p : path) if (p.r == r && p.c == c) return true;
@@ -154,16 +154,50 @@ void MazeManager::update(const float delay) {
 
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
-			Grid &grid = board[r][c];
-			if (grid.type == FLOOR) continue;
-			DrawBox(grid.minX, grid.minY,
-					grid.maxX, grid.maxY,
+			MazeGrid &MazeGrid = board[r][c];
+			if (MazeGrid.type == FLOOR) continue;
+			DrawBox(MazeGrid.minX, MazeGrid.minY,
+					MazeGrid.maxX, MazeGrid.maxY,
 					cWhite, true);
 		}
 	}
 }
 
-Vec2 &MazeManager::getPos(int r, int c) {
+int MazeManager::getRByY(int y) {
+	int r = 0;
+	if (y < min.y) {
+		r = 1;
+	} else if (max.y < y) {
+		r = gRows - 2;
+	} else {
+		for (int i = 1; i < gRows; i += 2) {
+			if (y < board[i][0].maxY) {
+				r = i;
+				break;
+			}
+		}
+	}
+	return r;
+}
+
+int MazeManager::getCByX(int x) {
+	int c = 0;
+	if (x < min.x) {
+		c = 1;
+	} else if (max.x < x) {
+		c = gCols - 2;
+	} else {
+		for (int i = 1; i < gRows; i += 2) {
+			if (x < board[0][i].maxX) {
+				c = i;
+				break;
+			}
+		}
+	}
+	return c;
+}
+
+Vec2 &MazeManager::getPosByRC(int r, int c) {
 	if (r < 0 || c < 0) return board[0][0].pos;
 	if (gRows <= r || gCols <= c) return board[gRows - 1][gCols - 1].pos;
 	return board[r][c].pos;
@@ -174,7 +208,21 @@ Vec2 &MazeManager::getRdmPos() {
 	const int rdmC = UtilMath::getInstance()->getRandom(0, (gCols - 2) / 2);
 	const int r = rdmR * 2 + 1;
 	const int c = rdmC * 2 + 1;
-	return getPos(r, c);
+	return getPosByRC(r, c);
+}
+
+MazeGrid &MazeManager::getGridByRC(int r, int c) {
+	if (r < 0) r = 0;
+	if (c < 0) c = 0;
+	if (gRows - 1 < r) r = gRows - 1;
+	if (gCols - 1 < c) c = gCols - 1;
+	return board[r][c];
+}
+
+MazeGrid &MazeManager::getGridByPos(int x, int y) {
+	const int r = this->getRByY(y);
+	const int c = this->getCByX(x);
+	return board[r][c];
 }
 
 vector<Vec2> MazeManager::detectRouteByRdm(int sX, int sY) {
@@ -185,59 +233,11 @@ vector<Vec2> MazeManager::detectRouteByRdm(int sX, int sY) {
 
 vector<Vec2> MazeManager::detectRouteByPos(int sX, int sY, int gX, int gY) {
 	// Start
-	int sR = 0;
-	if (sY < min.y) {
-		sR = 1;
-	} else if (max.y < sY) {
-		sR = gRows - 2;
-	} else {
-		for (int r = 1; r < gRows; r += 2) {
-			if (sY < board[r][0].maxY) {
-				sR = r;
-				break;
-			}
-		}
-	}
-	int sC = 0;
-	if (sX < min.x) {
-		sC = 1;
-	} else if (max.x < sX) {
-		sC = gCols - 2;
-	} else {
-		for (int c = 1; c < gCols; c += 2) {
-			if (sX < board[0][c].maxX) {
-				sC = c;
-				break;
-			}
-		}
-	}
+	int sR = this->getRByY(sY);
+	int sC = this->getCByX(sX);
 	// Goal
-	int gR = 0;
-	if (gY < min.y) {
-		gR = 1;
-	} else if (max.y < gY) {
-		gR = gRows - 2;
-	} else {
-		for (int r = 1; r < gRows; r += 2) {
-			if (gY < board[r][0].maxY) {
-				gR = r;
-				break;
-			}
-		}
-	}
-	int gC = 0;
-	if (gX < min.x) {
-		gC = 1;
-	} else if (max.x < gX) {
-		gC = gCols - 2;
-	} else {
-		for (int c = 1; c < gCols; c += 2) {
-			if (gX < board[0][c].maxX) {
-				gC = c;
-				break;
-			}
-		}
-	}
+	int gR = this->getRByY(gY);
+	int gC = this->getCByX(gX);
 	return this->detectRouteByRC(sR, sC, gR, gC);
 }
 
@@ -261,7 +261,7 @@ vector<Vec2> MazeManager::detectRouteByRC(int sR, int sC, int gR, int gC) {
 
 	// Nodes
 	unordered_map<int, MazeNode> nodes;
-	this->insertRout(nodes, startR, startC, 0, 0, 0);// Center
+	this->insertRout(nodes, startR, startC, 0, 0, 0);
 	this->insertRout(nodes, startR, startC, 0, -1, 1);
 	this->insertRout(nodes, startR, startC, 0, 1, 1);
 	this->insertRout(nodes, startR, startC, 1, 0, 1);

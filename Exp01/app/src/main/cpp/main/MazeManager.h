@@ -3,6 +3,18 @@
 
 #include "Utility.h"
 
+enum MazeType {
+	FLOOR, WALL, PILLAR
+};
+
+struct MazeGrid {
+	MazeType type;
+	int r, c;
+	int minX, maxX;
+	int minY, maxY;
+	Vec2 pos;
+};
+
 struct MazeNode {
 	int cR, cC, pR, pC;
 	int x, y;
@@ -13,20 +25,9 @@ struct MazeNode {
 class MazeManager {
 
 public:
-	enum Type {
-		FLOOR, WALL, PILLAR
-	};
 
 	enum Dir {
 		LEFT, RIGHT, UP, DOWN
-	};
-
-	struct Grid {
-		Type type;
-		int r, c;
-		int minX, maxX;
-		int minY, maxY;
-		Vec2 pos;
 	};
 
 protected:
@@ -37,8 +38,8 @@ protected:
 	unsigned int cBlack, cWhite, cRed, cGreen, cBlue;
 
 private:
-	vector<vector<Grid>> board;
-	vector<Grid> pillars;
+	vector<vector<MazeGrid>> board;
+	vector<MazeGrid> pillars;
 
 public:
 	static MazeManager *createBoard(float x, float y, int fS, int wS);
@@ -53,19 +54,37 @@ public:
 
 	void createMaze();
 
-	void extendPath(Grid &pillar, vector<Grid> &path);
+	void extendPath(MazeGrid &pillar, vector<MazeGrid> &path);
 
-	bool checkDeadend(Grid &pillar, vector<Grid> &path, int oR, int oC);
+	bool checkDeadend(MazeGrid &pillar, vector<MazeGrid> &path, int oR, int oC);
 
-	bool checkPathClosed(Grid &pillar, vector<Grid> &path);
+	bool checkPathClosed(MazeGrid &pillar, vector<MazeGrid> &path);
 
-	bool checkPathOwn(Grid &pillar, vector<Grid> &path, int oR, int oC);
+	bool checkPathOwn(MazeGrid &pillar, vector<MazeGrid> &path, int oR, int oC);
 
 	void update(const float delay);
 
-	Vec2 &getPos(int r, int c);
+	Vec2 &getCenter() { return center; }
+
+	int getMinX() const { return min.x; }
+
+	int getMaxX() const { return max.x; }
+
+	int getMinY() const { return min.y; }
+
+	int getMaxY() const { return max.y; }
+
+	int getRByY(int y);
+
+	int getCByX(int x);
+
+	Vec2 &getPosByRC(int r, int c);
 
 	Vec2 &getRdmPos();
+
+	MazeGrid &getGridByRC(int r, int c);
+
+	MazeGrid &getGridByPos(int x, int y);
 
 	vector<Vec2> detectRouteByRdm(int sX, int sY);
 

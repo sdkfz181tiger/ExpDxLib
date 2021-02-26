@@ -216,13 +216,11 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	if (player->isDead()) return;
 	player->startStay();
 
-	// TODO: player制御
-
-	int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
-	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	const int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
+	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
 	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
+	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
 }
 
 void SceneGame::gameReady(const float delay) {
@@ -337,6 +335,8 @@ void SceneGame::gameStart(const float delay) {
 
 	// Player
 	player->update(delay);
+	if (!player->getMoveFlg()) return;
+
 	if (player->getMinX() < mManager->getMinX()) {
 		player->setPosX(mManager->getMinX() + player->getWidth() / 2);
 	}
@@ -348,6 +348,44 @@ void SceneGame::gameStart(const float delay) {
 	}
 	if (mManager->getMaxY() < player->getMaxY()) {
 		player->setPosY(mManager->getMaxY() - player->getHeight() / 2);
+	}
+
+	const MazeGrid &grid = mManager->getGridByPos(player->getPosX(), player->getPosY());
+	if (player->getVX() < 0) {
+		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c - 1);
+		if (gridT.type != MazeType::FLOOR) {
+			if (player->getPosX() < grid.pos.x) player->setPosX(grid.pos.x);
+		} else {
+			player->setPosY(grid.pos.y);
+		}
+		return;
+	}
+	if (0 < player->getVX()) {
+		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c + 1);
+		if (gridT.type != MazeType::FLOOR) {
+			if (grid.pos.x < player->getPosX()) player->setPosX(grid.pos.x);
+		} else {
+			player->setPosY(grid.pos.y);
+		}
+		return;
+	}
+	if (player->getVY() < 0) {
+		const MazeGrid &gridT = mManager->getGridByRC(grid.r - 1, grid.c);
+		if (gridT.type != MazeType::FLOOR) {
+			if (player->getPosY() < grid.pos.y) player->setPosY(grid.pos.y);
+		} else {
+			player->setPosX(grid.pos.x);
+		}
+		return;
+	}
+	if (0 < player->getVY()) {
+		const MazeGrid &gridT = mManager->getGridByRC(grid.r + 1, grid.c);
+		if (gridT.type != MazeType::FLOOR) {
+			if (grid.pos.y < player->getPosY()) player->setPosY(grid.pos.y);
+		} else {
+			player->setPosX(grid.pos.x);
+		}
+		return;
 	}
 }
 

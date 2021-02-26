@@ -33,6 +33,10 @@ public:
 
 	float getPosY() const { return pos.y; }
 
+	float getVX() const { return vel.x; }
+
+	float getVY() const { return vel.y; }
+
 	int getMinX() const { return minX; }
 
 	int getMaxX() const { return maxX; }
