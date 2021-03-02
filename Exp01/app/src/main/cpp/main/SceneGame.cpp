@@ -93,9 +93,11 @@ bool SceneGame::init() {
 	// Tanu
 	tanuA = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 	tanuA->setMazeManager(mManager);
+	tanuA->setLeader(player);
 	tanuA->setPos(mManager->getRdmPos());
 	tanuB = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 	tanuB->setMazeManager(mManager);
+	tanuB->setLeader(player);
 	tanuB->setPos(mManager->getRdmPos());
 
 	// Hopper
@@ -116,8 +118,6 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	// Test
-	osho->startFollowRdm();
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -215,7 +215,6 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (player->isDead()) return;
 	player->startStay();
-
 	const int spd = UtilDebug::getInstance()->getGridSize() * 20;
 	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
 	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
@@ -330,6 +329,7 @@ void SceneGame::gameStart(const float delay) {
 	// Osho, Chicken, Tanu
 	osho->update(delay);
 	chicken->update(delay);
+
 	tanuA->update(delay);
 	tanuB->update(delay);
 

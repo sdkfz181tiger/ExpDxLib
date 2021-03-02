@@ -285,7 +285,7 @@ vector<Vec2> MazeManager::detectRouteByRC(int sR, int sC, int gR, int gC) {
 		kPrev = kPair->second.pR * gCols + kPair->second.pC;
 		routes.emplace_back(kPair->second.x, kPair->second.y);
 	}
-	routes.push_back(pStart);// Start
+	//routes.push_back(pStart);// Start (If you needed)
 	return routes;
 }
 
