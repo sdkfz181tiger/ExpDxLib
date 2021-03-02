@@ -37,7 +37,7 @@ bool CtlDpad::init() {
 	return true;
 }
 
-void CtlDpad::setPosition(int x, int y){
+void CtlDpad::setPosition(int x, int y) {
 	pos.x = x;
 	pos.y = y;
 }
@@ -54,10 +54,11 @@ void CtlDpad::hide() {
 }
 
 bool CtlDpad::containsPoint(int x, int y) {
-	if (x < pos.x - width) return false;
-	if (pos.x + width < x) return false;
-	if (y < pos.y - height) return false;
-	if (pos.y + height < y) return false;
+	const int scale = 4;
+	if (x < pos.x - width * scale) return false;
+	if (pos.x + width * scale < x) return false;
+	if (y < pos.y - height * scale) return false;
+	if (pos.y + height * scale < y) return false;
 	return true;
 }
 
@@ -99,7 +100,7 @@ void CtlDpad::calcDirection(int x, int y) {
 	dpad.x = x;
 	dpad.y = y;
 	// Distance
-	if(UtilMath::getInstance()->calcDistance2D(pos, dpad) < width / 20) return;
+	if (UtilMath::getInstance()->calcDistance2D(pos, dpad) < width / 20) return;
 	// Direction
 	dpadDir = UtilMath::getInstance()->calcDeg2D(pos, dpad);
 	if (dpadDir < 45) {

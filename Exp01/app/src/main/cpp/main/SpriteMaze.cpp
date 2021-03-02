@@ -63,6 +63,17 @@ void SpriteMaze::startFollowPos(int x, int y) {
 	// Ways
 	if (0 < ways.size()) ways.clear();
 	for (auto pos: poses) ways.push_back(pos);
+	// Blocking backward
+	if (2 < ways.size()) {
+		const Vec2 &last1 = ways.at(ways.size() - 1);
+		const Vec2 &last3 = ways.at(ways.size() - 3);
+		bool flgX = signbit(last1.x - pos.x) != signbit(last3.x - pos.x);
+		bool flgY = signbit(last1.y - pos.y) != signbit(last3.y - pos.y);
+		if (flgX || flgY) {
+			ways.pop_back();
+			ways.pop_back();
+		}
+	}
 	// State
 	this->changeState(StateMaze::FOLLOWWAY);
 }
