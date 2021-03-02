@@ -163,6 +163,14 @@ void MazeManager::update(const float delay) {
 	}
 }
 
+bool MazeManager::isSameRCByPos(const Vec2 &posA, const Vec2 &posB) {
+	const int aR = this->getRByY(posA.y);
+	const int aC = this->getCByX(posA.x);
+	const int bR = this->getRByY(posB.y);
+	const int bC = this->getCByX(posB.x);
+	return aR == bR && aC == bC;
+}
+
 int MazeManager::getRByY(int y) {
 	int r = 0;
 	if (y < min.y) {
@@ -335,4 +343,60 @@ void MazeManager::insertRout(unordered_map<int, MazeNode> &nodes,
 	const int score = cost + 1 + hue;
 	MazeNode node = {r, c, cR, cC, x, y, cost + 1, hue, score, false};
 	nodes.insert(make_pair(key, node));
+}
+
+int MazeManager::getEyesightL(int x, int y, int cols) {
+	const MazeGrid &grid = this->getGridByPos(x, y);
+	int minX = grid.pos.x;
+	for (int i = 0; i < cols; i++) {
+		const int r = grid.r;
+		const int c = grid.c - i;
+		if (c < 0 || gCols <= c) break;
+		const MazeGrid &target = this->getGridByRC(r, c);
+		if (target.type != MazeType::FLOOR) break;
+		minX = target.minX;
+	}
+	return minX;
+}
+
+int MazeManager::getEyesightR(int x, int y, int cols) {
+	const MazeGrid &grid = this->getGridByPos(x, y);
+	int maxX = grid.pos.x;
+	for (int i = 0; i < cols; i++) {
+		const int r = grid.r;
+		const int c = grid.c + i;
+		if (c < 0 || gCols <= c) break;
+		const MazeGrid &target = this->getGridByRC(r, c);
+		if (target.type != MazeType::FLOOR) break;
+		maxX = target.maxX;
+	}
+	return maxX;
+}
+
+int MazeManager::getEyesightU(int x, int y, int rows) {
+	const MazeGrid &grid = this->getGridByPos(x, y);
+	int minY = grid.pos.y;
+	for (int i = 0; i < rows; i++) {
+		const int r = grid.r - i;
+		const int c = grid.c;
+		if (r < 0 || gRows <= r) break;
+		const MazeGrid &target = this->getGridByRC(r, c);
+		if (target.type != MazeType::FLOOR) break;
+		minY = target.minY;
+	}
+	return minY;
+}
+
+int MazeManager::getEyesightD(int x, int y, int rows) {
+	const MazeGrid &grid = this->getGridByPos(x, y);
+	int maxY = grid.pos.y;
+	for (int i = 0; i < rows; i++) {
+		const int r = grid.r + i;
+		const int c = grid.c;
+		if (r < 0 || gRows <= r) break;
+		const MazeGrid &target = this->getGridByRC(r, c);
+		if (target.type != MazeType::FLOOR) break;
+		maxY = target.maxY;
+	}
+	return maxY;
 }

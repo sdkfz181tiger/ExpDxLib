@@ -29,6 +29,8 @@ public:
 
 	void setPosY(float y);
 
+	Vec2 &getPos() { return pos; }
+
 	float getPosX() const { return pos.x; }
 
 	float getPosY() const { return pos.y; }

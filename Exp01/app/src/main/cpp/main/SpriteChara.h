@@ -39,6 +39,8 @@ public:
 
 	virtual void changeState(int sta);
 
+	void showState();
+
 	void setType(int typ);
 
 	int getType() const;

@@ -15,6 +15,7 @@ class SpriteMaze : public SpriteChara {
 protected:
 	MazeManager *mManager;
 	vector<Vec2> ways;
+	SpriteBase *leader;
 
 public:
 	static SpriteMaze *createSprite(const string &fileName, float x, float y);
@@ -31,9 +32,19 @@ public:
 
 	void startFollowRdm();
 
+	void startFollowLeader();
+
 	void startFollowPos(int x, int y);
 
 	void startFollowNext();
+
+	void setLeader(SpriteBase *spr);
+
+	bool searchLeaderInsight();
+
+	bool checkLeaderOnSameRC();
+
+	bool checkLeaderOnway();
 };
 
 #endif // _SPRITEMAZE_H_

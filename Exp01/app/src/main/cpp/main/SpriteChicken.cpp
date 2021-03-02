@@ -88,8 +88,9 @@ void SpriteChicken::update(float delay) {
 			this->startWalk(gSize * 20, nest.x, nest.y, false);
 		}
 	}
-	// Draw
+	// Draw, State
 	this->draw();
+	this->showState();
 }
 
 void SpriteChicken::changeState(int sta) {

@@ -64,8 +64,6 @@ public:
 
 	void update(const float delay);
 
-	Vec2 &getCenter() { return center; }
-
 	int getMinX() const { return min.x; }
 
 	int getMaxX() const { return max.x; }
@@ -77,6 +75,8 @@ public:
 	int getRByY(int y);
 
 	int getCByX(int x);
+
+	bool isSameRCByPos(const Vec2 &posA, const Vec2 &posB);
 
 	Vec2 &getPosByRC(int r, int c);
 
@@ -97,6 +97,14 @@ public:
 
 	void insertRout(unordered_map<int, MazeNode> &nodes,
 					int cR, int cC, int oR, int oC, int cost);
+
+	int getEyesightL(int x, int y, int cols);
+
+	int getEyesightR(int x, int y, int cols);
+
+	int getEyesightU(int x, int y, int rows);
+
+	int getEyesightD(int x, int y, int rows);
 };
 
 #endif // _MAZEMANAGER_H_

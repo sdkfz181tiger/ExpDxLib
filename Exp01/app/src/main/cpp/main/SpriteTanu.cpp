@@ -37,7 +37,13 @@ void SpriteTanu::update(float delay) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
-			this->startIdle();
+			if (this->searchLeaderInsight() &&
+				!this->checkLeaderOnSameRC() &&
+				!this->checkLeaderOnway()) {
+				this->startFollowLeader();
+			} else {
+				this->startIdle();
+			}
 		}
 	}
 	// Idle
@@ -46,7 +52,7 @@ void SpriteTanu::update(float delay) {
 			idleCnt--;
 		} else {
 			const int rdm = UtilMath::getInstance()->getRandom(0, 10);
-			if (rdm < 5) {
+			if (rdm < 9) {
 				this->startFollowRdm();
 			} else {
 				this->startSleep();
@@ -63,6 +69,13 @@ void SpriteTanu::update(float delay) {
 				if (walkLen <= 0.0f) {
 					if (0 < ways.size()) {
 						this->startFollowNext();
+						if (!this->getItemFlg()) {
+							if (this->searchLeaderInsight() &&
+								!this->checkLeaderOnSameRC() &&
+								!this->checkLeaderOnway()) {
+								this->startFollowLeader();
+							}
+						}
 					} else {
 						if (this->getItemFlg()) {
 							this->startRelease();
@@ -127,7 +140,7 @@ void SpriteTanu::update(float delay) {
 	if (state == StateTanu::FOLLOWWAY) {
 		if (0 < ways.size()) {
 			const int gSize = UtilDebug::getInstance()->getGridSize();
-			const int spd = (getItemFlg()) ? gSize * 50 : gSize * 10;
+			const int spd = (getItemFlg()) ? gSize * 30 : gSize * 10;
 			const Vec2 &pos = ways.at(ways.size() - 1);
 			this->startWalk(spd, pos.x, pos.y, false);
 			ways.pop_back();
@@ -139,7 +152,7 @@ void SpriteTanu::update(float delay) {
 	if (state == StateTanu::FOLLOWNEXT) {
 		if (0 < ways.size()) {
 			const int gSize = UtilDebug::getInstance()->getGridSize();
-			const int spd = (getItemFlg()) ? gSize * 50 : gSize * 10;
+			const int spd = (getItemFlg()) ? gSize * 30 : gSize * 10;
 			const Vec2 &pos = ways.at(ways.size() - 1);
 			this->startWalk(spd, pos.x, pos.y, false);
 			ways.pop_back();
@@ -147,11 +160,11 @@ void SpriteTanu::update(float delay) {
 			this->startStay();
 		}
 	}
-	// Ways
-	this->showWays();
 
-	// Draw
+	// Draw, State, Ways
 	this->draw();
+	this->showState();
+	this->showWays();
 
 	// Egg
 	if (eggFlg) {

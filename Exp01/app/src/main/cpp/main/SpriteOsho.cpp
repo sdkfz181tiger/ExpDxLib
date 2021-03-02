@@ -48,7 +48,7 @@ void SpriteOsho::update(float delay) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
 					if (0 < ways.size()) {
-						this->startFollowNext();
+						this->startFollowNext();// Next
 					} else {
 						this->startStay();
 					}
@@ -78,10 +78,10 @@ void SpriteOsho::update(float delay) {
 			this->startStay();
 		}
 	}
-	// Ways
-	this->showWays();
-	// Draw
+	// Draw, State, Ways
 	this->draw();
+	this->showState();
+	this->showWays();
 }
 
 void SpriteOsho::changeState(int sta) {

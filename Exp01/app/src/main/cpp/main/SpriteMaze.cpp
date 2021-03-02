@@ -41,8 +41,18 @@ void SpriteMaze::startFollowRdm() {
 	// MazeManager
 	if (mManager == nullptr) return;
 	// Random
-	Vec2 &rdm =	mManager->getRdmPos();
+	const Vec2 &rdm = mManager->getRdmPos();
 	this->startFollowPos(rdm.x, rdm.y);
+}
+
+void SpriteMaze::startFollowLeader() {
+	// MazeManager
+	if (mManager == nullptr) return;
+	// Leader
+	if (leader == nullptr) return;
+	// Leader
+	const Vec2 &pos = leader->getPos();
+	this->startFollowPos(pos.x, pos.y);
 }
 
 void SpriteMaze::startFollowPos(int x, int y) {
@@ -58,6 +68,47 @@ void SpriteMaze::startFollowPos(int x, int y) {
 }
 
 void SpriteMaze::startFollowNext() {
+	// MazeManager
+	if (mManager == nullptr) return;
 	// State
 	this->changeState(StateMaze::FOLLOWNEXT);
+}
+
+void SpriteMaze::setLeader(SpriteBase *spr) {
+	// Leader
+	leader = spr;
+}
+
+bool SpriteMaze::searchLeaderInsight() {
+	// MazeManager
+	if (mManager == nullptr) return false;
+	// Leader
+	if (leader == nullptr) return false;
+	// Eyesight
+	const int left = mManager->getEyesightL(pos.x, pos.y, 30);
+	const int right = mManager->getEyesightR(pos.x, pos.y, 30);
+	const int up = mManager->getEyesightU(pos.x, pos.y, 30);
+	const int down = mManager->getEyesightD(pos.x, pos.y, 30);
+	if (leader->getPosX() < left) return false;
+	if (right < leader->getPosX()) return false;
+	if (minY < leader->getPosY() && leader->getPosY() < maxY) return true;
+	if (leader->getPosY() < up) return false;
+	if (down < leader->getPosY()) return false;
+	if (minX < leader->getPosX() && leader->getPosX() < maxX) return true;
+	return false;
+}
+
+bool SpriteMaze::checkLeaderOnSameRC() {
+	return mManager->isSameRCByPos(pos, leader->getPos());
+}
+
+bool SpriteMaze::checkLeaderOnway() {
+	// Ways
+	if (ways.size() <= 0) return false;
+	const Vec2 &way = ways.at(0);
+	const int wR = mManager->getRByY(way.y);
+	const int wC = mManager->getCByX(way.x);
+	const int lR = mManager->getRByY(leader->getPosY());
+	const int lC = mManager->getCByX(leader->getPosX());
+	return wR == lR && wC == lC;
 }

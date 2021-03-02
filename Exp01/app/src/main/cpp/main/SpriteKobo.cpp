@@ -51,8 +51,9 @@ void SpriteKobo::update(float delay) {
 		}
 	}
 
-	// Draw
+	// Draw, State
 	this->draw();
+	this->showState();
 }
 
 void SpriteKobo::changeState(int sta) {

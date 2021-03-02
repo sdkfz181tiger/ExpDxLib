@@ -11,8 +11,8 @@ SpriteChara *SpriteChara::createSprite(const string &fileName, float x, float y)
 SpriteChara::SpriteChara(float x, float y) : SpriteFrames(x, y),
 											 type(TypeChara::DEFAULT),
 											 state(StateChara::DEFAULT),
-											 stayCnt(0), stayInterval(40),
-											 idleCnt(0), idleInterval(80),
+											 stayCnt(0), stayInterval(10),
+											 idleCnt(0), idleInterval(60),
 											 walkDst(Vec2(x, y)), walkLen(0.0f),
 											 walkFlg(false) {
 	//LOGD("Main", "SpriteChara()\n");
@@ -45,6 +45,14 @@ void SpriteChara::changeState(int sta) {
 	if (state == sta) return;
 	state = sta;
 	// Do something
+}
+
+void SpriteChara::showState() {
+	// State
+	char c[10];
+	sprintf(c, "%d", static_cast<int>(state));
+	UtilLabel::getInstance()->drawStr(c, pos.x, pos.y - height / 2,
+									  2, UtilAlign::CENTER);
 }
 
 void SpriteChara::startStay() {
