@@ -20,7 +20,7 @@ private:
 	SpriteKobo *player;
 	SpriteOsho *osho;
 	SpriteChicken *chicken;
-	SpriteTanu *tanuA, *tanuB;
+	vector<SpriteTanu*> tanus;
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
 	vector<MsgHopper *> hoppers;

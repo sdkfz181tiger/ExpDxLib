@@ -13,7 +13,6 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), osho(nullptr),
 												chicken(nullptr),
-												tanuA(nullptr), tanuB(nullptr),
 												updateMode(READY),
 												waitCnt(0), waitInterval(150) {
 	LOGD("Main", "SceneGame()\n");
@@ -28,8 +27,7 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
-	DX_SAFE_DELETE(tanuA);
-	DX_SAFE_DELETE(tanuB);
+	DX_SAFE_DELETE_VECTOR(tanus);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
 	DX_SAFE_DELETE_VECTOR(chicks);
@@ -91,14 +89,13 @@ bool SceneGame::init() {
 	chicken->setEggListener(this);
 
 	// Tanu
-	tanuA = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
-	tanuA->setMazeManager(mManager);
-	tanuA->setLeader(player);
-	tanuA->setPos(mManager->getRdmPos());
-	tanuB = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
-	tanuB->setMazeManager(mManager);
-	tanuB->setLeader(player);
-	tanuB->setPos(mManager->getRdmPos());
+	for (int i = 0; i < 3; i++) {
+		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
+		tanu->setMazeManager(mManager);
+		tanu->setLeader(player);
+		tanu->setPos(mManager->getRdmPos());
+		tanus.push_back(tanu);
+	}
 
 	// Hopper
 	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "READY!");
@@ -283,23 +280,17 @@ void SceneGame::gameStart(const float delay) {
 			UtilSound::getInstance()->playSE("sounds/se_get_01.wav");
 			continue;
 		}
-		// x TanuA
-		if (tanuA->containsPos(egg)) {
-			if (tanuA->getItemFlg()) continue;
-			tanuA->startCapture(true, false);
-			eggs.erase(itE);
-			DX_SAFE_DELETE(egg);
-			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
-			continue;
-		}
-		// x TanuB
-		if (tanuB->containsPos(egg)) {
-			if (tanuB->getItemFlg()) continue;
-			tanuB->startCapture(true, false);
-			eggs.erase(itE);
-			DX_SAFE_DELETE(egg);
-			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
-			continue;
+		// x Tanu
+		auto itT = tanus.end();
+		while (itT-- != tanus.begin()) {
+			auto tanu = static_cast<SpriteTanu *>(*itT);
+			if (tanu->containsPos(egg)) {
+				tanu->startCapture(true, false);
+				eggs.erase(itE);
+				DX_SAFE_DELETE(egg);
+				UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
+				break;
+			}
 		}
 	}
 
@@ -308,30 +299,29 @@ void SceneGame::gameStart(const float delay) {
 	while (itH-- != chicks.begin()) {
 		auto chick = static_cast<SpriteChick *>(*itH);
 		chick->update(delay);
-		// x TanuA
-		if (tanuA->containsPos(chick)) {
-			if (tanuA->getItemFlg()) continue;
-			tanuA->startCapture(false, true);
-			this->purgeChick();// Purge
-			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
-			continue;
+		// Tanu
+		auto itT = tanus.end();
+		while (itT-- != tanus.begin()) {
+			auto tanu = static_cast<SpriteTanu *>(*itT);
+			if (tanu->containsPos(chick)) {
+				tanu->startCapture(false, true);
+				this->purgeChick();// Purge
+				UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
+				break;
+			}
 		}
-		// x TanuB
-		if (tanuB->containsPos(chick)) {
-			if (tanuB->getItemFlg()) continue;
-			tanuB->startCapture(false, true);
-			this->purgeChick();// Purge
-			UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
-			continue;
-		}
+	}
+
+	// Tanu
+	auto itT = tanus.end();
+	while (itT-- != tanus.begin()) {
+		auto tanu = static_cast<SpriteTanu *>(*itT);
+		tanu->update(delay);
 	}
 
 	// Osho, Chicken, Tanu
 	osho->update(delay);
 	chicken->update(delay);
-
-	tanuA->update(delay);
-	tanuB->update(delay);
 
 	// Player
 	player->update(delay);
@@ -391,15 +381,14 @@ void SceneGame::gameStart(const float delay) {
 
 void SceneGame::gameFinish(const float delay) {
 
-	// Eggs, Chicks
+	// Tanus, Eggs, Chicks
+	for (auto tanu : tanus) tanu->update(delay);
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Osho, Chicken, Tanu, Player
+	// Osho, Chicken, Player
 	osho->update(delay);
 	chicken->update(delay);
-	tanuA->update(delay);
-	tanuB->update(delay);
 	player->update(delay);
 
 	// Wait
