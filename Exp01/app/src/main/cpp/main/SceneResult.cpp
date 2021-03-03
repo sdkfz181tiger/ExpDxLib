@@ -49,10 +49,9 @@ bool SceneResult::init() {
 	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
-	sBar->offsetAdHeight();
 
 	// RankingView
-	rView = RankingView::createRanking(cX, cY - gSize * 14, gSize, gSize * 5);
+	rView = RankingView::createRanking(cX, cY - gSize * 14, gSize, gSize * 3);
 
 	// Title, Retry
 	BtnBase *btnTitle = BtnBase::createBtn("images/box_38x22.png",

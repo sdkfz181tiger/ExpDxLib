@@ -29,7 +29,6 @@ bool MazeManager::init(int fS, int wS) {
 	floorSize = fS;
 	wallSize = wS;
 	this->loadMaze();// Load
-	this->createMaze();// Maze
 	return true;
 }
 
@@ -77,9 +76,13 @@ void MazeManager::loadMaze() {
 		board.push_back(line);
 		oY += h;
 	}
+
+	// Randomize or not
+	const bool randomize = maze["randomize"].get<bool>();
+	if (randomize) this->randomizeMaze();
 }
 
-void MazeManager::createMaze() {
+void MazeManager::randomizeMaze() {
 	// Pillars
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {
@@ -163,7 +166,7 @@ void MazeManager::update(const float delay) {
 	}
 }
 
-bool MazeManager::isSameRCByPos(const Vec2 &posA, const Vec2 &posB) {
+bool MazeManager::isSameRCByPos(Vec2 &posA, Vec2 &posB) {
 	const int aR = this->getRByY(posA.y);
 	const int aC = this->getCByX(posA.x);
 	const int bR = this->getRByY(posB.y);

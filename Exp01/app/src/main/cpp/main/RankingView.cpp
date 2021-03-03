@@ -56,8 +56,8 @@ void RankingView::sortRanking() {
 			objA.swap(objB);// Swap
 		}
 	}
-	// Top 3
-	if (3 < ranking.size()) ranking.erase(ranking.begin() + 3, ranking.end());
+	// Top 5
+	if (5 < ranking.size()) ranking.erase(ranking.begin() + 5, ranking.end());
 	// Number
 	rankinFlg = false;// Rankin or not
 	for (int i = 0; i < ranking.size(); i++) {
@@ -69,7 +69,7 @@ void RankingView::sortRanking() {
 			rank["rankin"] = false;
 		}
 		rank["num"] = i + 1;
-		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY * (i + 4),
+		lines.push_back(RankingLine::createLine(pos.x, pos.y + padY / 2 + padY * (i + 6),
 												padX, (ranking.size() - i) * 5,
 												rank));
 	}
@@ -130,7 +130,7 @@ void RankingView::stepBonus(const float delay) {
 		if (bonus < cols) {
 			startX = pos.x - padH / 2 * (bonus - 1);
 		}
-		const int startY = pos.y + padV * 2;
+		const int startY = pos.y + padV * 3;
 		const int x = startX + padH * c;
 		const int y = startY + padV * r;
 		auto chick = SpriteChick::createSprite("images/c_chick.png", x, y);
@@ -167,7 +167,7 @@ void RankingView::stepRanking(const float delay) {
 	// Ranking
 	char str[20];
 	sprintf(str, "= TOP %lu =", lines.size());
-	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y + padY * 3, 3,
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y + padY * 5, 3,
 									  UtilAlign::CENTER);
 
 	// Line
@@ -221,7 +221,7 @@ void RankingView::startRankinEffect() {
 
 void RankingView::update(const float delay) {
 
-	UtilLabel::getInstance()->drawStr("SCORE", pos.x, pos.y - padY * 1, 3,
+	UtilLabel::getInstance()->drawStr("SCORE", pos.x, pos.y - padY * 2, 3,
 									  UtilAlign::CENTER);
 
 	// Score

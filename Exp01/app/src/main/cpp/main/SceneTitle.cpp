@@ -48,7 +48,6 @@ bool SceneTitle::init() {
 	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
-	sBar->offsetAdHeight();
 
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);

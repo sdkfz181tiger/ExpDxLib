@@ -69,9 +69,14 @@ void SpriteMaze::startFollowPos(int x, int y) {
 		const Vec2 &last3 = ways.at(ways.size() - 3);
 		bool flgX = signbit(last1.x - pos.x) != signbit(last3.x - pos.x);
 		bool flgY = signbit(last1.y - pos.y) != signbit(last3.y - pos.y);
-		if (flgX || flgY) {
+		if (flgX && flgY) {
+			// Do nothing
+		} else if (flgX && !flgY) {
 			ways.pop_back();
+		} else if (!flgX && flgY) {
 			ways.pop_back();
+		} else {
+			// Do nothing
 		}
 	}
 	// State

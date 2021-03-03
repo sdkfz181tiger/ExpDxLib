@@ -52,7 +52,7 @@ public:
 
 	void loadMaze();
 
-	void createMaze();
+	void randomizeMaze();
 
 	void extendPath(MazeGrid &pillar, vector<MazeGrid> &path);
 
@@ -76,7 +76,7 @@ public:
 
 	int getCByX(int x);
 
-	bool isSameRCByPos(const Vec2 &posA, const Vec2 &posB);
+	bool isSameRCByPos(Vec2 &posA, Vec2 &posB);
 
 	Vec2 &getPosByRC(int r, int c);
 

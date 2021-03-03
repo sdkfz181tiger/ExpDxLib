@@ -45,7 +45,7 @@ bool SceneGame::init() {
 										  cX, cY - gSize * 32);
 
 	// MazeManager
-	mManager = MazeManager::createBoard(cX, cY, gSize * 4, gSize / 2);
+	mManager = MazeManager::createBoard(cX, cY, gSize * 3, gSize / 2);
 
 	// Quit, Sound
 	BtnBase *btnQuit = BtnBase::createBtn("images/c_quit.png",
@@ -61,7 +61,6 @@ bool SceneGame::init() {
 	sBar = StatusBar::create(0, 0, dWidth, gSize * 4);
 	sBar->pushBtnBase(btnQuit);
 	sBar->pushBtnBase(btnSound);
-	sBar->offsetAdHeight();
 	sBar->resetScore();// Reset score
 	sBar->resetBonus();// Reset bonus
 
@@ -224,12 +223,7 @@ void SceneGame::gameReady(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	// Eggs, Chicks
-	for (auto egg : eggs) egg->update(delay);
-	for (auto chick : chicks) chick->update(delay);
-
-	// Osho, Player
-	osho->update(delay);
+	// Player
 	player->update(delay);
 
 	// Wait
@@ -304,22 +298,20 @@ void SceneGame::gameStart(const float delay) {
 		while (itT-- != tanus.begin()) {
 			auto tanu = static_cast<SpriteTanu *>(*itT);
 			if (tanu->containsPos(chick)) {
+				if (tanu->getItemFlg()) continue;
 				tanu->startCapture(false, true);
 				this->purgeChick();// Purge
 				UtilSound::getInstance()->playSE("sounds/se_grab_01.wav");
-				break;
+				goto OUTER_LOOP;
 			}
 		}
 	}
+	OUTER_LOOP:
 
-	// Tanu
-	auto itT = tanus.end();
-	while (itT-- != tanus.begin()) {
-		auto tanu = static_cast<SpriteTanu *>(*itT);
-		tanu->update(delay);
-	}
+	// Tanus
+	for (auto tanu : tanus) tanu->update(delay);
 
-	// Osho, Chicken, Tanu
+	// Osho, Chicken
 	osho->update(delay);
 	chicken->update(delay);
 

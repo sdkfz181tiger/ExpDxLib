@@ -46,11 +46,11 @@ void StatusBar::pushBtnBase(BtnBase *btn) {
 }
 
 void StatusBar::offsetAdHeight() {
-	// AdMob
+	// Banner size of AdMob
 	const int adHeight = UtilJNI::getInstance()->getAdHeight();
 	const int sHeight = UtilJNI::getInstance()->getScreenHeight();
 	const int dHeight = UtilDx::getInstance()->getDispHeight();
-	offsetY = dHeight * adHeight / sHeight;
+	// offsetY = dHeight * adHeight / sHeight;// If you needed...
 	if (offsetY <= 0) return;
 	for (auto btn : btns) btn->offsetPos(0, offsetY);
 }

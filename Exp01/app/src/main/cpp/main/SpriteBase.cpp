@@ -43,8 +43,8 @@ void SpriteBase::setPosY(float y) {
 }
 
 void SpriteBase::setScale(int scl) {
-	width *= scl;
-	height *= scl;
+	width = (width / scale) * scl;
+	height = (height / scale) * scl;
 	scale = scl;
 }
 

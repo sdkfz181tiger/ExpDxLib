@@ -204,7 +204,7 @@ public class MainActivity extends NativeActivity {
 				pWindow.setContentView(mBanner);
 				pWindow.setWidth(mBanner.getAdSize().getWidthInPixels(activity));
 				pWindow.setHeight(mBanner.getAdSize().getHeightInPixels(activity));
-				pWindow.showAtLocation(fLayout, Gravity.TOP, 0, 0);// Show
+				pWindow.showAtLocation(fLayout, Gravity.BOTTOM, 0, 0);// Show
 				pWindow.update();// Update
 				adHeight = mBanner.getAdSize().getHeightInPixels(activity);// Height
 			}
