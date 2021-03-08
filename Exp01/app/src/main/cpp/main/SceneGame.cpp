@@ -71,15 +71,17 @@ bool SceneGame::init() {
 
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
-	player->setPos(mManager->getRdmPos());
+	player->setScale(2);
 
 	// Osho
 	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
 	osho->setMazeManager(mManager);
+	osho->setScale(2);
 	osho->setPos(mManager->getRdmPos());
 
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
+	chicken->setScale(2);
 	chicken->setPos(mManager->getRdmPos());
 
 	// Next
@@ -88,10 +90,11 @@ bool SceneGame::init() {
 	chicken->setEggListener(this);
 
 	// Tanu
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 		tanu->setMazeManager(mManager);
 		tanu->setLeader(player);
+		tanu->setScale(2);
 		tanu->setPos(mManager->getRdmPos());
 		tanus.push_back(tanu);
 	}
@@ -246,21 +249,6 @@ void SceneGame::gameStart(const float delay) {
 	const float cX = dWidth * 0.5f;
 	const float cY = dHeight * 0.5f;
 
-	// Player x Osho
-	if (player->containsPos(osho)) {
-		updateMode = FINISH;// Next
-		// Player, Dpad
-		player->startDead();
-		dPad->hide();
-		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
-		hoppers.push_back(hopper);
-		// BGM
-		UtilSound::getInstance()->stopBGM();
-		UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
-										  false, true);
-	}
-
 	// Eggs x Player or Tanu
 	auto itE = eggs.end();
 	while (itE-- != eggs.begin()) {
@@ -288,12 +276,12 @@ void SceneGame::gameStart(const float delay) {
 		}
 	}
 
-	// Chicks x Tanu
+	// Chicks x Tanus
 	auto itH = chicks.end();
 	while (itH-- != chicks.begin()) {
 		auto chick = static_cast<SpriteChick *>(*itH);
 		chick->update(delay);
-		// Tanu
+		// Tanus
 		auto itT = tanus.end();
 		while (itT-- != tanus.begin()) {
 			auto tanu = static_cast<SpriteTanu *>(*itT);
@@ -308,8 +296,26 @@ void SceneGame::gameStart(const float delay) {
 	}
 	OUTER_LOOP:
 
-	// Tanus
-	for (auto tanu : tanus) tanu->update(delay);
+	// Tanus x Player
+	auto itT = tanus.end();
+	while (itT-- != tanus.begin()) {
+		auto tanu = static_cast<SpriteTanu *>(*itT);
+		tanu->update(delay);
+		// x Player
+		if (player->containsPos(tanu)) {
+			updateMode = FINISH;// Next
+			// Player, Dpad
+			player->startDead();
+			dPad->hide();
+			// Hopper
+			MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
+			hoppers.push_back(hopper);
+			// BGM
+			UtilSound::getInstance()->stopBGM();
+			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
+											  false, true);
+		}
+	}
 
 	// Osho, Chicken
 	osho->update(delay);

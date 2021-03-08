@@ -153,7 +153,7 @@ bool MazeManager::checkPathOwn(MazeGrid &pillar, vector<MazeGrid> &path, int oR,
 
 void MazeManager::update(const float delay) {
 
-	DrawBox(min.x, min.y, max.x, max.y, cGreen, true);
+	DrawBox(min.x, min.y, max.x, max.y, cBlack, true);
 
 	for (int r = 0; r < gRows; r++) {
 		for (int c = 0; c < gCols; c++) {

@@ -23,16 +23,14 @@ int android_main(void) {
 		SetDrawScreen(DX_SCREEN_BACK);
 
 		int now = GetNowCount();
-
 		gameManager->touchInput();// Touch
 		gameManager->update(delay);// Update
-
 		int passed = GetNowCount() - now;
+
 		if (wait < passed) {
 			delay = float(passed) * 0.001f;
-			WaitTimer(wait);
 		} else {
-			delay = float(wait - passed) * 0.001f;
+			delay = float(wait) * 0.001f;
 			WaitTimer(wait - passed);
 		}
 		ScreenFlip();// Flip
