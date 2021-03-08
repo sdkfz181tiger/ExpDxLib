@@ -81,7 +81,7 @@ void SpriteChara::startIdle() {
 	this->changeState(StateChara::IDLE);
 }
 
-void SpriteChara::startWalk(int spd, int x, int y, bool flg) {
+void SpriteChara::startWalkDst(int spd, int x, int y, bool flg) {
 	// Move
 	this->move(spd, UtilMath::getInstance()->calcDeg2D(pos, Vec2(x, y)));
 	walkDst.x = x;
@@ -92,7 +92,7 @@ void SpriteChara::startWalk(int spd, int x, int y, bool flg) {
 	this->changeState(StateChara::WALK);
 }
 
-void SpriteChara::startWalk(int spd, int deg, bool flg) {
+void SpriteChara::startWalkDir(int spd, int deg, bool flg) {
 	// Move
 	this->move(spd, deg);
 	walkDst.x = pos.x;

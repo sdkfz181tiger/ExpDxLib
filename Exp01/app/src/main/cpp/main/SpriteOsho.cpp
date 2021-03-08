@@ -61,7 +61,7 @@ void SpriteOsho::update(float delay) {
 		if (0 < ways.size()) {
 			int gSize = UtilDebug::getInstance()->getGridSize();
 			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			this->startWalkDst(gSize * 5, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
@@ -72,7 +72,7 @@ void SpriteOsho::update(float delay) {
 		if (0 < ways.size()) {
 			int gSize = UtilDebug::getInstance()->getGridSize();
 			Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(gSize * 5, pos.x, pos.y, false);
+			this->startWalkDst(gSize * 5, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();

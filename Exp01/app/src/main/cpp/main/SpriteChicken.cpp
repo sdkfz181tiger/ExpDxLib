@@ -73,7 +73,7 @@ void SpriteChicken::update(float delay) {
 		} else {
 			// Next
 			int gSize = UtilDebug::getInstance()->getGridSize();
-			this->startWalk(gSize * 20, next.x, next.y, false);
+			this->startWalkDst(gSize * 20, next.x, next.y, false);
 		}
 	}
 	// Lay
@@ -85,7 +85,7 @@ void SpriteChicken::update(float delay) {
 			if (eggListener) eggListener->onEggLayed(pos.x, pos.y);
 			// Nest
 			int gSize = UtilDebug::getInstance()->getGridSize();
-			this->startWalk(gSize * 20, nest.x, nest.y, false);
+			this->startWalkDst(gSize * 20, nest.x, nest.y, false);
 		}
 	}
 	// Draw, State

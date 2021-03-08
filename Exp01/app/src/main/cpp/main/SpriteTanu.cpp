@@ -100,7 +100,7 @@ void SpriteTanu::update(float delay) {
 			int maxY = UtilDx::getInstance()->getDispHeight() - gSize * 10;
 			int x = UtilMath::getInstance()->getRandom(minX, maxX);
 			int y = UtilMath::getInstance()->getRandom(minY, maxY);
-			this->startWalk(gSize * 5, x, y, false);
+			this->startWalkDst(gSize * 5, x, y, false);
 		}
 	}
 	// Captured
@@ -140,9 +140,9 @@ void SpriteTanu::update(float delay) {
 	if (state == StateTanu::FOLLOWWAY) {
 		if (0 < ways.size()) {
 			const int gSize = UtilDebug::getInstance()->getGridSize();
-			const int spd = (getItemFlg()) ? gSize * 30 : gSize * 10;
+			const int spd = (getItemFlg()) ? gSize * 20 : gSize * 8;
 			const Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(spd, pos.x, pos.y, false);
+			this->startWalkDst(spd, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();
@@ -152,9 +152,9 @@ void SpriteTanu::update(float delay) {
 	if (state == StateTanu::FOLLOWNEXT) {
 		if (0 < ways.size()) {
 			const int gSize = UtilDebug::getInstance()->getGridSize();
-			const int spd = (getItemFlg()) ? gSize * 30 : gSize * 10;
+			const int spd = (getItemFlg()) ? gSize * 20 : gSize * 8;
 			const Vec2 &pos = ways.at(ways.size() - 1);
-			this->startWalk(spd, pos.x, pos.y, false);
+			this->startWalkDst(spd, pos.x, pos.y, false);
 			ways.pop_back();
 		} else {
 			this->startStay();

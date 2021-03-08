@@ -20,6 +20,7 @@
 #include "SpriteMaze.h"
 #include "SpriteOsho.h"
 #include "SpriteTanu.h"
+#include "SpriteUsa.h"
 #include "TimerCpp.h"
 
 // SceneTag

@@ -55,6 +55,7 @@ add_library( # Sets the name of the library.
         main/SpriteMaze.cpp
         main/SpriteOsho.cpp
         main/SpriteTanu.cpp
+        main/SpriteUsa.cpp
         main/StatusBar.cpp
         main/TimerCpp.cpp
         utility/Utility.h

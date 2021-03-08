@@ -12,7 +12,7 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), mManager(nullptr),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), osho(nullptr),
-												chicken(nullptr),
+												chicken(nullptr), usa(nullptr),
 												updateMode(READY),
 												waitCnt(0), waitInterval(150) {
 	LOGD("Main", "SceneGame()\n");
@@ -27,6 +27,7 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
+	DX_SAFE_DELETE(usa);
 	DX_SAFE_DELETE_VECTOR(tanus);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
@@ -83,11 +84,16 @@ bool SceneGame::init() {
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
 	chicken->setScale(2);
 	chicken->setPos(mManager->getRdmPos());
-
-	// Next
-	Vec2 &next = mManager->getRdmPos();
+	Vec2 &next = mManager->getRdmPos();// Next
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
+
+	// Usa
+	usa = SpriteUsa::createSprite("images/c_tanu.png", cX, cY);
+	usa->setMazeManager(mManager);
+	usa->setLeader(player);
+	usa->setScale(2);
+	usa->setPos(mManager->getRdmPos());
 
 	// Tanu
 	for (int i = 0; i < 4; i++) {
@@ -191,11 +197,6 @@ void SceneGame::onBtnReleased(BtnTag &tag) {
 void SceneGame::onDpadPressed(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadPressed():%d", tag);
 	if (player->isDead()) return;
-	int spd = UtilDebug::getInstance()->getGridSize() * 5;
-	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
-	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
-	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
-	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
 }
 
 void SceneGame::onDpadCanceled(DpadTag &tag) {
@@ -214,11 +215,11 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (player->isDead()) return;
 	player->startStay();
-	const int spd = UtilDebug::getInstance()->getGridSize() * 20;
-	if (tag == DpadTag::LEFT) player->startWalk(spd, 180, true);
-	if (tag == DpadTag::RIGHT) player->startWalk(spd, 0, true);
-	if (tag == DpadTag::UP) player->startWalk(spd, 270, true);
-	if (tag == DpadTag::DOWN) player->startWalk(spd, 90, true);
+	const int spd = UtilDebug::getInstance()->getGridSize() * 10;
+	if (tag == DpadTag::LEFT) player->startWalkDir(spd, 180, true);
+	if (tag == DpadTag::RIGHT) player->startWalkDir(spd, 0, true);
+	if (tag == DpadTag::UP) player->startWalkDir(spd, 270, true);
+	if (tag == DpadTag::DOWN) player->startWalkDir(spd, 90, true);
 }
 
 void SceneGame::gameReady(const float delay) {
@@ -302,24 +303,25 @@ void SceneGame::gameStart(const float delay) {
 		auto tanu = static_cast<SpriteTanu *>(*itT);
 		tanu->update(delay);
 		// x Player
-		if (player->containsPos(tanu)) {
-			updateMode = FINISH;// Next
-			// Player, Dpad
-			player->startDead();
-			dPad->hide();
-			// Hopper
-			MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
-			hoppers.push_back(hopper);
-			// BGM
-			UtilSound::getInstance()->stopBGM();
-			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
-											  false, true);
-		}
+//		if (player->containsPos(tanu)) {
+//			updateMode = FINISH;// Next
+//			// Player, Dpad
+//			player->startDead();
+//			dPad->hide();
+//			// Hopper
+//			MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
+//			hoppers.push_back(hopper);
+//			// BGM
+//			UtilSound::getInstance()->stopBGM();
+//			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
+//											  false, true);
+//		}
 	}
 
-	// Osho, Chicken
+	// Osho, Chicken, Usa
 	osho->update(delay);
 	chicken->update(delay);
+	usa->update(delay);
 
 	// Player
 	player->update(delay);
@@ -342,7 +344,10 @@ void SceneGame::gameStart(const float delay) {
 	if (player->getVX() < 0) {
 		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c - 1);
 		if (gridT.type != MazeType::FLOOR) {
-			if (player->getPosX() < grid.pos.x) player->setPosX(grid.pos.x);
+			if (player->getPosX() < grid.pos.x) {
+				player->setPosX(grid.pos.x);
+				player->startStay();
+			}
 		} else {
 			player->setPosY(grid.pos.y);
 		}
@@ -351,7 +356,10 @@ void SceneGame::gameStart(const float delay) {
 	if (0 < player->getVX()) {
 		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c + 1);
 		if (gridT.type != MazeType::FLOOR) {
-			if (grid.pos.x < player->getPosX()) player->setPosX(grid.pos.x);
+			if (grid.pos.x < player->getPosX()) {
+				player->setPosX(grid.pos.x);
+				player->startStay();
+			}
 		} else {
 			player->setPosY(grid.pos.y);
 		}
@@ -360,7 +368,10 @@ void SceneGame::gameStart(const float delay) {
 	if (player->getVY() < 0) {
 		const MazeGrid &gridT = mManager->getGridByRC(grid.r - 1, grid.c);
 		if (gridT.type != MazeType::FLOOR) {
-			if (player->getPosY() < grid.pos.y) player->setPosY(grid.pos.y);
+			if (player->getPosY() < grid.pos.y) {
+				player->setPosY(grid.pos.y);
+				player->startStay();
+			}
 		} else {
 			player->setPosX(grid.pos.x);
 		}
@@ -369,7 +380,10 @@ void SceneGame::gameStart(const float delay) {
 	if (0 < player->getVY()) {
 		const MazeGrid &gridT = mManager->getGridByRC(grid.r + 1, grid.c);
 		if (gridT.type != MazeType::FLOOR) {
-			if (grid.pos.y < player->getPosY()) player->setPosY(grid.pos.y);
+			if (grid.pos.y < player->getPosY()) {
+				player->setPosY(grid.pos.y);
+				player->startStay();
+			}
 		} else {
 			player->setPosX(grid.pos.x);
 		}
@@ -384,9 +398,12 @@ void SceneGame::gameFinish(const float delay) {
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Osho, Chicken, Player
+	// Osho, Chicken, Usa
 	osho->update(delay);
 	chicken->update(delay);
+	usa->update(delay);
+
+	// Player
 	player->update(delay);
 
 	// Wait
