@@ -54,7 +54,11 @@ void SpriteUsa::update(float delay) {
 			if (!walkFlg) {
 				walkLen -= this->getSpeed() * delay;
 				if (walkLen <= 0.0f) {
-					this->startStay();
+					if (0 < ways.size()) {
+						this->startFollowNext();
+					} else {
+						this->startStay();
+					}
 				}
 			}
 		}
@@ -73,6 +77,30 @@ void SpriteUsa::update(float delay) {
 			int x = UtilMath::getInstance()->getRandom(minX, maxX);
 			int y = UtilMath::getInstance()->getRandom(minY, maxY);
 			this->startWalkDst(gSize * 5, x, y, false);
+		}
+	}
+	// Followway
+	if (state == StateUsa::FOLLOWWAY) {
+		if (0 < ways.size()) {
+			const int gSize = UtilDebug::getInstance()->getGridSize();
+			const int spd = gSize * 8;
+			const Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalkDst(spd, pos.x, pos.y, false);
+			ways.pop_back();
+		} else {
+			this->startStay();
+		}
+	}
+	// Follownext
+	if (state == StateUsa::FOLLOWNEXT) {
+		if (0 < ways.size()) {
+			const int gSize = UtilDebug::getInstance()->getGridSize();
+			const int spd = gSize * 8;
+			const Vec2 &pos = ways.at(ways.size() - 1);
+			this->startWalkDst(spd, pos.x, pos.y, false);
+			ways.pop_back();
+		} else {
+			this->startStay();
 		}
 	}
 

@@ -84,7 +84,7 @@ bool SceneGame::init() {
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
 	chicken->setScale(2);
 	chicken->setPos(mManager->getRdmPos());
-	Vec2 &next = mManager->getRdmPos();// Next
+	const Vec2 &next = mManager->getRdmPos();// Next
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
 
@@ -96,7 +96,7 @@ bool SceneGame::init() {
 	usa->setPos(mManager->getRdmPos());
 
 	// Tanu
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 0; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 		tanu->setMazeManager(mManager);
 		tanu->setLeader(player);
@@ -123,6 +123,8 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
+	// Test
+	usa->startFollowRdm();
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
