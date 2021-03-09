@@ -25,6 +25,14 @@ public:
 	void update(const float delay) override;
 
 	void changeState(int sta) override;
+
+	void flickL();
+
+	void flickR();
+
+	void flickU();
+
+	void flickD();
 };
 
 #endif // _SPRITEUSA_H_

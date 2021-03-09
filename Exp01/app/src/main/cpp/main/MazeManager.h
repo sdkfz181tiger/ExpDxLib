@@ -98,13 +98,21 @@ public:
 	void insertRout(unordered_map<int, MazeNode> &nodes,
 					int cR, int cC, int oR, int oC, int cost);
 
-	int getEyesightL(int x, int y, int cols);
+	int getWallLX(int x, int y, int cols);
 
-	int getEyesightR(int x, int y, int cols);
+	int getWallRX(int x, int y, int cols);
 
-	int getEyesightU(int x, int y, int rows);
+	int getWallUY(int x, int y, int rows);
 
-	int getEyesightD(int x, int y, int rows);
+	int getWallDY(int x, int y, int rows);
+
+	MazeGrid &getWallLG(int x, int y, int cols);
+
+	MazeGrid &getWallRG(int x, int y, int cols);
+
+	MazeGrid &getWallUG(int x, int y, int rows);
+
+	MazeGrid &getWallDG(int x, int y, int rows);
 };
 
 #endif // _MAZEMANAGER_H_

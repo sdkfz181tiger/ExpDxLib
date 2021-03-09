@@ -96,7 +96,7 @@ bool SceneGame::init() {
 	usa->setPos(mManager->getRdmPos());
 
 	// Tanu
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 10; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 		tanu->setMazeManager(mManager);
 		tanu->setLeader(player);
@@ -123,8 +123,6 @@ void SceneGame::setOnTouchBegan(int id, int x, int y) {
 	if (y < dHeight / 5) sBar->setOnTouchBegan(id, x, y);
 	if (dHeight / 5 < y) dPad->setOnTouchBegan(id, x, y);
 	for (auto btn : btns) btn->setOnTouchBegan(id, x, y);
-	// Test
-	usa->startFollowRdm();
 }
 
 void SceneGame::setOnTouchMoved(int id, int x, int y) {
@@ -218,10 +216,22 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	if (player->isDead()) return;
 	player->startStay();
 	const int spd = UtilDebug::getInstance()->getGridSize() * 10;
-	if (tag == DpadTag::LEFT) player->startWalkDir(spd, 180, true);
-	if (tag == DpadTag::RIGHT) player->startWalkDir(spd, 0, true);
-	if (tag == DpadTag::UP) player->startWalkDir(spd, 270, true);
-	if (tag == DpadTag::DOWN) player->startWalkDir(spd, 90, true);
+	if (tag == DpadTag::LEFT) {
+		player->startWalkDir(spd, 180, true);
+		usa->flickL();
+	}
+	if (tag == DpadTag::RIGHT) {
+		player->startWalkDir(spd, 0, true);
+		usa->flickR();
+	}
+	if (tag == DpadTag::UP) {
+		player->startWalkDir(spd, 270, true);
+		usa->flickU();
+	}
+	if (tag == DpadTag::DOWN) {
+		player->startWalkDir(spd, 90, true);
+		usa->flickD();
+	}
 }
 
 void SceneGame::gameReady(const float delay) {

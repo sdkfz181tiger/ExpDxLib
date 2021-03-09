@@ -348,58 +348,78 @@ void MazeManager::insertRout(unordered_map<int, MazeNode> &nodes,
 	nodes.insert(make_pair(key, node));
 }
 
-int MazeManager::getEyesightL(int x, int y, int cols) {
+int MazeManager::getWallLX(int x, int y, int cols) {
+	const MazeGrid &grid = this->getWallLG(x, y, cols);
+	return grid.minX;
+}
+
+int MazeManager::getWallRX(int x, int y, int cols) {
+	const MazeGrid &grid = this->getWallRG(x, y, cols);
+	return grid.maxX;
+}
+
+int MazeManager::getWallUY(int x, int y, int rows) {
+	const MazeGrid &grid = this->getWallUG(x, y, rows);
+	return grid.minY;
+}
+
+int MazeManager::getWallDY(int x, int y, int rows) {
+	const MazeGrid &grid = this->getWallDG(x, y, rows);
+	return grid.maxY;
+}
+
+MazeGrid &MazeManager::getWallLG(int x, int y, int cols) {
 	const MazeGrid &grid = this->getGridByPos(x, y);
-	int minX = grid.pos.x;
+	int minC = grid.c;
 	for (int i = 0; i < cols; i++) {
 		const int r = grid.r;
 		const int c = grid.c - i;
 		if (c < 0 || gCols <= c) break;
 		const MazeGrid &target = this->getGridByRC(r, c);
 		if (target.type != MazeType::FLOOR) break;
-		minX = target.minX;
+		minC = target.c;
 	}
-	return minX;
+	return this->getGridByRC(grid.r, minC);
 }
 
-int MazeManager::getEyesightR(int x, int y, int cols) {
+MazeGrid &MazeManager::getWallRG(int x, int y, int cols) {
 	const MazeGrid &grid = this->getGridByPos(x, y);
-	int maxX = grid.pos.x;
+	int maxC = grid.c;
 	for (int i = 0; i < cols; i++) {
 		const int r = grid.r;
 		const int c = grid.c + i;
 		if (c < 0 || gCols <= c) break;
 		const MazeGrid &target = this->getGridByRC(r, c);
 		if (target.type != MazeType::FLOOR) break;
-		maxX = target.maxX;
+		maxC = target.c;
 	}
-	return maxX;
+	return this->getGridByRC(grid.r, maxC);
 }
 
-int MazeManager::getEyesightU(int x, int y, int rows) {
+MazeGrid &MazeManager::getWallUG(int x, int y, int rows) {
 	const MazeGrid &grid = this->getGridByPos(x, y);
-	int minY = grid.pos.y;
+	int minR = grid.r;
 	for (int i = 0; i < rows; i++) {
 		const int r = grid.r - i;
 		const int c = grid.c;
 		if (r < 0 || gRows <= r) break;
 		const MazeGrid &target = this->getGridByRC(r, c);
 		if (target.type != MazeType::FLOOR) break;
-		minY = target.minY;
+		minR = target.r;
 	}
-	return minY;
+	return this->getGridByRC(minR, grid.c);
 }
 
-int MazeManager::getEyesightD(int x, int y, int rows) {
+MazeGrid &MazeManager::getWallDG(int x, int y, int rows) {
 	const MazeGrid &grid = this->getGridByPos(x, y);
-	int maxY = grid.pos.y;
+	int maxR = grid.r;
 	for (int i = 0; i < rows; i++) {
 		const int r = grid.r + i;
 		const int c = grid.c;
 		if (r < 0 || gRows <= r) break;
 		const MazeGrid &target = this->getGridByRC(r, c);
 		if (target.type != MazeType::FLOOR) break;
-		maxY = target.maxY;
+		maxR = target.r;
 	}
-	return maxY;
+	return this->getGridByRC(maxR, grid.c);
 }

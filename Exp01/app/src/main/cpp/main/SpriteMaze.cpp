@@ -101,10 +101,10 @@ bool SpriteMaze::searchLeaderInsight() {
 	// Leader
 	if (leader == nullptr) return false;
 	// Eyesight
-	const int left = mManager->getEyesightL(pos.x, pos.y, 30);
-	const int right = mManager->getEyesightR(pos.x, pos.y, 30);
-	const int up = mManager->getEyesightU(pos.x, pos.y, 30);
-	const int down = mManager->getEyesightD(pos.x, pos.y, 30);
+	const int left = mManager->getWallLX(pos.x, pos.y, 30);
+	const int right = mManager->getWallRX(pos.x, pos.y, 30);
+	const int up = mManager->getWallUY(pos.x, pos.y, 30);
+	const int down = mManager->getWallDY(pos.x, pos.y, 30);
 	if (leader->getPosX() < left) return false;
 	if (right < leader->getPosX()) return false;
 	if (minY < leader->getPosY() && leader->getPosY() < maxY) return true;

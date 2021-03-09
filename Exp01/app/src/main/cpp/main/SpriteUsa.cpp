@@ -153,3 +153,31 @@ void SpriteUsa::changeState(int sta) {
 		return;
 	}
 }
+
+void SpriteUsa::flickL() {
+	// MazeManager
+	if (mManager == nullptr) return;
+	const MazeGrid &grid = mManager->getWallLG(pos.x, pos.y, 50);
+	this->startFollowPos(grid.pos.x, grid.pos.y);
+}
+
+void SpriteUsa::flickR() {
+	// MazeManager
+	if (mManager == nullptr) return;
+	const MazeGrid &grid = mManager->getWallRG(pos.x, pos.y, 50);
+	this->startFollowPos(grid.pos.x, grid.pos.y);
+}
+
+void SpriteUsa::flickU() {
+	// MazeManager
+	if (mManager == nullptr) return;
+	const MazeGrid &grid = mManager->getWallUG(pos.x, pos.y, 50);
+	this->startFollowPos(grid.pos.x, grid.pos.y);
+}
+
+void SpriteUsa::flickD() {
+	// MazeManager
+	if (mManager == nullptr) return;
+	const MazeGrid &grid = mManager->getWallDG(pos.x, pos.y, 50);
+	this->startFollowPos(grid.pos.x, grid.pos.y);
+}
