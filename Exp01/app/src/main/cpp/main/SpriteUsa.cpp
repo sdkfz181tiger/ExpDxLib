@@ -9,7 +9,9 @@ SpriteUsa *SpriteUsa::createSprite(const string &fileName, float x, float y) {
 }
 
 SpriteUsa::SpriteUsa(float x, float y) : SpriteMaze(x, y),
-										 wanCnt(0), wanInterval(10) {
+										 wanCnt(0), wanInterval(10),
+										 stkNow(Stick::DEFAULT),
+										 stkNext(Stick::DEFAULT) {
 	LOGD("Main", "SpriteUsa()\n");
 }
 
@@ -29,13 +31,7 @@ void SpriteUsa::update(float delay) {
 		if (0 < stayCnt) {
 			stayCnt--;
 		} else {
-			if (this->searchLeaderInsight() &&
-				!this->checkLeaderOnSameRC() &&
-				!this->checkLeaderOnway()) {
-				this->startFollowLeader();
-			} else {
-				this->startIdle();
-			}
+			this->startIdle();
 		}
 	}
 	// Idle
@@ -59,6 +55,7 @@ void SpriteUsa::update(float delay) {
 					} else {
 						this->startStay();
 					}
+					if (stkNow != stkNext) this->checkStick();
 				}
 			}
 		}
@@ -104,10 +101,11 @@ void SpriteUsa::update(float delay) {
 		}
 	}
 
-	// Draw, State, Ways
+	// Draw, State, Ways, Stick
 	this->draw();
 	this->showState();
 	this->showWays();
+	this->showStick();
 }
 
 void SpriteUsa::changeState(int sta) {
@@ -157,27 +155,114 @@ void SpriteUsa::changeState(int sta) {
 void SpriteUsa::flickL() {
 	// MazeManager
 	if (mManager == nullptr) return;
-	const MazeGrid &grid = mManager->getWallLG(pos.x, pos.y, 50);
-	this->startFollowPos(grid.pos.x, grid.pos.y);
+	// Stick
+	if (stkNext == Stick::LEFT) return;
+	stkNext = Stick::LEFT;// Stick
+
+	const MazeGrid &grid = mManager->getGridByPos(pos.x, pos.y);
+	const MazeGrid &gridL = mManager->getWallLG(pos.x, pos.y, 30);
+	if (grid.c == gridL.c) return;
+	stkNow = stkNext;// Stick
+	this->startFollowPos(gridL.pos.x, gridL.pos.y);
 }
 
 void SpriteUsa::flickR() {
 	// MazeManager
 	if (mManager == nullptr) return;
-	const MazeGrid &grid = mManager->getWallRG(pos.x, pos.y, 50);
-	this->startFollowPos(grid.pos.x, grid.pos.y);
+	// Stick
+	if (stkNext == Stick::RIGHT) return;
+	stkNext = Stick::RIGHT;// Stick
+
+	const MazeGrid &grid = mManager->getGridByPos(pos.x, pos.y);
+	const MazeGrid &gridR = mManager->getWallRG(pos.x, pos.y, 30);
+	if (grid.c == gridR.c) return;
+	stkNow = stkNext;// Stick
+	this->startFollowPos(gridR.pos.x, gridR.pos.y);
 }
 
 void SpriteUsa::flickU() {
 	// MazeManager
 	if (mManager == nullptr) return;
-	const MazeGrid &grid = mManager->getWallUG(pos.x, pos.y, 50);
-	this->startFollowPos(grid.pos.x, grid.pos.y);
+	// Stick
+	if (stkNext == Stick::UP) return;
+	stkNext = Stick::UP;// Stick
+
+	const MazeGrid &grid = mManager->getGridByPos(pos.x, pos.y);
+	const MazeGrid &gridU = mManager->getWallUG(pos.x, pos.y, 30);
+	if (grid.r == gridU.r) return;
+	stkNow = stkNext;// Stick
+	this->startFollowPos(gridU.pos.x, gridU.pos.y);
 }
 
 void SpriteUsa::flickD() {
 	// MazeManager
 	if (mManager == nullptr) return;
-	const MazeGrid &grid = mManager->getWallDG(pos.x, pos.y, 50);
-	this->startFollowPos(grid.pos.x, grid.pos.y);
+	// Stick
+	if (stkNext == Stick::DOWN) return;
+	stkNext = Stick::DOWN;// Stick
+
+	const MazeGrid &grid = mManager->getGridByPos(pos.x, pos.y);
+	const MazeGrid &gridD = mManager->getWallDG(pos.x, pos.y, 30);
+	if (grid.r == gridD.r) return;
+	stkNow = stkNext;// Stick
+	this->startFollowPos(gridD.pos.x, gridD.pos.y);
+}
+
+void SpriteUsa::checkStick() {
+
+	const MazeGrid &grid = mManager->getGridByPos(pos.x, pos.y);
+
+	if (stkNext == Stick::DEFAULT) {
+		// Do nothing
+	} else if (stkNext == Stick::LEFT) {
+		const MazeGrid &gridL = mManager->getWallLG(pos.x, pos.y, 30);
+		if (grid.c != gridL.c) {
+			stkNow = stkNext;// Update stick
+			this->startFollowPos(gridL.pos.x, gridL.pos.y);
+		}
+	} else if (stkNext == Stick::RIGHT) {
+		const MazeGrid &gridR = mManager->getWallRG(pos.x, pos.y, 30);
+		if (grid.c != gridR.c) {
+			stkNow = stkNext;// Update stick
+			this->startFollowPos(gridR.pos.x, gridR.pos.y);
+		}
+	} else if (stkNext == Stick::UP) {
+		const MazeGrid &gridU = mManager->getWallUG(pos.x, pos.y, 30);
+		if (grid.r != gridU.r) {
+			stkNow = stkNext;// Update stick
+			this->startFollowPos(gridU.pos.x, gridU.pos.y);
+		}
+	} else if (stkNext == Stick::DOWN) {
+		const MazeGrid &gridD = mManager->getWallDG(pos.x, pos.y, 30);
+		if (grid.r != gridD.r) {
+			stkNow = stkNext;// Update stick
+			this->startFollowPos(gridD.pos.x, gridD.pos.y);
+		}
+	} else {
+		// Do nothing
+	}
+}
+
+void SpriteUsa::showStick() {
+
+	string str = "DEFAULT";
+	switch (stkNext) {
+		case Stick::LEFT:
+			str = "LEFT";
+			break;
+		case Stick::RIGHT:
+			str = "RIGHT";
+			break;
+		case Stick::UP:
+			str = "UP";
+			break;
+		case Stick::DOWN:
+			str = "DOWN";
+			break;
+		default:
+			// Do nothing
+			break;
+	}
+	UtilLabel::getInstance()->drawStr(str, pos.x, pos.y, 1,
+									  UtilAlign::CENTER);
 }

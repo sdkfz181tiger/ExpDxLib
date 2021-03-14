@@ -18,8 +18,8 @@ private:
 	StatusBar *sBar;
 	CtlDpad *dPad;
 	SpriteKobo *player;
-	SpriteOsho *osho;
 	SpriteChicken *chicken;
+	SpriteOsho *osho;
 	SpriteUsa *usa;
 	vector<SpriteTanu*> tanus;
 	vector<SpriteEgg *> eggs;

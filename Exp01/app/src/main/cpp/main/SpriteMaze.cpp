@@ -50,9 +50,15 @@ void SpriteMaze::startFollowLeader() {
 	if (mManager == nullptr) return;
 	// Leader
 	if (leader == nullptr) return;
-	// Leader
-	const Vec2 &pos = leader->getPos();
-	this->startFollowPos(pos.x, pos.y);
+	const Vec2 &dst = leader->getPos();
+	// Route
+	vector<Vec2> poses = mManager->detectRouteByPos(pos.x, pos.y, dst.x, dst.y);
+	// Ways
+	if (0 < ways.size()) ways.clear();
+	for (auto pos: poses) ways.push_back(pos);
+	if (2 < ways.size()) ways.pop_back();// Important
+	// State
+	this->changeState(StateMaze::FOLLOWWAY);
 }
 
 void SpriteMaze::startFollowPos(int x, int y) {
@@ -63,22 +69,6 @@ void SpriteMaze::startFollowPos(int x, int y) {
 	// Ways
 	if (0 < ways.size()) ways.clear();
 	for (auto pos: poses) ways.push_back(pos);
-	// Blocking backward
-	if (2 < ways.size()) {
-		const Vec2 &last1 = ways.at(ways.size() - 1);
-		const Vec2 &last3 = ways.at(ways.size() - 3);
-		bool flgX = signbit(last1.x - pos.x) != signbit(last3.x - pos.x);
-		bool flgY = signbit(last1.y - pos.y) != signbit(last3.y - pos.y);
-		if (flgX && flgY) {
-			// Do nothing
-		} else if (flgX && !flgY) {
-			ways.pop_back();
-		} else if (!flgX && flgY) {
-			ways.pop_back();
-		} else {
-			// Do nothing
-		}
-	}
 	// State
 	this->changeState(StateMaze::FOLLOWWAY);
 }

@@ -78,22 +78,22 @@ void CtlDpad::setOnTouchMoved(int id, int x, int y) {
 		this->calcDirection(x, y);// Calc
 		return;
 	}
-	this->setPosition(-width, -height);// Hide
+	//this->hide();// Hide
 	if (dpadListener) dpadListener->onDpadCanceled(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;
-	dpadTag = DpadTag::DEFAULT;
+	//dpadTag = DpadTag::DEFAULT;
 }
 
 void CtlDpad::setOnTouchEnded(int id, int x, int y) {
 	if (!dpadFlg) return;
 	if (dpadID != id) return;
 	if (!this->containsPoint(x, y)) return;
-	this->hide();// Hide
+	//this->hide();// Hide
 	if (dpadListener) dpadListener->onDpadReleased(dpadTag);
 	dpadFlg = false;
 	dpadID = -1;
-	dpadTag = DpadTag::DEFAULT;
+	//dpadTag = DpadTag::DEFAULT;
 }
 
 void CtlDpad::calcDirection(int x, int y) {

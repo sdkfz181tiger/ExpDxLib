@@ -11,8 +11,8 @@ SceneGame *SceneGame::createScene(int dWidth, int dHeight) {
 SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), mManager(nullptr),
 												dPad(nullptr), sBar(nullptr),
-												player(nullptr), osho(nullptr),
-												chicken(nullptr), usa(nullptr),
+												player(nullptr), chicken(nullptr),
+												osho(nullptr), usa(nullptr),
 												updateMode(READY),
 												waitCnt(0), waitInterval(150) {
 	LOGD("Main", "SceneGame()\n");
@@ -27,6 +27,7 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(dPad);
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
+	DX_SAFE_DELETE(osho);
 	DX_SAFE_DELETE(usa);
 	DX_SAFE_DELETE_VECTOR(tanus);
 	DX_SAFE_DELETE_VECTOR(btns);
@@ -73,12 +74,8 @@ bool SceneGame::init() {
 	// Player
 	player = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
 	player->setScale(2);
-
-	// Osho
-	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
-	osho->setMazeManager(mManager);
-	osho->setScale(2);
-	osho->setPos(mManager->getRdmPos());
+	player->setMazeManager(mManager);
+	player->setCtlDpad(dPad);
 
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
@@ -88,20 +85,25 @@ bool SceneGame::init() {
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
 
+	// Osho
+	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY+gSize*5);
+	osho->setScale(2);
+	osho->setPos(mManager->getRdmPos());
+	osho->setMazeManager(mManager);
+
 	// Usa
-	usa = SpriteUsa::createSprite("images/c_tanu.png", cX, cY);
+	usa = SpriteUsa::createSprite("images/c_tanu.png", cX, cY-gSize*4);
+	usa->setScale(2);
 	usa->setMazeManager(mManager);
 	usa->setLeader(player);
-	usa->setScale(2);
-	usa->setPos(mManager->getRdmPos());
 
 	// Tanu
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 0; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
-		tanu->setMazeManager(mManager);
-		tanu->setLeader(player);
 		tanu->setScale(2);
 		tanu->setPos(mManager->getRdmPos());
+		tanu->setMazeManager(mManager);
+		tanu->setLeader(player);
 		tanus.push_back(tanu);
 	}
 
@@ -202,34 +204,31 @@ void SceneGame::onDpadPressed(DpadTag &tag) {
 void SceneGame::onDpadCanceled(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadCanceled():%d", tag);
 	if (player->isDead()) return;
-	player->startStay();// Stay
 }
 
 void SceneGame::onDpadReleased(DpadTag &tag) {
 	//LOGD("Dpad", "onDpadReleased():%d", tag);
 	if (player->isDead()) return;
-	player->startStay();// Stay
 }
 
 void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (player->isDead()) return;
-	player->startStay();
 	const int spd = UtilDebug::getInstance()->getGridSize() * 10;
 	if (tag == DpadTag::LEFT) {
-		player->startWalkDir(spd, 180, true);
+		player->flickL(spd);
 		usa->flickL();
 	}
 	if (tag == DpadTag::RIGHT) {
-		player->startWalkDir(spd, 0, true);
+		player->flickR(spd);
 		usa->flickR();
 	}
 	if (tag == DpadTag::UP) {
-		player->startWalkDir(spd, 270, true);
+		player->flickU(spd);
 		usa->flickU();
 	}
 	if (tag == DpadTag::DOWN) {
-		player->startWalkDir(spd, 90, true);
+		player->flickD(spd);
 		usa->flickD();
 	}
 }
@@ -258,9 +257,6 @@ void SceneGame::gameReady(const float delay) {
 }
 
 void SceneGame::gameStart(const float delay) {
-
-	const float cX = dWidth * 0.5f;
-	const float cY = dHeight * 0.5f;
 
 	// Eggs x Player or Tanu
 	auto itE = eggs.end();
@@ -330,77 +326,11 @@ void SceneGame::gameStart(const float delay) {
 //		}
 	}
 
-	// Osho, Chicken, Usa
+	// Osho, Usa, Player, Chicken
 	osho->update(delay);
-	chicken->update(delay);
 	usa->update(delay);
-
-	// Player
 	player->update(delay);
-	if (!player->getMoveFlg()) return;
-
-	if (player->getMinX() < mManager->getMinX()) {
-		player->setPosX(mManager->getMinX() + player->getWidth() / 2);
-	}
-	if (mManager->getMaxX() < player->getMaxX()) {
-		player->setPosX(mManager->getMaxX() - player->getWidth() / 2);
-	}
-	if (player->getMinY() < mManager->getMinY()) {
-		player->setPosY(mManager->getMinY() + player->getHeight() / 2);
-	}
-	if (mManager->getMaxY() < player->getMaxY()) {
-		player->setPosY(mManager->getMaxY() - player->getHeight() / 2);
-	}
-
-	const MazeGrid &grid = mManager->getGridByPos(player->getPosX(), player->getPosY());
-	if (player->getVX() < 0) {
-		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c - 1);
-		if (gridT.type != MazeType::FLOOR) {
-			if (player->getPosX() < grid.pos.x) {
-				player->setPosX(grid.pos.x);
-				player->startStay();
-			}
-		} else {
-			player->setPosY(grid.pos.y);
-		}
-		return;
-	}
-	if (0 < player->getVX()) {
-		const MazeGrid &gridT = mManager->getGridByRC(grid.r, grid.c + 1);
-		if (gridT.type != MazeType::FLOOR) {
-			if (grid.pos.x < player->getPosX()) {
-				player->setPosX(grid.pos.x);
-				player->startStay();
-			}
-		} else {
-			player->setPosY(grid.pos.y);
-		}
-		return;
-	}
-	if (player->getVY() < 0) {
-		const MazeGrid &gridT = mManager->getGridByRC(grid.r - 1, grid.c);
-		if (gridT.type != MazeType::FLOOR) {
-			if (player->getPosY() < grid.pos.y) {
-				player->setPosY(grid.pos.y);
-				player->startStay();
-			}
-		} else {
-			player->setPosX(grid.pos.x);
-		}
-		return;
-	}
-	if (0 < player->getVY()) {
-		const MazeGrid &gridT = mManager->getGridByRC(grid.r + 1, grid.c);
-		if (gridT.type != MazeType::FLOOR) {
-			if (grid.pos.y < player->getPosY()) {
-				player->setPosY(grid.pos.y);
-				player->startStay();
-			}
-		} else {
-			player->setPosX(grid.pos.x);
-		}
-		return;
-	}
+	chicken->update(delay);
 }
 
 void SceneGame::gameFinish(const float delay) {
@@ -410,13 +340,11 @@ void SceneGame::gameFinish(const float delay) {
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Osho, Chicken, Usa
+	// Osho, Usa, Player, Chicken
 	osho->update(delay);
-	chicken->update(delay);
 	usa->update(delay);
-
-	// Player
 	player->update(delay);
+	chicken->update(delay);
 
 	// Wait
 	waitCnt++;
@@ -446,6 +374,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 		auto chick = SpriteChick::createSprite("images/c_chick.png",
 											   player->getPosX(),
 											   player->getPosY());
+		chick->setScale(2);
 		chick->setTarget(player);
 		chicks.push_back(chick);
 		num--;// Decrement
@@ -456,6 +385,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 		auto chick = SpriteChick::createSprite("images/c_chick.png",
 											   chicks.at(last)->getPosX(),
 											   chicks.at(last)->getPosY());
+		chick->setScale(2);
 		chick->setTarget(chicks.at(last));
 		chicks.push_back(chick);
 	}

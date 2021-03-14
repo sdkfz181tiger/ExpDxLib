@@ -8,10 +8,15 @@ public:
 	const static int WANDER = 101;
 };
 
+enum class Stick {
+	DEFAULT, LEFT, RIGHT, UP, DOWN
+};
+
 class SpriteUsa : public SpriteMaze {
 
 private:
 	int wanCnt, wanInterval;
+	Stick stkNow, stkNext;
 
 public:
 	static SpriteUsa *createSprite(const string &fileName, float x, float y);
@@ -33,6 +38,10 @@ public:
 	void flickU();
 
 	void flickD();
+
+	void checkStick();
+
+	void showStick();
 };
 
 #endif // _SPRITEUSA_H_
