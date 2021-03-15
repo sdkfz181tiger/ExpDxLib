@@ -76,6 +76,12 @@ public:
 
 	int getMaxY() const { return max.y; }
 
+	int getGRows() const { return gRows; }
+
+	int getGCols() const { return gCols; }
+
+	vector<vector<MazeGrid>> &getBoard() { return board; }
+
 	int getRByY(int y);
 
 	int getCByX(int x);

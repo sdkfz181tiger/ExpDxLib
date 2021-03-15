@@ -29,10 +29,11 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
 	DX_SAFE_DELETE(osho);
-	DX_SAFE_DELETE_VECTOR(tanus);
-	DX_SAFE_DELETE_VECTOR(btns);
+	DX_SAFE_DELETE_VECTOR(items);
 	DX_SAFE_DELETE_VECTOR(eggs);
 	DX_SAFE_DELETE_VECTOR(chicks);
+	DX_SAFE_DELETE_VECTOR(tanus);
+	DX_SAFE_DELETE_VECTOR(btns);
 }
 
 bool SceneGame::init() {
@@ -86,6 +87,20 @@ bool SceneGame::init() {
 	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY + gSize * 5);
 	osho->setPos(mManager->getRdmPos());
 	osho->setMazeManager(mManager);
+
+	// Item
+	const vector<vector<MazeGrid>> &board = mManager->getBoard();
+	const int gRows = mManager->getGRows();
+	const int gCols = mManager->getGCols();
+	for (int r = 0; r < gRows; r++) {
+		for (int c = 0; c < gCols; c++) {
+			const MazeGrid &grid = board[r][c];
+			if (grid.type != MazeType::FLOOR) continue;
+			SpriteItem *item = SpriteItem::createSprite("images/i_apple.png",
+														grid.pos.x, grid.pos.y);
+			items.push_back(item);
+		}
+	}
 
 	// Tanu
 	for (int i = 0; i < 5; i++) {
@@ -234,6 +249,13 @@ void SceneGame::gameReady(const float delay) {
 
 void SceneGame::gameStart(const float delay) {
 
+	// Item x Player
+	auto itI = items.end();
+	while (itI-- != items.begin()) {
+		auto item = static_cast<SpriteItem *>(*itI);
+		item->update(delay);
+	}
+
 	// Eggs x Player or Tanu
 	auto itE = eggs.end();
 	while (itE-- != eggs.begin()) {
@@ -312,10 +334,11 @@ void SceneGame::gameStart(const float delay) {
 
 void SceneGame::gameFinish(const float delay) {
 
-	// Tanus, Eggs, Chicks
-	for (auto tanu : tanus) tanu->update(delay);
+	// Items, Eggs, Chicks, Tanus
+	for (auto item : items) item->update(delay);
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
+	for (auto tanu : tanus) tanu->update(delay);
 
 	// Osho, Player, Chicken
 	osho->update(delay);

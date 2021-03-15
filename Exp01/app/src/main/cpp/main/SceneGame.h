@@ -21,9 +21,10 @@ private:
 	SpritePlayer *player;
 	SpriteChicken *chicken;
 	SpriteOsho *osho;
-	vector<SpriteTanu*> tanus;
+	vector<SpriteItem *> items;
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;
+	vector<SpriteTanu *> tanus;
 	vector<MsgHopper *> hoppers;
 
 public:
