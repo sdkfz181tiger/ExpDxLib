@@ -10,7 +10,7 @@ SpriteChick *SpriteChick::createSprite(const string &fileName, float x, float y)
 
 SpriteChick::SpriteChick(float x, float y) : SpriteChara(x, y),
 										   target(nullptr),
-										   footprints(6, Vec2(0, 0)) {
+										   footprints(12, Vec2(0, 0)) {
 	LOGD("Main", "SpriteChick()\n");
 }
 

@@ -9,8 +9,8 @@ SpriteChicken *SpriteChicken::createSprite(const string &fileName, float x, floa
 }
 
 SpriteChicken::SpriteChicken(float x, float y) : SpriteChara(x, y),
-												 goCnt(0), goInterval(20),
-												 layCnt(0), layInterval(40),
+												 goCnt(0), goInterval(16),
+												 layCnt(0), layInterval(32),
 												 next(Vec2(0, 0)),
 												 nest(Vec2(x, y)),
 												 eggCnt(0), eggTotal(1),

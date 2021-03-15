@@ -16,11 +16,10 @@
 #include "SpriteEgg.h"
 #include "SpriteFrames.h"
 #include "SpriteItem.h"
-#include "SpriteKobo.h"
 #include "SpriteMaze.h"
 #include "SpriteOsho.h"
+#include "SpritePlayer.h"
 #include "SpriteTanu.h"
-#include "SpriteUsa.h"
 #include "TimerCpp.h"
 
 // SceneTag

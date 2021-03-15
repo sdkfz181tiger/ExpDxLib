@@ -56,7 +56,7 @@ void SpriteMaze::startFollowLeader() {
 	// Ways
 	if (0 < ways.size()) ways.clear();
 	for (auto pos: poses) ways.push_back(pos);
-	if (2 < ways.size()) ways.pop_back();// Important
+	if (0 < ways.size()) ways.pop_back();// Important
 	// State
 	this->changeState(StateMaze::FOLLOWWAY);
 }

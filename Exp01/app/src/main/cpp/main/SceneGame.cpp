@@ -12,7 +12,7 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												background(nullptr), mManager(nullptr),
 												dPad(nullptr), sBar(nullptr),
 												player(nullptr), chicken(nullptr),
-												osho(nullptr), usa(nullptr),
+												osho(nullptr),
 												updateMode(READY),
 												waitCnt(0), waitInterval(150) {
 	LOGD("Main", "SceneGame()\n");
@@ -28,7 +28,6 @@ SceneGame::~SceneGame() {
 	DX_SAFE_DELETE(player);
 	DX_SAFE_DELETE(chicken);
 	DX_SAFE_DELETE(osho);
-	DX_SAFE_DELETE(usa);
 	DX_SAFE_DELETE_VECTOR(tanus);
 	DX_SAFE_DELETE_VECTOR(btns);
 	DX_SAFE_DELETE_VECTOR(eggs);
@@ -72,10 +71,9 @@ bool SceneGame::init() {
 	dPad->addDpadListener(this);
 
 	// Player
-	player = SpriteKobo::createSprite("images/c_kobo.png", cX, cY);
+	player = SpritePlayer::createSprite("images/c_kobo.png", cX, cY);
 	player->setScale(2);
 	player->setMazeManager(mManager);
-	player->setCtlDpad(dPad);
 
 	// Chicken
 	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
@@ -91,17 +89,11 @@ bool SceneGame::init() {
 	osho->setPos(mManager->getRdmPos());
 	osho->setMazeManager(mManager);
 
-	// Usa
-	usa = SpriteUsa::createSprite("images/c_tanu.png", cX, cY-gSize*4);
-	usa->setScale(2);
-	usa->setMazeManager(mManager);
-	usa->setLeader(player);
-
 	// Tanu
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 1; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
 		tanu->setScale(2);
-		tanu->setPos(mManager->getRdmPos());
+		//tanu->setPos(mManager->getRdmPos());
 		tanu->setMazeManager(mManager);
 		tanu->setLeader(player);
 		tanus.push_back(tanu);
@@ -215,22 +207,10 @@ void SceneGame::onDpadChanged(DpadTag &tag) {
 	//LOGD("Main", "onBtnReleased()");
 	if (player->isDead()) return;
 	const int spd = UtilDebug::getInstance()->getGridSize() * 10;
-	if (tag == DpadTag::LEFT) {
-		player->flickL(spd);
-		usa->flickL();
-	}
-	if (tag == DpadTag::RIGHT) {
-		player->flickR(spd);
-		usa->flickR();
-	}
-	if (tag == DpadTag::UP) {
-		player->flickU(spd);
-		usa->flickU();
-	}
-	if (tag == DpadTag::DOWN) {
-		player->flickD(spd);
-		usa->flickD();
-	}
+	if (tag == DpadTag::LEFT) player->flickL();
+	if (tag == DpadTag::RIGHT) player->flickR();
+	if (tag == DpadTag::UP) player->flickU();
+	if (tag == DpadTag::DOWN) player->flickD();
 }
 
 void SceneGame::gameReady(const float delay) {
@@ -310,25 +290,28 @@ void SceneGame::gameStart(const float delay) {
 	while (itT-- != tanus.begin()) {
 		auto tanu = static_cast<SpriteTanu *>(*itT);
 		tanu->update(delay);
+		/*
 		// x Player
-//		if (player->containsPos(tanu)) {
-//			updateMode = FINISH;// Next
-//			// Player, Dpad
-//			player->startDead();
-//			dPad->hide();
-//			// Hopper
-//			MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "FINISH!");
-//			hoppers.push_back(hopper);
-//			// BGM
-//			UtilSound::getInstance()->stopBGM();
-//			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
-//											  false, true);
-//		}
+		if (player->containsPos(tanu)) {
+			updateMode = FINISH;// Next
+			// Player, Dpad
+			player->startDead();
+			dPad->hide();
+			// Hopper
+			MsgHopper *hopper = MsgHopper::createStr(
+					dWidth * 0.5f, dHeight * 0.5f,
+					4, "GAME OVER!");
+			hoppers.push_back(hopper);
+			// BGM
+			UtilSound::getInstance()->stopBGM();
+			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
+											  false, true);
+		}
+		 */
 	}
 
-	// Osho, Usa, Player, Chicken
+	// Osho, Player, Chicken
 	osho->update(delay);
-	usa->update(delay);
 	player->update(delay);
 	chicken->update(delay);
 }
@@ -340,9 +323,8 @@ void SceneGame::gameFinish(const float delay) {
 	for (auto egg : eggs) egg->update(delay);
 	for (auto chick : chicks) chick->update(delay);
 
-	// Osho, Usa, Player, Chicken
+	// Osho, Player, Chicken
 	osho->update(delay);
-	usa->update(delay);
 	player->update(delay);
 	chicken->update(delay);
 

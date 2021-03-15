@@ -64,6 +64,10 @@ public:
 
 	void update(const float delay);
 
+	int getCX() const { return min.x + (max.x - min.x) / 2; }
+
+	int getCY() const { return min.y + (max.y - min.y) / 2; }
+
 	int getMinX() const { return min.x; }
 
 	int getMaxX() const { return max.x; }

@@ -17,10 +17,9 @@ private:
 	MazeManager *mManager;
 	StatusBar *sBar;
 	CtlDpad *dPad;
-	SpriteKobo *player;
+	SpritePlayer *player;
 	SpriteChicken *chicken;
 	SpriteOsho *osho;
-	SpriteUsa *usa;
 	vector<SpriteTanu*> tanus;
 	vector<SpriteEgg *> eggs;
 	vector<SpriteChick *> chicks;

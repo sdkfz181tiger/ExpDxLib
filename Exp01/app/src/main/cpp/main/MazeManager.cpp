@@ -159,9 +159,8 @@ void MazeManager::update(const float delay) {
 		for (int c = 0; c < gCols; c++) {
 			MazeGrid &MazeGrid = board[r][c];
 			if (MazeGrid.type == FLOOR) continue;
-			DrawBox(MazeGrid.minX, MazeGrid.minY,
-					MazeGrid.maxX, MazeGrid.maxY,
-					cWhite, true);
+			DrawBox(MazeGrid.minX, MazeGrid.minY, MazeGrid.maxX, MazeGrid.maxY,
+					cBlue, true);
 		}
 	}
 }
@@ -289,6 +288,7 @@ vector<Vec2> MazeManager::detectRouteByRC(int sR, int sC, int gR, int gC) {
 		routes.emplace_back(kPair->second.x, kPair->second.y);
 	}
 	routes.push_back(pStart);// Start
+
 	return routes;
 }
 

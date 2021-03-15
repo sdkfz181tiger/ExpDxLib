@@ -116,8 +116,7 @@ void SpriteTanu::update(float delay) {
 		if (0 < escCnt) {
 			escCnt--;
 		} else {
-			// Next
-			this->startFollowRdm();
+			this->startFollowPos(mManager->getCX(), mManager->getCY());
 		}
 	}
 	// Release
