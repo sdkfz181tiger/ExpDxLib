@@ -14,17 +14,17 @@ private:
 	string msg;
 
 public:
-	static MsgHopper *createNum(float x, float y, int s, int n);
+	static MsgHopper *createNum(float x, float y, int s, int i, int n);
 
-	static MsgHopper *createStr(float x, float y, int s, const string &m);
+	static MsgHopper *createStr(float x, float y, int s, int i, const string &m);
 
 	MsgHopper(float x, float y, int s);
 
 	virtual ~MsgHopper();
 
-	bool init(int n);
+	bool init(int i, int n);
 
-	bool init(const string &m);
+	bool init(int i, const string &m);
 
 	void update(const float delay);
 

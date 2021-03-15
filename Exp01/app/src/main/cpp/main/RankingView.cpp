@@ -134,6 +134,7 @@ void RankingView::stepBonus(const float delay) {
 		const int x = startX + padH * c;
 		const int y = startY + padV * r;
 		auto chick = SpriteChick::createSprite("images/c_chick.png", x, y);
+		chick->setScale(3);
 		chicks.push_back(chick);
 	}
 

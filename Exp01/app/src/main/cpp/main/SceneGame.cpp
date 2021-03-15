@@ -14,7 +14,8 @@ SceneGame::SceneGame(int dWidth, int dHeight) : SceneBase(dWidth, dHeight),
 												player(nullptr), chicken(nullptr),
 												osho(nullptr),
 												updateMode(READY),
-												waitCnt(0), waitInterval(150) {
+												waitCntReady(0), waitIntervalReady(150),
+												waitCntFinish(0), waitIntervalFinish(230) {
 	LOGD("Main", "SceneGame()\n");
 }
 
@@ -71,36 +72,31 @@ bool SceneGame::init() {
 	dPad->addDpadListener(this);
 
 	// Player
-	player = SpritePlayer::createSprite("images/c_kobo.png", cX, cY);
-	player->setScale(2);
+	MazeGrid &grid = mManager->getGridByRC(15, 11);
+	player = SpritePlayer::createSprite("images/c_kobo.png", grid.pos.x, grid.pos.y);
 	player->setMazeManager(mManager);
 
 	// Chicken
-	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, gSize * 3);
-	chicken->setScale(2);
-	chicken->setPos(mManager->getRdmPos());
+	chicken = SpriteChicken::createSprite("images/c_chicken_f.png", cX, 0);
 	const Vec2 &next = mManager->getRdmPos();// Next
 	chicken->setNext(next.x, next.y);
 	chicken->setEggListener(this);
 
 	// Osho
-	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY+gSize*5);
-	osho->setScale(2);
+	osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY + gSize * 5);
 	osho->setPos(mManager->getRdmPos());
 	osho->setMazeManager(mManager);
 
 	// Tanu
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 5; i++) {
 		SpriteTanu *tanu = SpriteTanu::createSprite("images/c_tanu.png", cX, cY);
-		tanu->setScale(2);
-		//tanu->setPos(mManager->getRdmPos());
 		tanu->setMazeManager(mManager);
 		tanu->setLeader(player);
 		tanus.push_back(tanu);
 	}
 
 	// Hopper
-	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "READY!");
+	MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, 100, "READY!");
 	hoppers.push_back(hopper);
 
 	// BGM
@@ -222,12 +218,12 @@ void SceneGame::gameReady(const float delay) {
 	player->update(delay);
 
 	// Wait
-	waitCnt++;
-	if (waitInterval < waitCnt) {
-		waitCnt = 0;
+	waitCntReady++;
+	if (waitIntervalReady < waitCntReady) {
+		waitCntReady = 0;
 		updateMode = START;// Next
 		// Hopper
-		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, "START!");
+		MsgHopper *hopper = MsgHopper::createStr(cX, cY, 4, 40, "START!");
 		hoppers.push_back(hopper);
 		// BGM
 		UtilSound::getInstance()->stopBGM();
@@ -290,7 +286,6 @@ void SceneGame::gameStart(const float delay) {
 	while (itT-- != tanus.begin()) {
 		auto tanu = static_cast<SpriteTanu *>(*itT);
 		tanu->update(delay);
-		/*
 		// x Player
 		if (player->containsPos(tanu)) {
 			updateMode = FINISH;// Next
@@ -300,14 +295,13 @@ void SceneGame::gameStart(const float delay) {
 			// Hopper
 			MsgHopper *hopper = MsgHopper::createStr(
 					dWidth * 0.5f, dHeight * 0.5f,
-					4, "GAME OVER!");
+					4, 250, "GAME OVER!");
 			hoppers.push_back(hopper);
 			// BGM
 			UtilSound::getInstance()->stopBGM();
 			UtilSound::getInstance()->playBGM("sounds/bgm_omg_01.wav",
 											  false, true);
 		}
-		 */
 	}
 
 	// Osho, Player, Chicken
@@ -329,9 +323,9 @@ void SceneGame::gameFinish(const float delay) {
 	chicken->update(delay);
 
 	// Wait
-	waitCnt++;
-	if (waitInterval < waitCnt) {
-		waitCnt = 0;
+	waitCntFinish++;
+	if (waitIntervalFinish < waitCntFinish) {
+		waitCntFinish = 0;
 		this->replaceSceneWait(0.2f, SceneTag::RESULT);// NextScene
 	}
 }
@@ -356,7 +350,6 @@ void SceneGame::chainChick(int num, int x, int y) {
 		auto chick = SpriteChick::createSprite("images/c_chick.png",
 											   player->getPosX(),
 											   player->getPosY());
-		chick->setScale(2);
 		chick->setTarget(player);
 		chicks.push_back(chick);
 		num--;// Decrement
@@ -367,7 +360,6 @@ void SceneGame::chainChick(int num, int x, int y) {
 		auto chick = SpriteChick::createSprite("images/c_chick.png",
 											   chicks.at(last)->getPosX(),
 											   chicks.at(last)->getPosY());
-		chick->setScale(2);
 		chick->setTarget(chicks.at(last));
 		chicks.push_back(chick);
 	}
@@ -377,7 +369,7 @@ void SceneGame::chainChick(int num, int x, int y) {
 	sBar->setBonus(chicks.size());
 
 	// Hopper
-	MsgHopper *hopper = MsgHopper::createNum(x, y, 2, 10);
+	MsgHopper *hopper = MsgHopper::createNum(x, y, 2, 20, 10);
 	hoppers.push_back(hopper);
 }
 

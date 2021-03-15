@@ -1,17 +1,17 @@
 #include "MsgHopper.h"
 
-MsgHopper *MsgHopper::createNum(float x, float y, int s, int n) {
+MsgHopper *MsgHopper::createNum(float x, float y, int s, int i, int n) {
 	// New
 	MsgHopper *sprite = new MsgHopper(x, y, s);
-	if (sprite && sprite->init(n)) return sprite;
+	if (sprite && sprite->init(i, n)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
-MsgHopper *MsgHopper::createStr(float x, float y, int s, const string &msg) {
+MsgHopper *MsgHopper::createStr(float x, float y, int s, int i, const string &msg) {
 	// New
 	MsgHopper *sprite = new MsgHopper(x, y, s);
-	if (sprite && sprite->init(msg)) return sprite;
+	if (sprite && sprite->init(i, msg)) return sprite;
 	DX_SAFE_DELETE(sprite);
 	return nullptr;
 }
@@ -28,12 +28,14 @@ MsgHopper::~MsgHopper() {
 	LOGD("Main", "~MsgHopper()\n");
 }
 
-bool MsgHopper::init(int n) {
+bool MsgHopper::init(int i, int n) {
+	waitInterval = i;
 	msg = to_string(n);
 	return true;
 }
 
-bool MsgHopper::init(const string &m) {
+bool MsgHopper::init(int i, const string &m) {
+	waitInterval = i;
 	msg = m;
 	return true;
 }

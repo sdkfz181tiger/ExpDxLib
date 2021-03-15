@@ -53,6 +53,8 @@ public:
 
 	void setScale(int scl);
 
+	int getScale() { return scale; }
+
 	void move(int spd, int deg);
 
 	void stop();

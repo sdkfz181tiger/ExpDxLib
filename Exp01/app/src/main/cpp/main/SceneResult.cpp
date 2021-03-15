@@ -51,17 +51,19 @@ bool SceneResult::init() {
 	sBar->pushBtnBase(btnSound);
 
 	// RankingView
-	rView = RankingView::createRanking(cX, cY - gSize * 14, gSize, gSize * 3);
+	rView = RankingView::createRanking(cX, cY - gSize * 16, gSize, gSize * 3);
 
 	// Title, Retry
 	BtnBase *btnTitle = BtnBase::createBtn("images/box_38x22.png",
 										   cX - gSize * 8, cY + gSize * 25);
+	btnTitle->setScale(2);
 	btnTitle->addBtnListener(this, BtnTag::TITLE);
 	btnTitle->setTitle("TITLE");
 	btns.push_back(btnTitle);
 
 	BtnBase *btnGame = BtnBase::createBtn("images/box_38x22.png",
 										  cX + gSize * 8, cY + gSize * 25);
+	btnGame->setScale(2);
 	btnGame->addBtnListener(this, BtnTag::GAME);
 	btnGame->setTitle("RETRY");
 	btns.push_back(btnGame);

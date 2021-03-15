@@ -17,7 +17,7 @@ MazeManager::MazeManager(float x, float y) :
 		cWhite(GetColor(255, 255, 255)),
 		cRed(GetColor(225, 65, 100)),
 		cGreen(GetColor(110, 140, 50)),
-		cBlue(GetColor(75, 60, 155)) {
+		cBlue(GetColor(75, 60, 255)) {
 	LOGD("Main", "MazeManager()\n");
 }
 

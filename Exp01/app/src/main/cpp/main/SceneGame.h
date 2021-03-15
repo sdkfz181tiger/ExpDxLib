@@ -10,7 +10,8 @@ private:
 		READY, START, FINISH
 	};
 	UpdateMode updateMode;
-	int waitCnt, waitInterval;
+	int waitCntReady, waitIntervalReady;
+	int waitCntFinish, waitIntervalFinish;
 
 private:
 	SpriteBase *background;

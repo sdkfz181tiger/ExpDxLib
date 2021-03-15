@@ -49,15 +49,28 @@ void RankingLine::update(const float delay) {
 
 	// Rank
 	char str[30];
-	sprintf(str, "%d.", num);
+	if (num == 1) {
+		sprintf(str, "1ST.", num);
+	} else if (num == 2) {
+		sprintf(str, "2ND.", num);
+	} else if (num == 3) {
+		sprintf(str, "3RD.", num);
+	} else if (num == 4) {
+		sprintf(str, "4TH.", num);
+	} else if (num == 5) {
+		sprintf(str, "5TH.", num);
+	} else {
+		sprintf(str, "ERR.", num);
+	}
+
 	UtilLabel::getInstance()->drawStr(str, pos.x - padX * 14, pos.y, 2,
 									  UtilAlign::LEFT);
 	// Score
 	sprintf(str, "%d", score);
-	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 5, pos.y, 2,
+	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 6, pos.y, 2,
 									  UtilAlign::RIGHT);
 	// Name
 	sprintf(str, "%s", name.c_str());
-	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 8, pos.y, 2,
+	UtilLabel::getInstance()->drawStr(str, pos.x + padX * 9, pos.y, 2,
 									  UtilAlign::LEFT);
 }

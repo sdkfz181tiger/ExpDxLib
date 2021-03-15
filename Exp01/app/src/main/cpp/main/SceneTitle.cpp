@@ -51,10 +51,12 @@ bool SceneTitle::init() {
 
 	// Characters
 	auto osho = SpriteOsho::createSprite("images/c_osho.png", cX, cY);
+	osho->setScale(4);
 	sprites.push_back(osho);
 
 	BtnBase *btnStart = BtnBase::createBtn("images/box_38x22.png",
 										   cX, cY + gSize * 12);
+	btnStart->setScale(2);
 	btnStart->addBtnListener(this, BtnTag::GAME);
 	btnStart->setTitle("START");
 	btns.push_back(btnStart);
